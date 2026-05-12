@@ -1,0 +1,50 @@
+        body { font-family: 'Inter', sans-serif; }
+        .header-bg { background-color: #1e40af; } 
+        .card-hover { transition: transform 0.2s, box-shadow 0.2s; }
+        .card-hover:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .dropdown-menu { display: none; }
+        .dropdown-menu.show { display: block; }
+        
+        .form-input {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+            outline: none;
+        }
+        .form-input:focus { border-color: #1e40af; ring: 2px; ring-color: #bfdbfe; }
+        .hidden-section { display: none; }
+
+        .a4-paper {
+            width: 21cm;
+            min-height: 29.7cm;
+            padding: 2.54cm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active { display: flex; }
+
+        @media (max-width: 21.5cm) {
+            .a4-paper {
+                width: 95%;
+                height: auto;
+                padding: 1.5rem;
+                min-height: auto;
+            }
+        }

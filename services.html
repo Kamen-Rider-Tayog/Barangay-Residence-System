@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serbisyong Online | Barangay San Francisco</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/services.css">
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+
+    <!-- Navigation -->
+    <nav class="header-bg text-white py-4 px-8 flex items-center justify-between shadow-md sticky top-0 z-50">
+        <a href="index.html" class="flex items-center gap-3 hover:opacity-90 transition">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                <img src="asset/logo.png" alt="Logo" class="w-full h-full object-cover">
+            </div>
+            <div>
+                <h1 class="font-bold leading-none">Barangay San Francisco</h1>
+                <p class="text-[10px] opacity-80 uppercase tracking-wider" data-key="sub-header">Pamamahala ng Impormasyon at Serbisyo</p>
+            </div>
+        </a>
+
+        <div class="flex items-center gap-8">
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="index.html" class="hover:opacity-80 transition" data-key="nav-home">Home</a>
+            </div>
+            
+            <div class="relative">
+                <button id="langBtn" class="flex items-center gap-1 text-xs font-bold hover:opacity-80 transition uppercase">
+                    <i data-lucide="languages" class="w-4 h-4"></i>
+                    <span id="currentLangLabel" data-key="label">Wika</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <div id="langMenu" class="dropdown-menu absolute right-0 mt-2 w-32 bg-white text-gray-800 border border-gray-100 shadow-xl rounded-lg py-2 z-50">
+                    <button onclick="changeLanguage('tl')" class="w-full text-left px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">Tagalog</button>
+                    <button onclick="changeLanguage('en')" class="w-full text-left px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">English</button>
+                </div>
+            </div>
+
+            <a href="login.html" class="px-5 py-1.5 bg-white text-blue-700 rounded-md font-bold text-sm hover:bg-gray-100 transition inline-block" data-key="login">Mag-login</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow max-w-7xl mx-auto px-4 md:px-8 py-12 w-full">
+        <!-- SECTION 1: Service Selection -->
+        <div id="serviceSelection">
+            <header class="mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-2" data-key="page-title">Serbisyong Online</h2>
+                <p class="text-gray-500" data-key="page-subtitle">Mag-request ng mga dokumento at serbisyo online</p>
+            </header>
+            <h3 class="text-xl font-bold text-gray-800 mb-8" data-key="select-service">Pumili ng Serbisyo</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div onclick="showForm('Barangay Clearance', 50)" class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col h-full cursor-pointer">
+                    <div class="text-blue-600 mb-6"><i data-lucide="file-text" class="w-10 h-10"></i></div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2" data-key="srv-clearance-t">Barangay Clearance</h4>
+                    <p class="text-sm text-gray-500 mb-8 flex-grow" data-key="srv-clearance-d">Katibayan ng magandang asal</p>
+                    <p class="text-2xl font-bold text-blue-700">₱50</p>
+                </div>
+                <div onclick="showForm('Certificate of Residency', 30)" class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col h-full cursor-pointer">
+                    <div class="text-blue-600 mb-6"><i data-lucide="file-text" class="w-10 h-10"></i></div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2" data-key="srv-residency-t">Certificate of Residency</h4>
+                    <p class="text-sm text-gray-500 mb-8 flex-grow" data-key="srv-residency-d">Patunay ng pagtira sa barangay</p>
+                    <p class="text-2xl font-bold text-blue-700">₱30</p>
+                </div>
+                <div onclick="showForm('Business Permit', 200)" class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col h-full cursor-pointer">
+                    <div class="text-blue-600 mb-6"><i data-lucide="file-text" class="w-10 h-10"></i></div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2" data-key="srv-permit-t">Business Permit</h4>
+                    <p class="text-sm text-gray-500 mb-8 flex-grow" data-key="srv-permit-d">Permit para sa mga negosyo</p>
+                    <p class="text-2xl font-bold text-blue-700">₱200</p>
+                </div>
+                <div onclick="showForm('Indigency Certificate', 0)" class="card-hover bg-white p-8 rounded-xl border border-gray-100 shadow-sm flex flex-col h-full cursor-pointer">
+                    <div class="text-blue-600 mb-6"><i data-lucide="file-text" class="w-10 h-10"></i></div>
+                    <h4 class="text-xl font-bold text-gray-900 mb-2" data-key="srv-indigency-t">Indigency Certificate</h4>
+                    <p class="text-sm text-gray-500 mb-8 flex-grow" data-key="srv-indigency-d">Katibayan ng katayuang indigent</p>
+                    <p class="text-2xl font-bold text-green-600 uppercase" data-key="srv-free">LIBRE</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Request Form -->
+        <div id="serviceForm" class="hidden-section max-w-4xl mx-auto">
+            <header class="mb-8">
+                <h2 class="text-4xl font-bold text-gray-900 mb-2" data-key="page-title">Serbisyong Online</h2>
+                <p class="text-gray-500" data-key="page-subtitle">Mag-request ng mga dokumento at serbisyo online</p>
+            </header>
+
+            <div class="bg-white p-6 md:p-10 rounded-2xl border border-gray-100 shadow-lg">
+                <h3 id="formTitle" class="text-2xl font-bold text-gray-800 mb-8">Mag-request ng Dokumento</h3>
+                
+                <form id="mainRequestForm" class="space-y-6" onsubmit="return handlePreview(event)">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-email">Email</label>
+                            <input type="email" id="inputEmail" class="form-input" placeholder="halimbawa@email.com" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-name">Buong Pangalan</label>
+                            <input type="text" id="inputName" class="form-input" placeholder="Juan Dela Cruz" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-address">Tirahan</label>
+                        <input type="text" id="inputAddress" class="form-input" placeholder="Kumpletong Address" required>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-contact">Numero ng Telepono</label>
+                            <input type="tel" id="inputContact" class="form-input" placeholder="09123456789" pattern="09[0-9]{9}" title="Dapat nagsisimula sa 09 at may 11 digits" maxlength="11" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-qty">Dami</label>
+                            <input type="number" id="inputQty" class="form-input" value="1" min="1" required>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-purpose">Layunin</label>
+                        <textarea id="inputPurpose" class="form-input h-32" placeholder="..." required></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-payment">Paraan ng Pagbabayad</label>
+                            <select id="inputPayment" class="form-input" required>
+                                <option value="Cash Payment" data-key="opt-cash">Bayad ng Cash</option>
+                                <option value="GCash">GCash</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-delivery">Paraan ng Pagkuha</label>
+                            <select id="inputDelivery" class="form-input" required>
+                                <option value="Pick-up" data-key="opt-pickup">Kukunin sa Hall</option>
+                                <option value="Home Delivery" data-key="opt-delivery">Ipadadala sa Bahay</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-date">Petsa</label>
+                            <input type="date" id="inputDate" class="form-input" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2" data-key="lbl-time">Oras</label>
+                            <input type="time" id="inputTime" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-4 pt-6">
+                        <button type="button" onclick="hideForm()" class="px-8 py-3 border border-gray-300 rounded-lg font-bold text-gray-600 hover:bg-gray-50 transition" data-key="btn-back">Bumalik</button>
+                        <button type="submit" class="flex-grow bg-blue-700 text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition" data-key="btn-preview">I-preview ang Dokumento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Preview View -->
+        <div id="previewSection" class="hidden-section">
+            <header class="mb-8">
+                <h2 class="text-4xl font-bold text-gray-900 mb-2" data-key="page-title">Serbisyong Online</h2>
+                <p class="text-gray-500" data-key="page-subtitle">Suriin ang iyong dokumento bago i-sumite</p>
+            </header>
+
+            <div class="flex flex-col xl:flex-row gap-12 items-start justify-center">
+                <div class="a4-paper overflow-hidden">
+                    <div class="text-center space-y-1 mb-10 border-b-2 border-gray-800 pb-6">
+                        <p class="text-xs uppercase tracking-widest font-semibold">Republika ng Pilipinas</p>
+                        <p class="text-xs uppercase font-semibold">Lungsod ng General Trias</p>
+                        <h3 class="text-xl font-bold uppercase tracking-widest" style="font-family: 'Playfair Display', serif;">Barangay San Francisco</h3>
+                        <p class="text-[10px] italic">Tanggapan ng Punong Barangay</p>
+                    </div>
+
+                    <div class="text-center mb-12">
+                        <h2 id="previewDocHeader" class="text-3xl font-bold text-blue-800 underline decoration-2 underline-offset-8">BARANGAY CLEARANCE</h2>
+                    </div>
+                    
+                    <div class="text-justify space-y-8 text-gray-900 leading-relaxed italic text-lg px-4">
+                        <p class="font-bold not-italic text-xl mb-10">SA SINUMANG KINAUUKULAN:</p>
+                        <p>Ito ay nagpapatunay na si <span id="prevName" class="font-bold border-b border-black px-2 uppercase not-italic"></span>, nasa sapat na gulang, Pilipino, at naninirahan sa <span id="prevAddr" class="font-bold border-b border-black px-2 not-italic"></span>, Barangay San Francisco, ay kilala sa pagkakaroon ng mabuting asal at masunuring mamamayan.</p>
+                        <p>Ang sertipikasyong ito ay ibinigay sa kahilingan ng nabanggit na tao para sa <span id="prevPurpose" class="font-bold border-b border-black px-2 not-italic"></span> at sa anumang legal na layunin na maaaring pagsilbihan nito.</p>
+                        <p class="not-italic">Iginawad ngayong <span class="font-bold">ika-9 ng Mayo, 2026</span> sa Barangay San Francisco, General Trias, Cavite, Pilipinas.</p>
+                    </div>
+
+                    <div class="mt-40 mr-10 flex flex-col items-end">
+                        <div class="text-center w-64 border-t border-black pt-2">
+                            <p class="font-bold uppercase text-lg">Kgg. Juan Dela Cruz</p>
+                            <p class="text-sm">Punong Barangay</p>
+                        </div>
+                    </div>
+
+                    <div class="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
+                        <div class="border-[15px] border-blue-900 rounded-full p-20 rotate-[-30deg]">
+                            <p class="text-8xl font-black">OPISYAL</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full xl:w-96 space-y-6">
+                    <div class="bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                        <h3 class="text-xl font-bold mb-6 flex items-center gap-2">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i> Buod ng Order
+                        </h3>
+                        <div class="space-y-4 text-sm">
+                            <div class="flex justify-between text-gray-500"><span>Serbisyo</span><span id="summarySrv" class="text-gray-900 font-bold"></span></div>
+                            <div class="flex justify-between text-gray-500"><span>Dami</span><span id="summaryQty" class="text-gray-900 font-bold"></span></div>
+                            <div class="flex justify-between text-gray-500 border-b pb-4"><span>Bayad sa Serbisyo</span><span id="summaryFee" class="text-gray-900 font-bold"></span></div>
+                            <div class="flex justify-between text-xl font-bold pt-4 text-blue-700"><span>Kabuuang Halaga</span><span id="summaryTotal"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 p-8 rounded-xl border border-blue-100">
+                        <h3 class="text-blue-700 font-bold flex items-center gap-2 mb-6"><i data-lucide="truck" class="w-5 h-5"></i> Pagpapadala at Iskedyul</h3>
+                        <div class="space-y-3 text-sm text-gray-700">
+                            <p class="flex justify-between"><strong>Paraan:</strong> <span id="summaryMethod" class="font-semibold"></span></p>
+                            <p class="flex justify-between"><strong>Petsa:</strong> <span id="summaryDate" class="font-semibold"></span></p>
+                            <p class="flex justify-between"><strong>Oras:</strong> <span id="summaryTime" class="font-semibold"></span></p>
+                            <p class="flex justify-between"><strong>Pagbabayad:</strong> <span id="summaryPay" class="font-semibold text-green-600"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-4">
+                        <button onclick="handleConfirm()" class="w-full bg-blue-700 text-white py-4 rounded-xl font-bold hover:bg-blue-800 transition shadow-lg flex items-center justify-center gap-2 text-lg">
+                            Kumpirmahin at I-sumite
+                        </button>
+                        <button onclick="backToEdit()" class="w-full bg-white border-2 border-gray-200 py-3 rounded-xl font-bold hover:bg-gray-50 transition text-gray-600">
+                            I-edit ang Impormasyon
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- GCash QR Modal -->
+    <div id="gcashModal" class="modal-overlay">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl text-center max-w-sm mx-4">
+            <h3 class="text-xl font-bold mb-4 text-blue-600" data-key="qr-title">I-scan para magbayad gamit ang GCash</h3>
+            <div class="bg-gray-100 p-4 rounded-xl mb-4">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=BarangaySanFranciscoPayment" alt="GCash QR Code" class="mx-auto border-4 border-white shadow-sm">
+            </div>
+            <p class="text-sm text-gray-600 mb-6 font-medium">
+                <span data-key="qr-acc-name">Pangalan ng Account</span>: Brgy San Francisco<br>
+                <span data-key="qr-acc-num">Numero ng Account</span>: 0912 345 6789
+            </p>
+            <button onclick="closeModals()" class="w-full bg-gray-200 text-gray-800 py-3 rounded-lg font-bold hover:bg-gray-300 transition" data-key="btn-cancel">Kanselahin</button>
+        </div>
+    </div>
+
+    <!-- Thank You Modal -->
+    <div id="thankYouModal" class="modal-overlay">
+        <div class="bg-white p-10 rounded-2xl shadow-2xl text-center max-w-sm mx-4 border-t-8 border-green-500">
+            <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i data-lucide="check-circle" class="w-12 h-12"></i>
+            </div>
+            <h2 class="text-2xl font-bold mb-2" data-key="ty-title">Salamat!</h2>
+            <p class="text-gray-500 mb-8" data-key="ty-msg">Ang inyong request ay matagumpay na naipadala at kasalukuyang pinoproseso.</p>
+            <button onclick="location.reload()" class="block w-full bg-blue-700 text-white py-3 rounded-lg font-bold hover:bg-blue-800 transition" data-key="btn-back-srv">Bumalik sa Serbisyo</button>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="bg-slate-900 text-white pt-16 pb-8 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-slate-800 pb-12 mb-8">
+        <div>
+            <h5 class="font-bold text-lg mb-6" data-key="f-contact">Makipag-ugnayan</h5>
+            <div class="space-y-4 text-slate-400">
+                <p class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4"></i> (046) 437-XXXX</p>
+                <p class="flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4"></i> brgy.sanfrancisco.gentri@gmail.com</p>
+                <p class="flex items-center gap-3"><i data-lucide="map-pin" class="w-4 h-4"></i> San Francisco, Gen. Trias, Cavite</p>
+            </div>
+        </div>
+        <div>
+            <h5 class="font-bold text-lg mb-6" data-key="f-links">Mabilis na Links</h5>
+            <ul class="space-y-4 text-slate-400">
+                <li><a href="index.html" class="hover:text-white transition" data-key="nav-home">Home</a></li>
+                <li><a href="services.html" class="hover:text-white transition" data-key="nav-services">Serbisyong Online</a></li>
+                <li><a href="login.html" class="hover:text-white transition" data-key="login">Mag-login</a></li>
+            </ul>
+        </div>
+        <div>
+            <h5 class="font-bold text-lg mb-6" data-key="f-follow">Sundan Kami</h5>
+            <div class="flex gap-6 text-slate-400">
+                <a href="#" class="hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+                </a>
+                <a href="#" class="hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"></line></svg>
+                </a>
+                <a href="#" class="hover:text-white transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-6 h-6"><path d="M4 4l11.733 16h4.267l-11.733-16zM4 20l6.768-6.768m2.464-2.464L20 4"></path></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+    <p class="text-center text-slate-500 text-sm" data-key="footer-copy">© 2026 Barangay San Francisco. Lahat ng Karapatan ay Nakareserba.</p>
+    </footer>
+
+    <script src="js/service.js"></script>
+    <script>
+        // Optional logic to ensure Lucide icons load
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barangay San Francisco Admin</title>
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet"> 
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="bg-[#1e40af] py-4 px-8 flex items-center justify-between shadow-md sticky top-0 z-50">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center overflow-hidden">
+                <img src="asset/logo.png" alt="Logo" class="w-full h-full object-contain">
+            </div>
+            <div>
+                <h1 class="font-bold text-white leading-none">Barangay San Francisco</h1>
+                <p class="text-[10px] text-blue-100 font-semibold tracking-wider uppercase opacity-90" data-key="sub-header">Information & Service Management</p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex items-center gap-8 text-blue-50 font-medium text-sm">
+                <a href="index.html" class="hover:text-white transition" data-key="nav-home">Home</a>
+            </div>
+            
+            <div class="relative">
+                <button id="langBtn" class="flex items-center gap-1 text-sm font-bold text-white hover:text-blue-200 transition uppercase tracking-wider">
+                    <i data-lucide="languages" class="w-3.0 h-3.0"></i>
+                    <span id="currentLangLabel">Wika</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <div id="langMenu" class="dropdown-menu absolute right-0 mt-2 w-32 bg-white hidden border border-gray-100 shadow-xl rounded-lg py-2 z-50">
+                    <button onclick="changeLanguage('tl')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 font-medium">Tagalog</button>
+                    <button onclick="changeLanguage('en')" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-blue-600 font-medium">English</button>
+                </div>
+            </div>
+
+            <button onclick="logoutUser()" class="px-5 py-2 bg-white text-blue-700 rounded-md font-bold hover:bg-blue-50 transition shadow-sm text-sm" data-key="login">Logout</button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto py-8 px-4">
+        
+        <div id="static-dashboard-top">
+            <div class="flex justify-between items-start mb-10">
+                <div>
+                    <h1 class="text-4xl font-extrabold text-slate-800 tracking-tight">Admin Dashboard</h1>
+                    <p class="text-slate-500 text-sm mt-1">Manage households and monitor barangay activities</p>
+                </div>
+                <div class="flex gap-4">
+                    <button id="nav-households" class="btn-nav btn-active" onclick="switchMainTab('households')">
+                        <i class="fas fa-home"></i> Households
+                    </button>
+                    <button id="nav-complaints" class="btn-nav btn-inactive" onclick="switchMainTab('complaints')">
+                        <i class="fas fa-comment-dots"></i> Complaints
+                        <span class="badge-red">3</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                <div class="card p-5 flex-row items-center gap-5">
+                    <div class="stat-icon bg-blue-500 shadow-lg shadow-blue-100 rounded-2xl"><i class="fas fa-users"></i></div>
+                    <div><p class="text-slate-400 text-[11px] font-medium">Total Residents</p><p class="text-3xl font-bold text-slate-800">28</p></div>
+                </div>
+                <div class="card p-5 flex-row items-center gap-5">
+                    <div class="stat-icon bg-emerald-500 shadow-lg shadow-emerald-100 rounded-2xl"><i class="fas fa-home"></i></div>
+                    <div><p class="text-slate-400 text-[11px] font-medium">Total Households</p><p class="text-3xl font-bold text-slate-800">7</p></div>
+                </div>
+                <div class="card p-5 flex-row items-center gap-5">
+                    <div class="stat-icon bg-purple-500 shadow-lg shadow-purple-100 rounded-2xl"><i class="fas fa-file-alt"></i></div>
+                    <div><p class="text-slate-400 text-[11px] font-medium">Total Transactions</p><p class="text-3xl font-bold text-slate-800">18</p></div>
+                </div>
+                <div class="card p-5 flex-row items-center gap-5">
+                    <div class="stat-icon bg-orange-500 shadow-lg shadow-orange-100 rounded-2xl"><i class="fas fa-comment"></i></div>
+                    <div><p class="text-slate-400 text-[11px] font-medium">Total Complaints</p><p class="text-3xl font-bold text-slate-800">3</p></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="card p-6">
+                    <h3 class="chart-title">Monthly Service Requests</h3>
+                    <div class="chart-container-centered"><div class="bar-canvas-wrapper"><canvas id="barChart"></canvas></div></div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="chart-title">Service Distribution</h3>
+                    <div class="chart-container-centered"><div class="bar-canvas-wrapper"><canvas id="pieChart"></canvas></div></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-households">
+            <div class="card overflow-hidden">
+                <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
+                    <span class="font-bold text-slate-800 text-sm">Household Management</span>
+                    <button onclick="showAddPage()" class="bg-blue-700 hover:bg-blue-800 text-white px-4 py-1.5 rounded text-xs font-bold shadow-md transition-colors">+ Add Household</button>
+                </div>
+                <div class="p-4 border-b flex flex-col md:flex-row gap-4 bg-white">
+                    <div class="relative flex-1">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                        <input type="text" id="globalSearch" onkeyup="filterTable()" placeholder="Search Name, Email, Contact, Age, Address..." class="w-full pl-9 pr-4 py-2 border rounded-lg text-xs outline-none focus:border-blue-400">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase">Filter Phase:</label>
+                        <select id="phaseFilter" onchange="filterTable()" class="border rounded-lg px-3 py-2 text-xs bg-gray-50 outline-none">
+                            <option value="All">All Phases</option>
+                            <option value="Phase 1">Phase 1</option>
+                            <option value="Phase 2">Phase 2</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="householdTable" class="w-full text-left text-[11px]">
+                        <thead class="bg-slate-50 text-slate-800 font-bold border-b">
+                            <tr>
+                                <th class="px-6 py-3 font-bold uppercase">Full Name</th>
+                                <th class="px-6 py-3 font-bold uppercase">Email</th>
+                                <th class="px-6 py-3 font-bold uppercase">Contact</th>
+                                <th class="px-6 py-3 font-bold uppercase">Age</th>
+                                <th class="px-6 py-3 font-bold uppercase">Phase</th>
+                                <th class="px-6 py-3 font-bold uppercase">Address</th>
+                                <th class="px-6 py-3 font-bold uppercase">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-700">Maria Santos</td>
+                                <td class="px-6 py-4 text-slate-500">maria.santos@email.com</td>
+                                <td class="px-6 py-4 text-slate-500">09171234567</td>
+                                <td class="px-6 py-4 text-slate-500">42</td>
+                                <td class="px-6 py-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Phase 1</span></td>
+                                <td class="px-6 py-4 text-slate-500">Blk 5, Lot 12, Phase 1</td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <i class="fas fa-user text-blue-700 cursor-pointer hover:text-blue-800" onclick="handleFormPage('view', 'Maria', 'A', 'Santos', '', 42, 'Blk 5, Lot 12, Phase 1', '09171234567', 'Phase 1', 3, 'maria.santos@email.com', 'MariaSecret123')"></i>
+                                    <i class="fas fa-edit text-blue-700 cursor-pointer hover:text-blue-800" onclick="handleFormPage('edit', 'Maria', 'A', 'Santos', '', 42, 'Blk 5, Lot 12, Phase 1', '09171234567', 'Phase 1', 3, 'maria.santos@email.com', 'MariaSecret123')"></i>
+                                    <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-700">Juan Dela Cruz</td>
+                                <td class="px-6 py-4 text-slate-500">juan.dc@email.com</td>
+                                <td class="px-6 py-4 text-slate-500">09189998877</td>
+                                <td class="px-6 py-4 text-slate-500">35</td>
+                                <td class="px-6 py-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Phase 2</span></td>
+                                <td class="px-6 py-4 text-slate-500">Blk 10, Lot 4, Phase 2</td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <i class="fas fa-user text-blue-700 cursor-pointer" onclick="handleFormPage('view', 'Juan', '', 'Dela Cruz', '', 35, 'Blk 10, Lot 4, Phase 2', '09189998877', 'Phase 2', 4, 'juan.dc@email.com', 'JuanPass123')"></i>
+                                    <i class="fas fa-edit text-blue-700 cursor-pointer" onclick="handleFormPage('edit', 'Juan', '', 'Dela Cruz', '', 35, 'Blk 10, Lot 4, Phase 2', '09189998877', 'Phase 2', 4, 'juan.dc@email.com', 'JuanPass123')"></i>
+                                    <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50">
+                                <td class="px-6 py-4 font-semibold text-slate-700">Elena Ramos</td>
+                                <td class="px-6 py-4 text-slate-500">elena.ramos@email.com</td>
+                                <td class="px-6 py-4 text-slate-500">09192223344</td>
+                                <td class="px-6 py-4 text-slate-500">29</td>
+                                <td class="px-6 py-4"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">Phase 1</span></td>
+                                <td class="px-6 py-4 text-slate-500">Blk 2, Lot 1, Phase 1</td>
+                                <td class="px-6 py-4 flex items-center gap-3">
+                                    <i class="fas fa-user text-blue-700 cursor-pointer" onclick="handleFormPage('view', 'Elena', 'B', 'Ramos', '', 29, 'Blk 2, Lot 1, Phase 1', '09192223344', 'Phase 1', 2, 'elena.ramos@email.com', 'Elena999')"></i>
+                                    <i class="fas fa-edit text-blue-700 cursor-pointer" onclick="handleFormPage('edit', 'Elena', 'B', 'Ramos', '', 29, 'Blk 2, Lot 1, Phase 1', '09192223344', 'Phase 1', 2, 'elena.ramos@email.com', 'Elena999')"></i>
+                                    <i class="fas fa-trash-alt text-red-500 cursor-pointer"></i>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="section-complaints" class="hidden-view">
+            <div class="card overflow-hidden">
+                <div class="p-4 bg-gray-50 border-b flex justify-between items-center">
+                    <span class="font-bold text-slate-800 text-sm">Complaint Management</span>
+                    <div class="flex gap-4 text-[10px] font-bold">
+                        <span class="text-orange-500 flex items-center"><span class="status-dot bg-orange-500"></span> Pending: 3</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white space-y-6">
+                    
+                    <div class="border rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 bg-orange-100 text-orange-500 rounded-lg flex items-center justify-center"><i class="fas fa-exclamation-circle text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base">Street Light Not Working</h3>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold">By: Maria Santos | Ref: CMP-001</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="px-3 py-1 bg-red-50 text-red-500 text-[10px] font-bold rounded border border-red-100 uppercase">High</span>
+                                <span class="px-3 py-1 bg-blue-50 text-blue-500 text-[10px] font-bold rounded border border-blue-100 uppercase">In Progress</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-6">The street light on Mabini Street corner Rizal Avenue has been out for 3 days.</p>
+                        <div class="grid grid-cols-3 gap-8 mb-6 text-[11px]">
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Category</p><p class="text-slate-800 font-semibold">Infrastructure</p></div>
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Date Submitted</p><p class="text-slate-800 font-semibold">May 5, 2026</p></div>
+                            <div>
+                                <p class="text-slate-400 font-bold uppercase mb-1">Status</p>
+                                <select disabled class="locked-select border rounded px-2 py-1 bg-gray-100 text-slate-800 text-xs w-full"><option selected>In Progress</option></select>
+                            </div>
+                        </div>
+                        <div class="response-box p-4 rounded mb-6">
+                            <p class="text-blue-600 font-bold text-[9px] uppercase mb-1">Admin Response:</p>
+                            <p class="text-slate-600 text-xs italic">We have contacted the electric company. Expected resolution in 2-3 business days.</p>
+                        </div>
+                        <div class="flex justify-end gap-3">
+                            <button onclick="openRespondModal('Street Light Not Working', 'The street light on Mabini Street corner Rizal Avenue has been out for 3 days.', 'In Progress', 'We have contacted the electric company. Expected resolution in 2-3 business days.')" class="px-6 py-2 border-2 border-blue-700 text-blue-700 font-bold text-xs rounded-lg hover:bg-blue-50 transition-colors">Respond</button>
+                            <button class="w-10 h-10 border border-red-100 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-50"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 bg-red-100 text-red-500 rounded-lg flex items-center justify-center"><i class="fas fa-exclamation-circle text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base">Delayed Garbage Collection</h3>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold">By: Juan Dela Cruz | Ref: CMP-002</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="px-3 py-1 bg-orange-50 text-orange-500 text-[10px] font-bold rounded border border-orange-100 uppercase">Medium</span>
+                                <span class="px-3 py-1 bg-blue-50 text-blue-500 text-[10px] font-bold rounded border border-blue-100 uppercase">In Progress</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-6">The garbage truck missed our street for two consecutive scheduled pickups.</p>
+                        <div class="grid grid-cols-3 gap-8 mb-6 text-[11px]">
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Category</p><p class="text-slate-800 font-semibold">Sanitation</p></div>
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Date Submitted</p><p class="text-slate-800 font-semibold">May 7, 2026</p></div>
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Status</p><select disabled class="locked-select border rounded px-2 py-1 bg-gray-100 text-slate-800 text-xs w-full"><option selected>In Progress</option></select></div>
+                        </div>
+                        <div class="flex justify-end gap-3">
+                            <button onclick="openRespondModal('Delayed Garbage Collection', 'The garbage truck missed our street for two consecutive scheduled pickups.', 'In Progress', '')" class="px-6 py-2 border-2 border-blue-700 text-blue-700 font-bold text-xs rounded-lg hover:bg-blue-50 transition-colors">Respond</button>
+                            <button class="w-10 h-10 border border-red-100 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-50"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="border rounded-xl p-6 shadow-sm">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 bg-purple-100 text-purple-500 rounded-lg flex items-center justify-center"><i class="fas fa-exclamation-circle text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-base">Noise Complaint (Karaoke)</h3>
+                                    <p class="text-[10px] text-slate-400 uppercase font-bold">By: Elena Ramos | Ref: CMP-003</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <span class="px-3 py-1 bg-yellow-50 text-yellow-600 text-[10px] font-bold rounded border border-yellow-100 uppercase">Low</span>
+                                <span class="px-3 py-1 bg-blue-50 text-blue-500 text-[10px] font-bold rounded border border-blue-100 uppercase">In Progress</span>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-600 mb-6">Loud music and karaoke session in Phase 1 until 2:00 AM last night.</p>
+                        <div class="grid grid-cols-3 gap-8 mb-6 text-[11px]">
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Category</p><p class="text-slate-800 font-semibold">Peace & Order</p></div>
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Date Submitted</p><p class="text-slate-800 font-semibold">May 10, 2026</p></div>
+                            <div><p class="text-slate-400 font-bold uppercase mb-1">Status</p><select disabled class="locked-select border rounded px-2 py-1 bg-gray-100 text-slate-800 text-xs w-full"><option selected>In Progress</option></select></div>
+                        </div>
+                        <div class="flex justify-end gap-3">
+                            <button onclick="openRespondModal('Noise Complaint (Karaoke)', 'Loud music and karaoke session in Phase 1 until 2:00 AM last night.', 'In Progress', '')" class="px-6 py-2 border-2 border-blue-700 text-blue-700 font-bold text-xs rounded-lg hover:bg-blue-50 transition-colors">Respond</button>
+                            <button class="w-10 h-10 border border-red-100 text-red-400 rounded-lg flex items-center justify-center hover:bg-red-50"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div id="form-view" class="max-w-6xl mx-auto hidden-view">
+            <button onclick="switchMainTab('households')" class="text-slate-600 text-sm font-bold mb-6 flex items-center"><i class="fas fa-arrow-left mr-2"></i> Back to Dashboard</button>
+            <div class="card p-8">
+                <h2 id="form-title" class="text-2xl font-bold text-slate-800 mb-6">Household Form</h2>
+                <form id="main-form" class="space-y-8">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex flex-col items-center">
+                            <div class="profile-upload-box" id="pic-box" onclick="triggerFileUpload()">
+                                <img src="" id="pic-preview" class="hidden">
+                                <div id="pic-placeholder" class="flex flex-col items-center text-slate-300"><i class="fas fa-user text-4xl mb-2"></i><span class="text-[9px] font-bold uppercase">Attach Photo</span></div>
+                            </div>
+                            <input type="file" id="image-input" class="hidden" accept="image/*" onchange="previewImage(event)">
+                        </div>
+                        <div class="flex-1 grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div class="col-span-4 text-slate-800 font-bold border-b pb-2 uppercase text-xs">Head of Household Information</div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">First Name</label><input type="text" id="f-name" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Middle Name</label><input type="text" id="m-name" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Last Name</label><input type="text" id="l-name" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Suffix</label><input type="text" id="s-name" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Age</label><input type="number" id="h-age" min="0" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div class="col-span-3"><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Full Address</label><input type="text" id="h-addr" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Contact</label><input type="text" id="h-contact" maxlength="11" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Phase</label><select id="h-phase" class="w-full border rounded-lg px-4 py-2 bg-gray-50 text-sm"><option>Phase 1</option><option>Phase 2</option></select></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Total Residents</label><input type="number" id="res-count" min="1" value="1" oninput="updateMemberFields(this.value)" class="w-full border-2 border-slate-400 rounded-lg px-4 py-2 font-bold text-slate-700 text-sm"></div>
+                        </div>
+                    </div>
+                    <div id="member-container"></div>
+                    <div class="bg-slate-50 p-6 rounded-xl border border-slate-200">
+                        <div class="text-slate-800 font-bold border-b border-slate-200 pb-2 mb-4 uppercase text-xs">Credentials</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Email</label><input type="email" id="h-email" class="w-full border rounded-lg px-4 py-2 text-sm"></div>
+                            <div><label class="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Password</label><input type="text" id="reg-password" class="w-full border rounded-lg px-4 py-2 text-sm"></div>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 pt-6 border-t" id="form-actions">
+                        <button type="button" onclick="switchMainTab('households')" class="flex-1 py-3 font-bold text-slate-500">Cancel</button>
+                        <button type="submit" id="submit-btn" class="flex-1 py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-lg shadow-lg transition-colors">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="complaint-modal" class="fixed inset-0 flex items-center justify-center hidden-view">
+            <div id="modal-overlay" class="absolute inset-0" onclick="toggleModal('complaint-modal', false)"></div>
+            <div class="card relative w-full max-w-md p-8 bg-white shadow-2xl z-50">
+                <h2 class="text-xl font-bold text-slate-800 mb-6">Respond to Complaint</h2>
+                
+                <div class="bg-slate-50 p-4 rounded-lg mb-6 border border-slate-100">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Subject:</p>
+                    <p id="modal-subject" class="text-sm font-bold text-slate-700 mb-3"></p>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1">Description:</p>
+                    <p id="modal-desc" class="text-xs text-slate-600"></p>
+                </div>
+
+                <div class="mb-6">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-2">Update Status</label>
+                    <select id="modal-status" class="w-full border-2 border-slate-200 rounded-lg px-4 py-2.5 text-sm focus:border-blue-400 outline-none">
+                        <option>Pending</option>
+                        <option>In Progress</option>
+                        <option>Resolved</option>
+                        <option>Closed</option>
+                    </select>
+                </div>
+
+                <div class="mb-8">
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase mb-2">Admin Response</label>
+                    <textarea id="modal-response" class="w-full border-2 border-slate-200 rounded-lg px-4 py-3 text-sm min-h-[120px] focus:border-blue-400 outline-none" placeholder="Enter your response here..."></textarea>
+                </div>
+
+                <div class="flex gap-4">
+                    <button onclick="toggleModal('complaint-modal', false)" class="flex-1 py-3 px-4 border-2 border-slate-200 text-slate-500 font-bold text-sm rounded-xl">Cancel</button>
+                    <button class="flex-1 py-3 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm rounded-xl shadow-lg transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane text-[10px]"></i> Update & Respond
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white pt-16 pb-8 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-12 border-b border-slate-800 pb-12 mb-8">
+            <div>
+                <h5 class="font-bold text-lg mb-6" data-key="f-contact">Makipag-ugnayan</h5>
+                <div class="space-y-4 text-slate-400">
+                    <p class="flex items-center gap-3"><i data-lucide="phone" class="w-4 h-4"></i> (046) 437-XXXX</p>
+                    <p class="flex items-center gap-3"><i data-lucide="mail" class="w-4 h-4"></i> brgy.sanfrancisco.gentri@gmail.com</p>
+                    <p class="flex items-center gap-3"><i data-lucide="map-pin" class="w-4 h-4"></i> San Francisco, Gen. Trias, Cavite</p>
+                </div>
+            </div>
+            <div>
+                <h5 class="font-bold text-lg mb-6" data-key="f-links">Mabilis na Links</h5>
+                <ul class="space-y-4 text-slate-400">
+                    <li><a href="index.html" class="hover:text-white transition" data-key="nav-home">Home</a></li>
+                    <li><a href="services.html" class="hover:text-white transition" data-key="nav-services">Serbisyong Online</a></li>
+                    <li><a href="login.html" class="hover:text-white transition" data-key="login">Mag-login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="font-bold text-lg mb-6" data-key="f-follow">Sundan Kami</h5>
+                <div class="flex gap-6 text-slate-400">
+                    <a href="#" class="hover:text-blue-500 transition"><i class="fa-brands fa-facebook text-2xl"></i></a>
+                    <a href="#" class="hover:text-pink-500 transition"><i class="fa-brands fa-instagram text-2xl"></i></a>
+                    <a href="#" class="hover:text-white transition"><i class="fa-brands fa-x-twitter text-2xl"></i></a>
+                    <a href="#" class="hover:text-blue-400 transition"><i class="fa-brands fa-messenger text-2xl"></i></a>
+                </div>
+            </div>
+        </div>
+        <p class="text-center text-slate-500 text-sm" data-key="footer-copy">© 2026 Barangay San Francisco, General Trias. Lahat ng Karapatan ay Nakareserba.</p>
+    </footer>
+
+    <!-- Custom JS -->
+    <script src="js/dashboard.js"></script>
+</body>
+</html>
