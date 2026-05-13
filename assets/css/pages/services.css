@@ -1,0 +1,183 @@
+.service-card {
+    text-align: center;
+    cursor: pointer;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Service icon - unique */
+.service-icon {
+    color: var(--primary-blue);
+    margin-bottom: 1.5rem;
+}
+
+.service-icon svg {
+    width: 40px;
+    height: 40px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+}
+
+/* Price styling - unique */
+.service-price {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+}
+
+.service-price.free {
+    color: var(--success-green);
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+/* Form card - extends .card */
+.form-card {
+    padding: 2rem;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--gray-800);
+}
+
+/* Form row layout - unique */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* A4 Paper - unique to services */
+.a4-paper {
+    width: 21cm;
+    min-height: 29.7cm;
+    padding: 2.54cm;
+    background: white;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    margin: 0 auto;
+}
+
+.preview-header {
+    text-align: center;
+    border-bottom: 2px solid var(--gray-800);
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.preview-header p {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+
+.preview-header h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.doc-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.doc-title h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--primary-blue);
+    text-decoration: underline;
+}
+
+.doc-content {
+    text-align: justify;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+}
+
+.signature-section {
+    margin-top: 5rem;
+    text-align: right;
+}
+
+/* Watermark effect - unique */
+.watermark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.03;
+    pointer-events: none;
+}
+
+.watermark div {
+    border: 15px solid var(--primary-blue);
+    border-radius: 50%;
+    padding: 3rem;
+    transform: rotate(-30deg);
+}
+
+/* Order summary - extends .card */
+.order-summary {
+    padding: 1.5rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+
+.summary-total {
+    border-top: 1px solid var(--gray-200);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-weight: 700;
+    font-size: 1.125rem;
+}
+
+/* Delivery info - uses bg-blue-light from components */
+.delivery-info {
+    padding: 1.5rem;
+}
+
+/* Action buttons layout */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Thank you icon - unique */
+.thank-you-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--success-green-light);
+    color: var(--success-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+}
+
+.thank-you-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    .a4-paper {
+        width: 100%;
+        padding: 1.5rem;
+    }
+}
