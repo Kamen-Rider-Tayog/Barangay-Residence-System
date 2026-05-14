@@ -1,7 +1,6 @@
 <?php
 require_once '../includes/init.php';
 $stats = getDashboardStats();
-$latestCampaign = getLatestCampaign();
 
 include '../includes/header.php';
 ?>

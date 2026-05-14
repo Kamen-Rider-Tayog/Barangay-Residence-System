@@ -2,8 +2,10 @@
 require_once '../includes/init.php';
 requireLogin();
 
+header('Content-Type: application/json');
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: user.php');
+    echo json_encode(['success' => false, 'message' => 'Invalid request']);
     exit();
 }
 
@@ -13,7 +15,7 @@ $priority = $_POST['priority'] ?? 'medium';
 $description = $_POST['description'] ?? '';
 
 if (empty($subject) || empty($category) || empty($description)) {
-    header('Location: user.php?error=missing_fields');
+    echo json_encode(['success' => false, 'message' => 'Please fill in all fields']);
     exit();
 }
 
@@ -22,9 +24,9 @@ $household_id = $_SESSION['household_id'];
 $complaint_id = createComplaint($household_id, $subject, $description, $category, $priority);
 
 if ($complaint_id) {
-    header('Location: user.php?success=complaint_submitted');
+    echo json_encode(['success' => true, 'message' => 'Complaint submitted']);
 } else {
-    header('Location: user.php?error=complaint_failed');
+    echo json_encode(['success' => false, 'message' => 'Database error. Please try again.']);
 }
 exit();
 ?>

@@ -15,9 +15,9 @@
         
         <div class="lang-dropdown">
             <button id="langBtn" class="lang-btn">
-                <i class="fa-solid fa-language"></i>
+                <i class="fas fa-language"></i>
                 <span id="currentLangLabel"><?php echo __('language'); ?></span>
-                <i id="langArrow" class="fa-solid fa-angle-down"></i>
+                <i id="langArrow" class="fas fa-angle-down"></i>
             </button>
             <div id="langMenu" class="lang-menu">
                 <button onclick="changeLanguage('tl')">Tagalog</button>
@@ -26,9 +26,19 @@
         </div>
         
         <?php if (isLoggedIn()): ?>
-            <a href="/barangay-residence-system/includes/logout.php"><?php echo __('logout'); ?></a>
+            <?php if (isAdmin()): ?>
+                <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">
+                    <i class="fas fa-chalkboard-user"></i> <?php echo __('admin-dashboard'); ?>
+                </a>
+            <?php else: ?>
+                <a href="/barangay-residence-system/pages/user.php" class="btn btn-outline">
+                    <i class="fa-solid fa-user"></i> <?php echo __('my-dashboard'); ?>
+                </a>
+            <?php endif; ?>
         <?php else: ?>
-            <a href="/barangay-residence-system/pages/login.php" class="btn btn-outline"><?php echo __('login'); ?></a>
+            <a href="/barangay-residence-system/pages/login.php" class="btn btn-outline">
+                <i class="fas fa-sign-in-alt"></i> <?php echo __('login'); ?>
+            </a>
         <?php endif; ?>
     </div>
 </nav>

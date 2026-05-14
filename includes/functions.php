@@ -1,6 +1,6 @@
 <?php
 function isLoggedIn() {
-    return isset($_SESSION['user_id']) || isset($_SESSION['admin_id']);
+    return isset($_SESSION['household_id']) || isset($_SESSION['admin_id']);
 }
 
 function isAdmin() {
@@ -13,14 +13,14 @@ function isResident() {
 
 function requireLogin() {
     if (!isLoggedIn()) {
-        header('Location: ' . SITE_URL . '/pages/login.php');
+        header('Location: /barangay-residence-system/pages/login.php');
         exit();
     }
 }
 
 function requireAdmin() {
     if (!isAdmin()) {
-        header('Location: ' . SITE_URL . '/pages/index.php');
+        header('Location: /barangay-residence-system/pages/index.php');
         exit();
     }
 }
@@ -80,7 +80,7 @@ function registerHousehold($email, $password, $address, $phase_no) {
 
 function logout() {
     session_destroy();
-    header('Location: ' . SITE_URL . '/pages/login.php');
+    header('Location: /barangay-residence-system/pages/login.php');
     exit();
 }
 
@@ -335,5 +335,18 @@ function getTopAnnouncement() {
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     return $stmt->get_result()->fetch_assoc();
+}
+
+function getAllPhases() {
+    global $conn;
+    $sql = "SELECT DISTINCT phase_no FROM household WHERE phase_no IS NOT NULL AND phase_no != '' ORDER BY phase_no";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $phases = [];
+    while ($row = $result->fetch_assoc()) {
+        $phases[] = $row['phase_no'];
+    }
+    return $phases;
 }
 ?>

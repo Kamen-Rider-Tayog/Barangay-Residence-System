@@ -1,8 +1,3 @@
-// Initialize icons
-if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
-}
-
 // Language dropdown
 const langBtn = document.getElementById('langBtn');
 const langMenu = document.getElementById('langMenu');
@@ -10,10 +5,10 @@ const langMenu = document.getElementById('langMenu');
 if (langBtn && langMenu) {
     langBtn.addEventListener('click', (e) => {
         e.stopPropagation();
-        langMenu.classList.toggle('hidden');
+        langMenu.classList.toggle('show');
     });
-    window.addEventListener('click', () => {
-        if (langMenu) langMenu.classList.add('hidden');
+    document.addEventListener('click', () => {
+        if (langMenu) langMenu.classList.remove('show');
     });
 }
 
@@ -36,42 +31,74 @@ function switchTab(tab) {
         if (householdsSection) householdsSection.classList.remove('hidden-section');
         if (complaintsSection) complaintsSection.classList.add('hidden-section');
         if (householdsBtn) {
-            householdsBtn.className = "btn-nav btn-active";
-            complaintsBtn.className = "btn-nav btn-inactive";
+            householdsBtn.classList.remove('btn-inactive');
+            householdsBtn.classList.add('btn-active');
+            complaintsBtn.classList.remove('btn-active');
+            complaintsBtn.classList.add('btn-inactive');
         }
     } else {
         if (complaintsSection) complaintsSection.classList.remove('hidden-section');
         if (householdsSection) householdsSection.classList.add('hidden-section');
         if (complaintsBtn) {
-            complaintsBtn.className = "btn-nav btn-active";
-            householdsBtn.className = "btn-nav btn-inactive";
+            complaintsBtn.classList.remove('btn-inactive');
+            complaintsBtn.classList.add('btn-active');
+            householdsBtn.classList.remove('btn-active');
+            householdsBtn.classList.add('btn-inactive');
         }
     }
+}
+
+// Phase filter dropdown
+const phaseBtn = document.getElementById('phaseBtn');
+const phaseMenu = document.getElementById('phaseMenu');
+
+if (phaseBtn && phaseMenu) {
+    phaseBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        phaseMenu.classList.toggle('show');
+    });
+    document.addEventListener('click', () => {
+        if (phaseMenu) phaseMenu.classList.remove('show');
+    });
+}
+
+let currentPhase = 'all';
+
+function setPhaseFilter(phase) {
+    currentPhase = phase;
+    const phaseLabel = phase === 'all' ? 'All Phases' : phase;
+    const currentPhaseLabel = document.getElementById('currentPhaseLabel');
+    if (currentPhaseLabel) currentPhaseLabel.textContent = phaseLabel;
+    
+    if (phaseMenu) phaseMenu.classList.remove('show');
+    filterTable();
 }
 
 // Filter table
 function filterTable() {
     const search = document.getElementById("globalSearch");
-    const phase = document.getElementById("phaseFilter");
-    if (!search || !phase) return;
-    
-    const searchValue = search.value.toUpperCase();
-    const phaseValue = phase.value;
+    const searchValue = search ? search.value.toUpperCase() : "";
     const table = document.getElementById("householdTable");
     if (!table) return;
     
-    const tr = table.getElementsByTagName("tr");
-    for (let i = 1; i < tr.length; i++) {
-        let match = false;
-        const cells = tr[i].getElementsByTagName("td");
+    const rows = table.getElementsByTagName("tr");
+    for (let i = 1; i < rows.length; i++) {
+        const cells = rows[i].getElementsByTagName("td");
+        let textMatch = false;
+        let phaseMatch = (currentPhase === 'all');
+        
         for (let j = 0; j < cells.length - 1; j++) {
             if (cells[j] && cells[j].textContent.toUpperCase().includes(searchValue)) {
-                match = true;
+                textMatch = true;
                 break;
             }
         }
-        const phaseMatch = (phaseValue === "All" || (cells[4] && cells[4].textContent.trim() === phaseValue));
-        tr[i].style.display = (match && phaseMatch) ? "" : "none";
+        
+        if (!phaseMatch && cells[4]) {
+            phaseMatch = cells[4].textContent.trim() === currentPhase;
+        }
+        
+        rows[i].style.display = (textMatch && phaseMatch) ? "" : "none";
     }
 }
 
@@ -127,42 +154,5 @@ if (responseForm) {
         .catch(error => {
             alert('Error updating complaint. Please try again.');
         });
-    });
-}
-
-// Charts (keep as is - they work)
-if (document.getElementById('barChart')) {
-    new Chart(document.getElementById('barChart'), {
-        type: 'bar',
-        data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
-            datasets: [{ data: [45, 52, 48, 61, 55], backgroundColor: '#3b82f6', borderRadius: 4 }]
-        },
-        options: { plugins: { legend: { display: false } } }
-    });
-}
-
-if (document.getElementById('pieChart')) {
-    new Chart(document.getElementById('pieChart'), {
-        type: 'pie',
-        data: {
-            labels: ['Residency', 'Clearance', 'Indigency', 'Business'],
-            datasets: [{ 
-                data: [29, 43, 13, 16], 
-                backgroundColor: ['#10b981', '#3b82f6', '#ef4444', '#f59e0b'],
-                hoverOffset: 15
-            }]
-        },
-        options: { 
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { 
-                legend: { 
-                    position: 'right',
-                    align: 'center',
-                    labels: { boxWidth: 15, padding: 15, font: { size: 12, weight: 'bold' } } 
-                } 
-            }
-        }
     });
 }

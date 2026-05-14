@@ -1,15 +1,12 @@
 <?php
-$page_title = 'My Profile';
-$page_css = 'user.css';
-$page_js = 'user.js';
 require_once '../includes/init.php';
 requireLogin();
 
 if (!isResident()) {
-    redirect(SITE_URL . '/pages/login.php');
+    header('Location: /barangay-residence-system/pages/login.php');
+    exit();
 }
 
-// Get user data from session
 $household_id = $_SESSION['household_id'];
 $household = getHouseholdById($household_id);
 $residents = getResidentsByHouseholdId($household_id);
@@ -17,8 +14,9 @@ $requests = getServiceRequestsByHouseholdId($household_id);
 $complaints = getComplaintsByHouseholdId($household_id);
 
 include '../includes/header.php';
-include '../includes/navbar.php';
 ?>
+<link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/user.css">
+<?php include '../includes/navbar.php'; ?>
 
 <main class="container">
     <h2><?php echo __('profile-title'); ?></h2>
@@ -35,17 +33,23 @@ include '../includes/navbar.php';
                 
                 <div class="profile-details">
                     <div class="detail-item">
-                        <div class="detail-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                        <i class="fas fa-envelope"></i>
                         <div><p class="detail-label">Email</p><p class="detail-value"><?php echo $household['email']; ?></p></div>
                     </div>
                     <div class="detail-item">
-                        <div class="detail-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                        <i class="fas fa-phone"></i>
                         <div><p class="detail-label">Contact</p><p class="detail-value"><?php echo $residents[0]['contact_no'] ?? 'N/A'; ?></p></div>
                     </div>
                     <div class="detail-item">
-                        <div class="detail-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <i class="fas fa-map-marker-alt"></i>
                         <div><p class="detail-label">Address</p><p class="detail-value"><?php echo $household['address']; ?></p></div>
                     </div>
+                </div>
+                
+                <div class="logout-sidebar">
+                    <a href="/barangay-residence-system/includes/logout.php" class="btn btn-danger">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
                 </div>
             </div>
         </div>
@@ -64,7 +68,7 @@ include '../includes/navbar.php';
                 <?php foreach ($requests as $req): ?>
                 <div class="transaction-item">
                     <div class="item-header">
-                        <div class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                        <div class="item-icon"><i class="fas fa-file-alt"></i></div>
                         <div class="item-info">
                             <h5 class="item-title"><?php echo $req['service_name']; ?></h5>
                             <p class="item-ref">Ref: <?php echo $req['ref_no']; ?></p>
@@ -78,13 +82,16 @@ include '../includes/navbar.php';
                     </div>
                 </div>
                 <?php endforeach; ?>
+                <?php if (empty($requests)): ?>
+                <div class="no-data">No transactions found.</div>
+                <?php endif; ?>
             </div>
             
             <div id="complaints" class="tab-content">
                 <?php foreach ($complaints as $comp): ?>
                 <div class="complaint-item">
                     <div class="item-header">
-                        <div class="item-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r="0.5"/></svg></div>
+                        <div class="item-icon"><i class="fas fa-exclamation-circle"></i></div>
                         <div class="item-info">
                             <h5 class="item-title"><?php echo $comp['subject']; ?></h5>
                             <p class="item-ref">Ref: <?php echo $comp['ref_no']; ?></p>
@@ -103,9 +110,56 @@ include '../includes/navbar.php';
                     <?php endif; ?>
                 </div>
                 <?php endforeach; ?>
+                <?php if (empty($complaints)): ?>
+                <div class="no-data">No complaints filed.</div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
 </main>
 
-<?php include '../includes/footer.php'; ?>
+<!-- Complaint Modal -->
+<div id="complaint-modal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>File a Complaint</h3>
+            <button class="close-modal" onclick="toggleComplaintModal(false)">&times;</button>
+        </div>
+        <form id="complaintForm">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Subject</label>
+                    <input type="text" id="complaintSubject" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select id="complaintCategory" class="form-input" required>
+                        <option value="">Select Category</option>
+                        <option value="infrastructure">Infrastructure</option>
+                        <option value="peace_order">Peace & Order</option>
+                        <option value="sanitation">Sanitation</option>
+                        <option value="noise">Noise Complaint</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Priority</label>
+                    <select id="complaintPriority" class="form-input" required>
+                        <option value="low">Low</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea id="complaintDescription" class="form-input" rows="4" required></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="toggleComplaintModal(false)">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit Complaint</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/barangay-residence-system/assets/js/pages/user.js"></script>

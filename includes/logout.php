@@ -1,10 +1,6 @@
 <?php
-require_once '../includes/init.php';
-
-// Destroy all session data
+session_start();
 session_destroy();
-
-// Redirect to home page
-header('Location: ' . SITE_URL . '/pages/index.php');
+header('Location: /barangay-residence-system/pages/index.php');
 exit();
 ?>

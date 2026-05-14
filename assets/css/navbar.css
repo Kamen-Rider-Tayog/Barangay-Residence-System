@@ -70,6 +70,41 @@
     opacity: 0.8;
 }
 
+.navbar-links .btn {
+    padding: 0.5rem 1.25rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-links .btn-primary {
+    background-color: white;
+    color: var(--primary-blue);
+    border: none;
+}
+
+.navbar-links .btn-primary:hover {
+    background-color: var(--gray-100);
+    transform: translateY(-2px);
+    opacity: 1;
+}
+
+.navbar-links .btn-outline {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.navbar-links .btn-outline:hover {
+    background-color: white;
+    color: var(--primary-blue);
+    transform: translateY(-2px);
+    opacity: 1;
+}
+
 .lang-dropdown {
     position: relative;
 }
@@ -143,17 +178,4 @@
 
 #langArrow {
     transition: transform 0.3s ease;
-}
-
-.lang-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: none;
-    border: none;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 0.875rem;
-    padding: 0.5rem;
 }
