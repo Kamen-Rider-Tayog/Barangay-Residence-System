@@ -1,0 +1,159 @@
+.navbar {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 1rem;
+    z-index: 50;
+    margin: 1rem;
+    border-radius: 2rem;
+    margin-top: 0;
+}
+
+.navbar-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+
+.navbar-logo-img {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.navbar-logo-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.navbar-logo h1 {
+    font-size: 1.125rem;
+    font-weight: bold;
+    line-height: 1.2;
+}
+
+.navbar-logo p {
+    font-size: 0.625rem;
+    opacity: 0.8;
+    letter-spacing: 0.05em;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.navbar-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.navbar-links a:hover {
+    opacity: 0.8;
+}
+
+.lang-dropdown {
+    position: relative;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+    white-space: nowrap;
+}
+
+.lang-menu {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 0.5rem;
+    min-width: 100%;
+    width: auto;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-xl);
+    overflow: hidden;
+    z-index: 9999;
+}
+
+.lang-menu.show {
+    display: block !important;
+}
+
+.lang-menu:not(.show) {
+    display: none;
+}
+
+.lang-menu button {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--gray-700);
+    white-space: nowrap;
+}
+
+.lang-menu button:hover {
+    background-color: var(--primary-blue-50);
+    color: var(--primary-blue);
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .navbar-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+    }
+}
+
+#langArrow {
+    transition: transform 0.3s ease;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0.5rem;
+}

@@ -1,8 +1,4 @@
 <?php
-// ============================================
-// AUTHENTICATION FUNCTIONS (Using password_hash)
-// ============================================
-
 function isLoggedIn() {
     return isset($_SESSION['user_id']) || isset($_SESSION['admin_id']);
 }
@@ -29,9 +25,6 @@ function requireAdmin() {
     }
 }
 
-/**
- * Login Admin using prepared statement with password_verify
- */
 function loginAdmin($username, $password) {
     global $conn;
     
@@ -51,9 +44,6 @@ function loginAdmin($username, $password) {
     return false;
 }
 
-/**
- * Login Resident using prepared statement with password_verify
- */
 function loginResident($email, $password) {
     global $conn;
     
@@ -73,9 +63,6 @@ function loginResident($email, $password) {
     return false;
 }
 
-/**
- * Register new household with hashed password
- */
 function registerHousehold($email, $password, $address, $phase_no) {
     global $conn;
     
@@ -97,10 +84,6 @@ function logout() {
     exit();
 }
 
-// ============================================
-// GENERATION FUNCTIONS
-// ============================================
-
 function generateRefNo($prefix = 'BRG') {
     return $prefix . '-' . date('Ymd') . '-' . rand(1000, 9999);
 }
@@ -109,13 +92,6 @@ function generateComplaintRefNo() {
     return 'CMP-' . date('Ymd') . '-' . rand(1000, 9999);
 }
 
-// ============================================
-// DATABASE QUERY FUNCTIONS (Using Prepared Statements)
-// ============================================
-
-/**
- * Get all active services
- */
 function getServices() {
     global $conn;
     $sql = "SELECT * FROM service WHERE is_active = 1 ORDER BY service_id";
@@ -125,39 +101,30 @@ function getServices() {
     return $result->fetch_all(MYSQLI_ASSOC);
 }
 
-/**
- * Get dashboard statistics for admin
- */
 function getDashboardStats() {
     global $conn;
     $stats = [];
     
-    // Total residents
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM resident");
     $stmt->execute();
     $stats['total_residents'] = $stmt->get_result()->fetch_assoc()['total'];
     
-    // Total households
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM household");
     $stmt->execute();
     $stats['total_households'] = $stmt->get_result()->fetch_assoc()['total'];
     
-    // Total service requests
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM service_request");
     $stmt->execute();
     $stats['total_requests'] = $stmt->get_result()->fetch_assoc()['total'];
     
-    // Pending complaints
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM complaint WHERE status = 'pending'");
     $stmt->execute();
     $stats['pending_complaints'] = $stmt->get_result()->fetch_assoc()['total'];
     
-    // Total voters (residents who are voters)
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM resident WHERE is_voter = 1");
     $stmt->execute();
     $stats['total_voters'] = $stmt->get_result()->fetch_assoc()['total'];
     
-    // Total services available
     $stmt = $conn->prepare("SELECT COUNT(*) as total FROM service WHERE is_active = 1");
     $stmt->execute();
     $stats['total_services'] = $stmt->get_result()->fetch_assoc()['total'];
@@ -165,9 +132,6 @@ function getDashboardStats() {
     return $stats;
 }
 
-/**
- * Get household by ID
- */
 function getHouseholdById($household_id) {
     global $conn;
     $sql = "SELECT * FROM household WHERE household_id = ?";
@@ -177,9 +141,6 @@ function getHouseholdById($household_id) {
     return $stmt->get_result()->fetch_assoc();
 }
 
-/**
- * Get all residents under a household
- */
 function getResidentsByHouseholdId($household_id) {
     global $conn;
     $sql = "SELECT * FROM resident WHERE household_id = ? ORDER BY is_head DESC, resident_id";
@@ -189,9 +150,6 @@ function getResidentsByHouseholdId($household_id) {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-/**
- * Get service requests by household ID
- */
 function getServiceRequestsByHouseholdId($household_id) {
     global $conn;
     $sql = "SELECT sr.*, s.service_name, s.base_price, p.is_paid, p.total_amount, p.payment_method
@@ -206,9 +164,6 @@ function getServiceRequestsByHouseholdId($household_id) {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-/**
- * Get complaints by household ID
- */
 function getComplaintsByHouseholdId($household_id) {
     global $conn;
     $sql = "SELECT * FROM complaint WHERE household_id = ? ORDER BY date_submitted DESC";
@@ -218,9 +173,6 @@ function getComplaintsByHouseholdId($household_id) {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-/**
- * Get multiple rows with prepared statement (flexible)
- */
 function getRows($sql, $types = "", $params = []) {
     global $conn;
     $stmt = $conn->prepare($sql);
@@ -234,9 +186,6 @@ function getRows($sql, $types = "", $params = []) {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-/**
- * Get single row with prepared statement
- */
 function getRow($sql, $types = "", $params = []) {
     global $conn;
     $stmt = $conn->prepare($sql);
@@ -250,9 +199,6 @@ function getRow($sql, $types = "", $params = []) {
     return $stmt->get_result()->fetch_assoc();
 }
 
-/**
- * Insert data and return last insert ID
- */
 function insertData($sql, $types = "", $params = []) {
     global $conn;
     $stmt = $conn->prepare($sql);
@@ -268,9 +214,6 @@ function insertData($sql, $types = "", $params = []) {
     return false;
 }
 
-/**
- * Update data and return affected rows
- */
 function updateData($sql, $types = "", $params = []) {
     global $conn;
     $stmt = $conn->prepare($sql);
@@ -284,9 +227,6 @@ function updateData($sql, $types = "", $params = []) {
     return $stmt->affected_rows;
 }
 
-/**
- * Delete data and return affected rows
- */
 function deleteData($sql, $types = "", $params = []) {
     global $conn;
     $stmt = $conn->prepare($sql);
@@ -300,19 +240,14 @@ function deleteData($sql, $types = "", $params = []) {
     return $stmt->affected_rows;
 }
 
-/**
- * Create a new service request with transaction
- */
 function createServiceRequest($household_id, $service_id, $purpose, $delivery_method, $qty = 1) {
     global $conn;
     
-    // Start transaction
     $conn->begin_transaction();
     
     try {
         $ref_no = generateRefNo();
         
-        // Insert service request
         $sql1 = "INSERT INTO service_request (household_id, service_id, ref_no, purpose, delivery_method, status) 
                  VALUES (?, ?, ?, ?, ?, 'pending')";
         $stmt1 = $conn->prepare($sql1);
@@ -320,11 +255,9 @@ function createServiceRequest($household_id, $service_id, $purpose, $delivery_me
         $stmt1->execute();
         $request_id = $conn->insert_id;
         
-        // Get service price
         $service = getRow("SELECT base_price FROM service WHERE service_id = ?", "i", [$service_id]);
         $total_amount = $service['base_price'] * $qty;
         
-        // Create payment record
         $payment_ref = generateRefNo('PAY');
         $sql2 = "INSERT INTO payment (request_id, total_amount, payment_method, ref_no, is_paid) 
                  VALUES (?, ?, 'cash', ?, 0)";
@@ -332,20 +265,15 @@ function createServiceRequest($household_id, $service_id, $purpose, $delivery_me
         $stmt2->bind_param("ids", $request_id, $total_amount, $payment_ref);
         $stmt2->execute();
         
-        // Commit transaction
         $conn->commit();
         return $request_id;
         
     } catch (Exception $e) {
-        // Rollback on error
         $conn->rollback();
         return false;
     }
 }
 
-/**
- * Create a new complaint
- */
 function createComplaint($household_id, $subject, $description, $category, $priority) {
     global $conn;
     $ref_no = generateComplaintRefNo();
@@ -354,18 +282,12 @@ function createComplaint($household_id, $subject, $description, $category, $prio
     return insertData($sql, "isssss", [$household_id, $ref_no, $subject, $description, $category, $priority]);
 }
 
-/**
- * Update complaint response (admin)
- */
 function updateComplaintResponse($complaint_id, $status, $admin_response) {
     global $conn;
     $sql = "UPDATE complaint SET status = ?, admin_response = ? WHERE complaint_id = ?";
     return updateData($sql, "ssi", [$status, $admin_response, $complaint_id]);
 }
 
-/**
- * Get all complaints (admin)
- */
 function getAllComplaints() {
     global $conn;
     $sql = "SELECT c.*, h.email, r.first_name, r.last_name 
@@ -378,9 +300,6 @@ function getAllComplaints() {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-/**
- * Get all households with member count (admin)
- */
 function getAllHouseholds() {
     global $conn;
     $sql = "SELECT h.*, COUNT(r.resident_id) as member_count,
@@ -394,54 +313,27 @@ function getAllHouseholds() {
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 }
 
-// ============================================
-// TRANSLATION FUNCTION
-// ============================================
+function getActiveCampaigns() {
+    global $conn;
+    $sql = "SELECT * FROM campaigns WHERE is_active = 1 AND end_date > NOW() ORDER BY end_date ASC";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+}
 
-function __($key) {
-    $lang = $_SESSION['lang'] ?? 'tl';
-    
-    $texts = [
-        'en' => [
-            'nav-home' => 'Home',
-            'nav-services' => 'Services',
-            'login' => 'Login',
-            'logout' => 'Logout',
-            'sub-header' => 'Information & Service Management',
-            'hero-title' => 'Welcome to Barangay San Francisco',
-            'hero-desc' => 'Your trusted partner in community service.',
-            'btn-request' => 'Request Service',
-            'btn-learn' => 'Learn More',
-            'stat-residents' => 'Residents',
-            'stat-households' => 'Households',
-            'stat-voters' => 'Voters',
-            'stat-services' => 'Services',
-            'profile-title' => 'My Profile',
-            'page-title' => 'Online Services',
-            'page-subtitle' => 'Request barangay documents online',
-            'select-service' => 'Select a Service'
-        ],
-        'tl' => [
-            'nav-home' => 'Home',
-            'nav-services' => 'Serbisyo',
-            'login' => 'Mag-login',
-            'logout' => 'Mag-logout',
-            'sub-header' => 'Pamamahala ng Impormasyon at Serbisyo',
-            'hero-title' => 'Maligayang Pagdating sa Barangay San Francisco',
-            'hero-desc' => 'Ang inyong katuwang sa serbisyo ng komunidad.',
-            'btn-request' => 'Mag-request',
-            'btn-learn' => 'Alamin',
-            'stat-residents' => 'Residente',
-            'stat-households' => 'Sambahayan',
-            'stat-voters' => 'Botante',
-            'stat-services' => 'Serbisyo',
-            'profile-title' => 'Aking Profile',
-            'page-title' => 'Serbisyong Online',
-            'page-subtitle' => 'Mag-request ng dokumento online',
-            'select-service' => 'Pumili ng Serbisyo'
-        ]
-    ];
-    
-    return $texts[$lang][$key] ?? $key;
+function getLatestCampaign() {
+    global $conn;
+    $sql = "SELECT * FROM campaigns WHERE is_active = 1 AND end_date > NOW() ORDER BY end_date ASC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
+}
+
+function getTopAnnouncement() {
+    global $conn;
+    $sql = "SELECT * FROM campaigns WHERE is_active = 1 AND end_date > NOW() ORDER BY end_date ASC LIMIT 1";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    return $stmt->get_result()->fetch_assoc();
 }
 ?>

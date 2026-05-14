@@ -3,18 +3,16 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #1d4ed8 100%);
+    background-color: var(--primary-blue);
     padding: 1rem;
 }
 
-/* Login container width - unique */
 .login-container {
     width: 100%;
     max-width: 450px;
     text-align: center;
 }
 
-/* Logo animation - unique */
 .logo-link {
     display: inline-block;
     margin-bottom: 1rem;
@@ -25,7 +23,6 @@
     transform: scale(1.05);
 }
 
-/* Logo circle - overrides component */
 .logo-circle {
     width: 80px;
     height: 80px;
@@ -38,7 +35,6 @@
     box-shadow: var(--shadow-lg);
 }
 
-/* Typography overrides */
 .login-container h1 {
     color: white;
     margin-top: 1rem;
@@ -51,14 +47,12 @@
     margin-bottom: 2rem;
 }
 
-/* Login card override */
 .login-card {
     background: white;
     padding: 2rem;
     text-align: left;
 }
 
-/* Input icon positioning - unique */
 .input-icon svg {
     width: 18px;
     height: 18px;
@@ -67,7 +61,6 @@
     fill: none;
 }
 
-/* Password toggle button - unique */
 .toggle-password {
     position: absolute;
     right: 12px;
@@ -86,10 +79,9 @@
     color: var(--primary-blue);
 }
 
-/* Login button gradient override */
 .login-btn {
     width: 100%;
-    background: linear-gradient(135deg, var(--primary-blue) 0%, #1d4ed8 100%);
+    background-color: var(--primary-blue);
 }
 
 .login-btn:hover {
@@ -97,7 +89,6 @@
     box-shadow: var(--shadow-lg);
 }
 
-/* Back link - unique */
 .back-home {
     display: inline-flex;
     align-items: center;

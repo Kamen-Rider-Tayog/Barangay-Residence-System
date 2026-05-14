@@ -1,39 +1,120 @@
+.service-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.service-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.service-header p {
+    color: var(--gray-500);
+}
+
+.section-subtitle {
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--gray-700);
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
 .service-card {
     text-align: center;
     cursor: pointer;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .service-card:hover {
-    transform: translateY(-5px);
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
 }
 
-/* Service icon - unique */
 .service-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--primary-blue-50);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
     color: var(--primary-blue);
-    margin-bottom: 1.5rem;
+    font-size: 1.75rem;
+    transition: all 0.3s ease;
 }
 
-.service-icon svg {
-    width: 40px;
-    height: 40px;
-    stroke: currentColor;
-    stroke-width: 1.5;
+.service-card:hover .service-icon {
+    background-color: var(--primary-blue);
+    color: white;
 }
 
-/* Price styling - unique */
+.service-card h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+}
+
+.service-description {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-bottom: 1rem;
+    min-height: 2.5rem;
+}
+
 .service-price {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: var(--primary-blue);
 }
 
 .service-price.free {
     color: var(--success-green);
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
 }
 
-/* Form card - extends .card */
+.service-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    background-color: var(--warning-orange);
+    color: white;
+    font-size: 0.625rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-weight: 600;
+}
+
+.service-badge.popular {
+    background-color: var(--primary-blue);
+}
+
+.service-badge.new {
+    background-color: var(--success-green);
+}
+
+.processing-time {
+    font-size: 0.625rem;
+    color: var(--gray-400);
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
 .form-card {
     padding: 2rem;
 }
@@ -45,139 +126,24 @@
     color: var(--gray-800);
 }
 
-/* Form row layout - unique */
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
 }
 
-/* A4 Paper - unique to services */
-.a4-paper {
-    width: 21cm;
-    min-height: 29.7cm;
-    padding: 2.54cm;
-    background: white;
-    box-shadow: var(--shadow-xl);
-    position: relative;
-    margin: 0 auto;
-}
-
-.preview-header {
-    text-align: center;
-    border-bottom: 2px solid var(--gray-800);
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-}
-
-.preview-header p {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-}
-
-.preview-header h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.doc-title {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.doc-title h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--primary-blue);
-    text-decoration: underline;
-}
-
-.doc-content {
-    text-align: justify;
-    line-height: 1.8;
-    margin-bottom: 2rem;
-}
-
-.signature-section {
-    margin-top: 5rem;
-    text-align: right;
-}
-
-/* Watermark effect - unique */
-.watermark {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.03;
-    pointer-events: none;
-}
-
-.watermark div {
-    border: 15px solid var(--primary-blue);
-    border-radius: 50%;
-    padding: 3rem;
-    transform: rotate(-30deg);
-}
-
-/* Order summary - extends .card */
-.order-summary {
-    padding: 1.5rem;
-}
-
-.summary-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-}
-
-.summary-total {
-    border-top: 1px solid var(--gray-200);
-    padding-top: 1rem;
-    margin-top: 0.5rem;
-    font-weight: 700;
-    font-size: 1.125rem;
-}
-
-/* Delivery info - uses bg-blue-light from components */
-.delivery-info {
-    padding: 1.5rem;
-}
-
-/* Action buttons layout */
-.action-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-/* Thank you icon - unique */
-.thank-you-icon {
-    width: 80px;
-    height: 80px;
-    background: var(--success-green-light);
-    color: var(--success-green);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-}
-
-.thank-you-icon svg {
-    width: 40px;
-    height: 40px;
+@media (max-width: 1024px) {
+    .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
-    .form-row {
+    .services-grid {
         grid-template-columns: 1fr;
     }
-    .a4-paper {
-        width: 100%;
-        padding: 1.5rem;
+    
+    .form-row {
+        grid-template-columns: 1fr;
     }
 }

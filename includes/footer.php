@@ -1,32 +1,32 @@
 <footer class="footer">
     <div class="footer-content">
         <div>
-            <h5 data-key="f-contact">Makipag-ugnayan</h5>
-            <p>📞 (046) 437-XXXX</p>
-            <p>✉️ brgy.sanfrancisco.gentri@gmail.com</p>
-            <p>📍 San Francisco, Gen. Trias, Cavite</p>
+            <h5><?php echo __('f-contact'); ?></h5>
+            <p><i class="fas fa-phone"></i> (+63) 966 988 0213</p>
+            <p><i class="fas fa-envelope"></i> brgy.sanfrancisco.gentri@gmail.com</p>
+            <p><i class="fas fa-map-marker-alt"></i> San Francisco, Gen. Trias, Cavite</p>
         </div>
         <div>
-            <h5 data-key="f-links">Mabilis na Links</h5>
+            <h5><?php echo __('f-links'); ?></h5>
             <ul>
-                <li><a href="/barangay-residence-system/pages/index.php" data-key="nav-home">Home</a></li>
-                <li><a href="/barangay-residence-system/pages/services.php" data-key="nav-services">Serbisyong Online</a></li>
-                <li><a href="/barangay-residence-system/pages/login.php" data-key="login">Mag-login</a></li>
+                <li><a href="/barangay-residence-system/pages/index.php"><?php echo __('nav-home'); ?></a></li>
+                <li><a href="/barangay-residence-system/pages/services.php"><?php echo __('nav-services'); ?></a></li>
+                <li><a href="/barangay-residence-system/pages/login.php"><?php echo __('login'); ?></a></li>
+                <li><a href="?reset_announcement=1" style="font-size: 0.625rem; color: gray;">Reset Announcement</a></li>
             </ul>
         </div>
         <div>
-            <h5 data-key="f-follow">Sundan Kami</h5>
+            <h5><?php echo __('f-follow'); ?></h5>
             <div class="social-icons">
-                <a href="#">FB</a>
-                <a href="#">IG</a>
-                <a href="#">TW</a>
+                <a href="https://www.facebook.com/tayog.kagame" target="_blank"><i class="fab fa-facebook"></i> Facebook</a>
+                <a href="https://www.instagram.com/_tayog/" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+                <a href="#"><i class="fab fa-twitter" target="_blank"></i> Twitter</a>
             </div>
         </div>
     </div>
-    <p class="footer-copyright" data-key="footer-copy">© 2026 Barangay San Francisco. Lahat ng Karapatan ay Nakareserba.</p>
+    <p class="footer-copyright"><?php echo __('footer-copy'); ?></p>
 </footer>
 
-<!-- JavaScript - Absolute Paths -->
 <script src="/barangay-residence-system/assets/js/main.js"></script>
 
 <?php if (isset($page_js)): ?>

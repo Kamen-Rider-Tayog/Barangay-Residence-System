@@ -1,8 +1,3 @@
-/* ============================================
-   REUSABLE COMPONENTS
-   ============================================ */
-
-/* Buttons */
 .btn {
     display: inline-block;
     padding: 0.625rem 1.25rem;
@@ -16,13 +11,14 @@
 }
 
 .btn-primary {
-    background-color: var(--primary-blue);
-    color: white;
+    background-color: var(--primary-blue-50);
+    color: var(--primary-blue);
 }
 
 .btn-primary:hover {
     background-color: var(--primary-blue-dark);
-    transform: translateY(-1px);
+    transform: translateY(-3px);
+    color: var(--primary-blue-50);
     box-shadow: var(--shadow-md);
 }
 
@@ -46,7 +42,6 @@
     background-color: #991b1b;
 }
 
-/* Cards */
 .card {
     background-color: white;
     border-radius: var(--border-radius-lg);
@@ -71,7 +66,6 @@
     padding: 1rem;
 }
 
-/* Form Elements */
 .form-group {
     margin-bottom: 1.25rem;
 }
@@ -116,7 +110,6 @@ select.form-input {
     cursor: pointer;
 }
 
-/* Input with icon */
 .input-wrapper {
     position: relative;
 }
@@ -137,7 +130,6 @@ select.form-input {
     padding-left: 2.5rem;
 }
 
-/* Error/Success Messages */
 .error-alert {
     background-color: var(--error-red-light);
     border: 1px solid #fecaca;
@@ -159,7 +151,6 @@ select.form-input {
     margin-bottom: 1.25rem;
 }
 
-/* Tables */
 .data-table {
     width: 100%;
     text-align: left;
@@ -190,7 +181,6 @@ select.form-input {
     background-color: var(--gray-50);
 }
 
-/* Badges */
 .badge {
     display: inline-block;
     padding: 0.25rem 0.5rem;
@@ -219,7 +209,6 @@ select.form-input {
     color: var(--warning-orange);
 }
 
-/* Modal */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -277,7 +266,6 @@ select.form-input {
     justify-content: flex-end;
 }
 
-/* Dropdown */
 .dropdown-menu {
     position: absolute;
     right: 0;
@@ -317,7 +305,6 @@ select.form-input {
     color: var(--primary-blue);
 }
 
-/* Tabs */
 .tabs {
     display: flex;
     gap: 2rem;
@@ -349,7 +336,6 @@ select.form-input {
     display: block;
 }
 
-/* Stats Cards */
 .stat-card {
     background: white;
     padding: 1.5rem;
@@ -384,4 +370,88 @@ select.form-input {
     font-size: 1.875rem;
     font-weight: 700;
     color: var(--gray-800);
+}
+
+.top-announcement-bar {
+    background-color: #fef3c7;
+    color: #92400e;
+    padding: 0.75rem 0;
+    font-size: 0.875rem;
+    border-bottom: 2px solid #fde68a;
+    position: relative;
+    z-index: 100;
+    text-align: center;
+}
+
+.top-announcement-content i {
+    font-size: 1rem;
+    color: #d97706;
+    animation: iconPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.2);
+        opacity: 0.6;
+    }
+}
+
+.top-announcement-content span {
+    animation: textPulse 1s ease-in-out infinite;
+}
+
+@keyframes textPulse {
+    0%, 100% {
+        color: #92400e;
+    }
+    50% {
+        color: #b45309;
+    }
+}
+
+.announcement-link {
+    color: #d97706;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.announcement-link:hover {
+    text-decoration: underline;
+    transform: translateX(3px);
+}
+
+.close-announcement {
+    background: none;
+    border: none;
+    color: #92400e;
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0.25rem;
+    transition: all 0.2s;
+    margin-left: 0.5rem;
+}
+
+.close-announcement:hover {
+    color: #78350f;
+    transform: scale(1.1);
+}
+
+@media (max-width: 768px) {
+    .top-announcement-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+        padding: 0 2rem;
+    }
+    
+    .close-announcement {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+    }
 }

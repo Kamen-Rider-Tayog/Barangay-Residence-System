@@ -7,10 +7,6 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 define('DB_NAME', 'barangay_system');
 
-// Site constants
-define('SITE_URL', 'http://localhost/barangay-residence-system');
-define('SITE_NAME', 'Barangay San Francisco');
-
 // Database connection with try-catch (MySQLi)
 try {
     $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);

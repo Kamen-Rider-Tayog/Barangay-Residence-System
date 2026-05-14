@@ -1,47 +1,88 @@
 <?php
-$page_title = 'Online Services';
-$page_css = 'services.css';
-$page_js = 'services.js';
 require_once '../includes/init.php';
-include '../includes/header.php';
-include '../includes/navbar.php';
-
-// Get services from database
 $services = getServices();
+
+$serviceIcons = [
+    'Barangay Clearance' => 'fa-file-signature',
+    'Certificate of Residency' => 'fa-home',
+    'Business Permit' => 'fa-store',
+    'Indigency Certificate' => 'fa-hand-holding-heart',
+    'Police Clearance' => 'fa-shield-alt',
+    'Cedula (Community Tax)' => 'fa-receipt',
+    'Certificate of Good Moral' => 'fa-scroll',
+    'First Time Job Seeker' => 'fa-user-graduate',
+    'Barangay ID' => 'fa-id-card',
+    'Health Certificate' => 'fa-heartbeat',
+    'Building Permit' => 'fa-hard-hat',
+    'Travel Pass' => 'fa-passport'
+];
+
+$processingTimes = [
+    'Barangay Clearance' => '1-2 days',
+    'Certificate of Residency' => 'Same day',
+    'Business Permit' => '3-5 days',
+    'Indigency Certificate' => 'Same day',
+    'Police Clearance' => '1-2 days',
+    'Cedula (Community Tax)' => '15 minutes',
+    'Certificate of Good Moral' => '1 day',
+    'First Time Job Seeker' => 'Same day',
+    'Barangay ID' => '1 week',
+    'Health Certificate' => '2-3 days',
+    'Building Permit' => '1-2 weeks',
+    'Travel Pass' => 'Same day'
+];
+
+$popularServices = ['Barangay Clearance', 'Certificate of Residency', 'Police Clearance'];
+$newServices = ['First Time Job Seeker', 'Barangay ID'];
+
+include '../includes/header.php';
 ?>
+<link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/services.css">
+<?php include '../includes/navbar.php'; ?>
 
 <main class="container">
-    <!-- Service Selection -->
     <div id="serviceSelection">
-        <header class="text-center" style="margin-bottom: 2rem;">
+        <div class="service-header">
             <h2><?php echo __('page-title'); ?></h2>
             <p><?php echo __('page-subtitle'); ?></p>
-        </header>
+        </div>
         
-        <h3 style="margin-bottom: 1.5rem;"><?php echo __('select-service'); ?></h3>
+        <h3 class="section-subtitle"><?php echo __('select-service'); ?></h3>
         
-        <div class="grid grid-cols-4">
-            <?php foreach ($services as $service): ?>
-            <div onclick="showForm('<?php echo $service['service_name']; ?>', <?php echo $service['base_price']; ?>)" class="card card-hover service-card">
+        <div class="services-grid">
+            <?php foreach ($services as $service): 
+                $name = $service['service_name'];
+                $icon = $serviceIcons[$name] ?? 'fa-file-alt';
+                $processingTime = $processingTimes[$name] ?? '2-3 days';
+                $isPopular = in_array($name, $popularServices);
+                $isNew = in_array($name, $newServices);
+            ?>
+            <div onclick="showForm('<?php echo $name; ?>', <?php echo $service['base_price']; ?>)" class="card card-hover service-card">
+                <?php if ($isPopular): ?>
+                    <span class="service-badge popular">Popular</span>
+                <?php elseif ($isNew): ?>
+                    <span class="service-badge new">New</span>
+                <?php endif; ?>
+                
                 <div class="service-icon">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                    </svg>
+                    <i class="fas <?php echo $icon; ?>"></i>
                 </div>
-                <h4><?php echo $service['service_name']; ?></h4>
-                <p><?php echo $service['description'] ?? ''; ?></p>
+                <h4><?php echo $name; ?></h4>
+                <p class="service-description"><?php echo $service['description'] ?? ''; ?></p>
                 <?php if ($service['base_price'] == 0): ?>
                     <p class="service-price free">FREE</p>
                 <?php else: ?>
-                    <p class="service-price">₱<?php echo $service['base_price']; ?></p>
+                    <p class="service-price">₱<?php echo number_format($service['base_price'], 2); ?></p>
                 <?php endif; ?>
+                <div class="processing-time">
+                    <i class="fas fa-clock"></i>
+                    <span><?php echo $processingTime; ?></span>
+                </div>
             </div>
             <?php endforeach; ?>
         </div>
     </div>
 
-    <!-- Request Form (hidden by default) -->
     <div id="serviceForm" class="hidden-section">
         <div class="card form-card">
             <h3 id="formTitle" class="form-title">Request Document</h3>
@@ -90,7 +131,7 @@ $services = getServices();
                         <label class="form-label">Delivery Method</label>
                         <select id="inputDelivery" name="delivery_method" class="form-input">
                             <option value="pickup">Pick-up</option>
-                            <option value="delivery">Home Delivery</option>
+                            <option value="delivery">Home Delivery (+₱50)</option>
                         </select>
                     </div>
                 </div>
