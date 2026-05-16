@@ -1,122 +1,192 @@
-lucide.createIcons();
-
-const today = new Date().toISOString().split('T')[0];
-const dateInput = document.getElementById('inputDate');
-if (dateInput) dateInput.setAttribute('min', today);
-
+// Services page
 let currentServiceName = "";
 let currentServicePrice = 0;
 
-// Language dropdown
-const langBtn = document.getElementById('langBtn');
-const langMenu = document.getElementById('langMenu');
-if (langBtn && langMenu) {
-    langBtn.addEventListener('click', (e) => { 
-        e.stopPropagation(); 
-        langMenu.classList.toggle('show'); 
-    });
-    window.addEventListener('click', () => { 
-        langMenu.classList.remove('show'); 
-    });
-}
-
-function changeLanguage(lang) {
-    window.location.href = '?lang=' + lang;
-}
-
-function showForm(serviceName, price) {
+function openServiceModal(serviceName, price) {
     currentServiceName = serviceName;
     currentServicePrice = price;
-    document.getElementById('serviceSelection').classList.add('hidden-section');
-    document.getElementById('serviceForm').classList.remove('hidden-section');
-    document.getElementById('formTitle').textContent = "Request " + serviceName;
-    window.scrollTo(0, 0);
+    
+    document.getElementById('modalServiceName').textContent = 'Request ' + serviceName;
+    document.getElementById('modalServiceNameHidden').value = serviceName;
+    document.getElementById('modalServicePrice').value = price;
+    
+    updatePriceSummary();
+    
+    const qtyInput = document.getElementById('reqQty');
+    const deliverySelect = document.getElementById('reqDelivery');
+    
+    if (qtyInput) {
+        qtyInput.removeEventListener('input', updatePriceSummary);
+        qtyInput.addEventListener('input', updatePriceSummary);
+    }
+    if (deliverySelect) {
+        deliverySelect.removeEventListener('change', updatePriceSummary);
+        deliverySelect.addEventListener('change', updatePriceSummary);
+    }
+    
+    const modal = document.getElementById('serviceModal');
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.add('active'), 10);
 }
 
-function hideForm() {
-    document.getElementById('serviceForm').classList.add('hidden-section');
-    document.getElementById('serviceSelection').classList.remove('hidden-section');
-    window.scrollTo(0, 0);
+function updatePriceSummary() {
+    const qty = parseInt(document.getElementById('reqQty')?.value || 1);
+    const deliveryMethod = document.getElementById('reqDelivery')?.value || 'pickup';
+    
+    const serviceFee = currentServicePrice * qty;
+    const deliveryFee = deliveryMethod === 'delivery' ? 50 : 0;
+    const total = serviceFee + deliveryFee;
+    
+    document.getElementById('summaryServiceFee').textContent = '₱' + serviceFee.toFixed(2);
+    document.getElementById('summaryQtyDisplay').textContent = qty;
+    document.getElementById('summaryDeliveryFee').textContent = deliveryFee === 0 ? '₱0.00' : '₱50.00';
+    document.getElementById('summaryTotal').textContent = '₱' + total.toFixed(2);
+    updateGcashAmount();
 }
 
-function handlePreview(e) {
-    e.preventDefault();
-    const name = document.getElementById('inputName').value;
-    const address = document.getElementById('inputAddress').value;
-    const purpose = document.getElementById('inputPurpose').value;
-    const qty = document.getElementById('inputQty').value;
-    
-    document.getElementById('prevName').textContent = name;
-    document.getElementById('prevAddr').textContent = address;
-    document.getElementById('prevPurpose').textContent = purpose;
-    document.getElementById('previewDocHeader').textContent = currentServiceName.toUpperCase();
-    document.getElementById('summarySrv').textContent = currentServiceName;
-    document.getElementById('summaryQty').textContent = qty;
-    
-    const feeDisplay = currentServicePrice === 0 ? "FREE" : "₱" + currentServicePrice;
-    const totalDisplay = currentServicePrice === 0 ? "FREE" : "₱" + (currentServicePrice * qty);
-    
-    document.getElementById('summaryFee').textContent = feeDisplay;
-    document.getElementById('summaryTotal').textContent = totalDisplay;
-    document.getElementById('summaryMethod').textContent = document.getElementById('inputDelivery').value;
-    document.getElementById('summaryDate').textContent = document.getElementById('inputDate').value;
-    document.getElementById('summaryTime').textContent = document.getElementById('inputTime').value;
-    document.getElementById('summaryPay').textContent = document.getElementById('inputPayment').value;
-    
-    document.getElementById('serviceForm').classList.add('hidden-section');
-    document.getElementById('previewSection').classList.remove('hidden-section');
-    window.scrollTo(0, 0);
+function updateGcashAmount() {
+    const totalElement = document.getElementById('summaryTotal');
+    const gcashAmountElement = document.getElementById('gcashAmount');
+    if (totalElement && gcashAmountElement) {
+        gcashAmountElement.textContent = totalElement.textContent;
+    }
 }
 
-function backToEdit() {
-    document.getElementById('previewSection').classList.add('hidden-section');
-    document.getElementById('serviceForm').classList.remove('hidden-section');
-    window.scrollTo(0, 0);
+function closeServiceModal() {
+    const modal = document.getElementById('serviceModal');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        const form = document.getElementById('serviceRequestForm');
+        if (form) form.reset();
+        document.getElementById('summaryQtyDisplay').textContent = '1';
+        document.getElementById('summaryServiceFee').textContent = '₱0.00';
+        document.getElementById('summaryDeliveryFee').textContent = '₱0.00';
+        document.getElementById('summaryTotal').textContent = '₱0.00';
+    }, 300);
 }
 
-function handleConfirm() {
-    const paymentMethod = document.getElementById('inputPayment').value;
-    
-    const formData = new FormData();
-    formData.append('email', document.getElementById('inputEmail').value);
-    formData.append('name', document.getElementById('inputName').value);
-    formData.append('address', document.getElementById('inputAddress').value);
-    formData.append('contact', document.getElementById('inputContact').value);
-    formData.append('service_name', currentServiceName);
-    formData.append('qty', document.getElementById('inputQty').value);
-    formData.append('purpose', document.getElementById('inputPurpose').value);
-    formData.append('payment_method', paymentMethod);
-    formData.append('delivery_method', document.getElementById('inputDelivery').value);
-    
-    fetch('submit_request.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.text())
-    .then(result => {
-        if (result.includes('success')) {
-            if (paymentMethod === "GCash" && currentServicePrice > 0) {
-                document.getElementById('gcashModal').classList.add('active');
-            } else {
-                showThankYou();
-            }
-        } else {
-            alert('Error submitting request. Please try again.');
+function closeGcashModal() {
+    const modal = document.getElementById('gcashModal');
+    modal.classList.remove('active');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+function closeSuccessModal() {
+    const modal = document.getElementById('successModal');
+    modal.classList.remove('active');
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        window.location.reload();
+    }, 300);
+}
+
+function openGcashApp() {
+    window.location.href = 'gcash://';
+    setTimeout(() => {
+        if (document.hasFocus()) {
+            showFeedbackModal('GCash App', 'Do you want to download GCash app?', 'info');
+            setTimeout(() => {
+                window.open('https://play.google.com/store/apps/details?id=com.globe.gcash.android', '_blank');
+            }, 1000);
         }
-    })
-    .catch(error => {
-        alert('Error submitting request. Please try again.');
+    }, 2000);
+}
+
+function confirmGcashPayment() {
+    closeGcashModal();
+    setTimeout(() => {
+        const successModal = document.getElementById('successModal');
+        successModal.classList.remove('hidden');
+        setTimeout(() => successModal.classList.add('active'), 50);
+    }, 300);
+}
+
+// Submit service request
+const serviceForm = document.getElementById('serviceRequestForm');
+if (serviceForm) {
+    serviceForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('reqEmail').value;
+        const name = document.getElementById('reqName').value;
+        const address = document.getElementById('reqAddress').value;
+        const paymentMethod = document.getElementById('reqPayment').value;
+        
+        if (!email || !name || !address) {
+            showFeedbackModal('Error', 'Please fill in all required fields.', 'error');
+            return;
+        }
+        
+        const formData = new FormData();
+        formData.append('email', email);
+        formData.append('name', name);
+        formData.append('address', address);
+        formData.append('contact', document.getElementById('reqContact').value);
+        formData.append('service_name', currentServiceName);
+        formData.append('qty', document.getElementById('reqQty').value);
+        formData.append('purpose', document.getElementById('reqPurpose').value);
+        formData.append('payment_method', paymentMethod);
+        formData.append('delivery_method', document.getElementById('reqDelivery').value);
+        
+        const submitBtn = serviceForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+        
+        fetch('submit_request.php', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const serviceModal = document.getElementById('serviceModal');
+                    serviceModal.classList.remove('active');
+                    
+                    setTimeout(() => {
+                        serviceModal.classList.add('hidden');
+                        
+                        if (paymentMethod === 'gcash' && currentServicePrice > 0) {
+                            updateGcashAmount();
+                            const gcashModal = document.getElementById('gcashModal');
+                            gcashModal.classList.remove('hidden');
+                            setTimeout(() => gcashModal.classList.add('active'), 50);
+                        } else {
+                            const successModal = document.getElementById('successModal');
+                            successModal.classList.remove('hidden');
+                            setTimeout(() => successModal.classList.add('active'), 50);
+                        }
+                    }, 300);
+                } else {
+                    showFeedbackModal('Error', data.message || 'Error submitting request.', 'error');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(() => {
+                showFeedbackModal('Error', 'Network error. Please try again.', 'error');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
     });
 }
 
-function showThankYou() {
-    closeModals();
-    document.getElementById('thankYouModal').classList.add('active');
+// Click outside to close
+const modalOverlay = document.getElementById('serviceModal');
+if (modalOverlay) {
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeServiceModal();
+    });
 }
 
-function closeModals() {
-    const gcashModal = document.getElementById('gcashModal');
-    const thankYouModal = document.getElementById('thankYouModal');
-    if (gcashModal) gcashModal.classList.remove('active');
-    if (thankYouModal) thankYouModal.classList.remove('active');
+const gcashOverlay = document.getElementById('gcashModal');
+if (gcashOverlay) {
+    gcashOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeGcashModal();
+    });
+}
+
+const successOverlay = document.getElementById('successModal');
+if (successOverlay) {
+    successOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeSuccessModal();
+    });
 }

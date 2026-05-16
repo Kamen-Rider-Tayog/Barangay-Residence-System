@@ -1,6 +1,6 @@
 <?php
-require_once '../includes/init.php';
-include '../includes/header.php';
+require_once '../includes/core/init.php';
+include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/login.css">
 <div class="login-page">

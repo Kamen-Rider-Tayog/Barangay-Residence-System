@@ -1,0 +1,28 @@
+.hero {
+    background-color: var(--primary-blue);
+    color: white;
+    padding: 4rem 1rem 10rem;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.hero p {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    max-width: 42rem;
+    margin: 0 auto 2rem;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        padding: 3rem 1rem;
+    }
+    .hero h2 {
+        font-size: 2rem;
+    }
+}

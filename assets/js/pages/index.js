@@ -1,3 +1,4 @@
+// Homepage countdown timer
 document.addEventListener('DOMContentLoaded', function() {
     updateHomeCountdown();
     setInterval(updateHomeCountdown, 1000);

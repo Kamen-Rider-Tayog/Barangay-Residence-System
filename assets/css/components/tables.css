@@ -1,0 +1,28 @@
+.data-table {
+    width: 100%;
+    text-align: left;
+    border-collapse: collapse;
+}
+
+.data-table thead {
+    background-color: var(--gray-50);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.data-table th {
+    padding: 0.875rem 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--gray-600);
+}
+
+.data-table td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 0.875rem;
+}
+
+.data-table tr:hover {
+    background-color: var(--gray-50);
+}

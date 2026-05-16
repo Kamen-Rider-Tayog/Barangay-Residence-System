@@ -1,26 +1,4 @@
-// Language dropdown
-const langBtn = document.getElementById('langBtn');
-const langMenu = document.getElementById('langMenu');
-
-if (langBtn && langMenu) {
-    langBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        langMenu.classList.toggle('show');
-    });
-    document.addEventListener('click', () => {
-        if (langMenu) langMenu.classList.remove('show');
-    });
-}
-
-function changeLanguage(lang) {
-    window.location.href = '?lang=' + lang;
-}
-
-function logoutUser() {
-    window.location.href = '../includes/logout.php';
-}
-
-// Tab switching
+// User dashboard
 function switchTab(tab) {
     const transactionsSection = document.getElementById('section-transactions');
     const complaintsSection = document.getElementById('section-complaints');
@@ -44,16 +22,20 @@ function switchTab(tab) {
     }
 }
 
-// Complaint Modal
 function toggleComplaintModal(show) {
     const modal = document.getElementById('complaint-modal');
     if (!modal) return;
+    
     if (show) {
         modal.classList.remove('hidden');
+        setTimeout(() => modal.classList.add('active'), 10);
         document.body.style.overflow = 'hidden';
     } else {
-        modal.classList.add('hidden');
+        modal.classList.remove('active');
+        setTimeout(() => modal.classList.add('hidden'), 300);
         document.body.style.overflow = '';
+        const form = document.getElementById('complaintForm');
+        if (form) form.reset();
     }
 }
 
@@ -61,13 +43,11 @@ function toggleComplaintModal(show) {
 const modalOverlay = document.getElementById('complaint-modal');
 if (modalOverlay) {
     modalOverlay.addEventListener('click', function(e) {
-        if (e.target === this) {
-            toggleComplaintModal(false);
-        }
+        if (e.target === this) toggleComplaintModal(false);
     });
 }
 
-// Submit complaint via AJAX
+// Submit complaint
 const complaintForm = document.getElementById('complaintForm');
 if (complaintForm) {
     complaintForm.addEventListener('submit', function(e) {
@@ -79,7 +59,7 @@ if (complaintForm) {
         const description = document.getElementById('complaintDescription').value;
         
         if (!subject || !category || !description) {
-            alert('Please fill in all fields.');
+            showFeedbackModal('Error', 'Please fill in all fields.', 'error');
             return;
         }
         
@@ -94,43 +74,40 @@ if (complaintForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
         submitBtn.disabled = true;
         
-        fetch('submit_complaint.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Complaint submitted successfully!');
-                toggleComplaintModal(false);
-                location.reload();
-            } else {
-                alert(data.message || 'Error submitting complaint. Please try again.');
-            }
-        })
-        .catch(error => {
-            alert('Error submitting complaint. Please try again.');
-        })
-        .finally(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        });
+        fetch('submit_complaint.php', { method: 'POST', body: formData })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    toggleComplaintModal(false);
+                    setTimeout(() => showFeedbackModal('Success!', data.message, 'success'), 400);
+                    setTimeout(() => location.reload(), 2500);
+                } else {
+                    showFeedbackModal('Error', data.message, 'error');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            })
+            .catch(() => {
+                showFeedbackModal('Error', 'Something went wrong.', 'error');
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
     });
 }
 
-// Initialize on load
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
-    // Set default active tab
     const transactionsSection = document.getElementById('section-transactions');
-    const transBtn = document.getElementById('nav-transactions');
-    
-    if (transactionsSection && !transactionsSection.classList.contains('hidden-section')) {
-        // Already active, do nothing
-    } else if (transactionsSection) {
+    if (transactionsSection && transactionsSection.classList.contains('hidden-section')) {
         transactionsSection.classList.remove('hidden-section');
-        if (transBtn) {
-            transBtn.classList.add('btn-active');
-            transBtn.classList.remove('btn-inactive');
-        }
+    }
+    const transBtn = document.getElementById('nav-transactions');
+    if (transBtn) {
+        transBtn.classList.add('btn-active');
+        transBtn.classList.remove('btn-inactive');
     }
 });
+
+function logoutUser() {
+    window.location.href = '../includes/logout.php';
+}

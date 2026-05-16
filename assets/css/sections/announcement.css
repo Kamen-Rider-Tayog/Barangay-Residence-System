@@ -1,0 +1,58 @@
+.announcement-section {
+    margin: 4rem 0;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.section-title i {
+    font-size: 1.5rem;
+    color: var(--primary-blue);
+}
+
+.section-title h3 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--gray-800);
+}
+
+.announcement-card {
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.announcement-card:hover {
+    transform: translateY(-5px);
+}
+
+.announcement-date {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-blue);
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.announcement-card h4 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--gray-800);
+}
+
+.announcement-card p {
+    color: var(--gray-600);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .announcement-section .grid {
+        grid-template-columns: 1fr;
+    }
+}

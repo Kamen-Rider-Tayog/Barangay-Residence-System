@@ -1,0 +1,65 @@
+.campaign-banner {
+    background-color: var(--primary-blue-dark);
+    margin: 2rem 0;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.campaign-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    color: white;
+}
+
+.campaign-banner-icon {
+    font-size: 2.5rem;
+}
+
+.campaign-banner-info {
+    flex: 1;
+}
+
+.campaign-banner-label {
+    background: rgba(255,255,255,0.2);
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.625rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.campaign-banner-info h3 {
+    font-size: 1.25rem;
+    margin: 0.5rem 0;
+}
+
+.campaign-banner-info p {
+    font-size: 0.875rem;
+    opacity: 0.9;
+}
+
+.campaign-banner-countdown {
+    text-align: center;
+    min-width: 180px;
+}
+
+.simple-countdown {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: rgba(0,0,0,0.3);
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .campaign-banner-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    .campaign-banner-countdown {
+        width: 100%;
+    }
+}

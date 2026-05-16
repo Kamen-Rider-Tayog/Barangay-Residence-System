@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/init.php';
+require_once '../includes/core/init.php';
 requireAdmin();
 $phases = getAllPhases();
 
@@ -7,10 +7,10 @@ $stats = getDashboardStats();
 $complaints = getAllComplaints();
 $households = getAllHouseholds();
 
-include '../includes/header.php';
+include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/dashboard.css">
-<?php include '../includes/navbar.php'; ?>
+<?php include '../includes/layouts/navbar.php'; ?>
 
 <main class="container">
     <div class="dashboard-header">
@@ -29,8 +29,11 @@ include '../includes/header.php';
                     <span class="badge-red"><?php echo $stats['pending_complaints']; ?></span>
                     <?php endif; ?>
                 </button>
+                <button id="nav-services" class="btn-nav btn-inactive" onclick="location.href='admin/services/index.php'">
+                    <i class="fas fa-cogs"></i> Services
+                </button>
             </div>
-            <a href="/barangay-residence-system/includes/logout.php" class="btn btn-outline" style="background: var(--error-red); color: white; border: none;">
+            <a href="/barangay-residence-system/includes/core/logout.php" class="btn btn-outline" style="background: var(--error-red); color: white; border: none;">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -55,11 +58,12 @@ include '../includes/header.php';
         </div>
     </div>
     
+    <!-- Households Section -->
     <div id="section-households">
         <div class="card">
             <div class="card-header flex-between">
                 <span class="font-bold">Household Management</span>
-                <button onclick="showAddForm()" class="btn btn-primary">+ Add Household</button>
+                <button onclick="location.href='admin/households/create.php'" class="btn btn-primary">+ Add Household</button>
             </div>
             
             <div class="search-bar">
@@ -103,9 +107,15 @@ include '../includes/header.php';
                             <td><span class="badge badge-blue"><?php echo htmlspecialchars($h['phase_no']); ?></span></td>
                             <td><?php echo $h['member_count']; ?></td>
                             <td class="action-icons">
-                                <i class="fas fa-eye" onclick="viewHousehold(<?php echo $h['household_id']; ?>)"></i>
-                                <i class="fas fa-edit" onclick="editHousehold(<?php echo $h['household_id']; ?>)"></i>
-                                <i class="fas fa-trash" onclick="deleteHousehold(<?php echo $h['household_id']; ?>)"></i>
+                                <a href="admin/households/show.php?id=<?php echo $h['household_id']; ?>" class="action-icon" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="admin/households/edit.php?id=<?php echo $h['household_id']; ?>" class="action-icon" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="admin/households/destroy.php?id=<?php echo $h['household_id']; ?>" class="action-icon" onclick="return confirm('Delete this household?')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -115,55 +125,79 @@ include '../includes/header.php';
         </div>
     </div>
     
+    <!-- Complaints Section with Grid and Filters -->
     <div id="section-complaints" class="hidden-section">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header flex-between">
                 <span class="font-bold">Complaint Management</span>
-            </div>
-            <div class="complaints-list">
-                <?php if (empty($complaints)): ?>
-                    <div class="no-data">
-                        <i class="fas fa-check-circle"></i>
-                        <p>No complaints found.</p>
+                <div class="complaint-filters">
+                    <select id="complaintStatusFilter" class="filter-select">
+                        <option value="all">All Status</option>
+                        <option value="pending">Pending</option>
+                        <option value="reviewing">Reviewing</option>
+                        <option value="resolved">Resolved</option>
+                        <option value="dismissed">Dismissed</option>
+                    </select>
+                    <select id="complaintPriorityFilter" class="filter-select">
+                        <option value="all">All Priority</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <div class="search-input" style="width: 200px;">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="complaintSearch" placeholder="Search complaints...">
                     </div>
-                <?php else: ?>
-                    <?php foreach ($complaints as $c): ?>
-                    <div class="complaint-card">
-                        <div class="complaint-header">
-                            <div>
-                                <h3><?php echo htmlspecialchars($c['subject']); ?></h3>
-                                <p class="complaint-meta">
-                                    <i class="fas fa-user"></i> <?php echo htmlspecialchars($c['first_name'] . ' ' . $c['last_name']); ?>
-                                    | <i class="fas fa-hashtag"></i> <?php echo $c['ref_no']; ?>
-                                    | <i class="fas fa-calendar"></i> <?php echo date('M d, Y', strtotime($c['date_submitted'])); ?>
-                                </p>
-                            </div>
-                            <div class="complaint-meta-badges">
+                </div>
+            </div>
+            <div class="complaints-grid" id="complaintsGrid">
+                <?php foreach ($complaints as $c): ?>
+                <div class="complaint-card" data-complaint-id="<?php echo $c['complaint_id']; ?>" data-status="<?php echo $c['status']; ?>" data-priority="<?php echo $c['priority']; ?>" data-subject="<?php echo strtolower(htmlspecialchars($c['subject'])); ?>" data-name="<?php echo strtolower($c['first_name'] . ' ' . $c['last_name']); ?>">
+                    <div class="complaint-header">
+                        <div class="complaint-title">
+                            <h3><?php echo htmlspecialchars($c['subject']); ?></h3>
+                            <div class="complaint-badges">
                                 <span class="badge badge-<?php echo $c['priority'] == 'high' ? 'red' : ($c['priority'] == 'medium' ? 'orange' : 'blue'); ?>">
                                     <?php echo ucfirst($c['priority']); ?>
                                 </span>
-                                <span class="badge badge-<?php echo $c['status'] == 'resolved' ? 'green' : 'orange'; ?>">
+                                <span class="badge badge-<?php echo $c['status'] == 'resolved' ? 'green' : ($c['status'] == 'pending' ? 'orange' : 'blue'); ?>">
                                     <?php echo ucfirst($c['status']); ?>
                                 </span>
                             </div>
                         </div>
-                        <p class="complaint-desc"><?php echo htmlspecialchars($c['description']); ?></p>
-                        <?php if ($c['admin_response']): ?>
-                        <div class="response-box">
-                            <strong><i class="fas fa-reply"></i> Admin Response:</strong>
-                            <p><?php echo htmlspecialchars($c['admin_response']); ?></p>
-                        </div>
-                        <?php endif; ?>
-                        <div class="complaint-actions">
-                            <button onclick="openRespondModal(<?php echo $c['complaint_id']; ?>)" class="btn btn-primary">
-                                <i class="fas fa-reply"></i> Respond
-                            </button>
+                        <div class="complaint-meta">
+                            <p><i class="fas fa-user"></i> <?php echo htmlspecialchars($c['first_name'] . ' ' . $c['last_name']); ?></p>
+                            <p><i class="fas fa-hashtag"></i> <?php echo $c['ref_no']; ?></p>
+                            <p><i class="fas fa-calendar"></i> <?php echo date('M d, Y', strtotime($c['date_submitted'])); ?></p>
                         </div>
                     </div>
-                    <?php endforeach; ?>
+                    <div class="complaint-preview">
+                        <p><?php echo htmlspecialchars(substr($c['description'], 0, 120)) . (strlen($c['description']) > 120 ? '...' : ''); ?></p>
+                    </div>
+                    <?php if ($c['admin_response']): ?>
+                    <div class="response-preview">
+                        <i class="fas fa-reply"></i> <?php echo htmlspecialchars(substr($c['admin_response'], 0, 80)) . (strlen($c['admin_response']) > 80 ? '...' : ''); ?>
+                    </div>
+                    <?php endif; ?>
+                    <div class="complaint-actions">
+                        <button onclick="location.href='admin/complaints/show.php?id=<?php echo $c['complaint_id']; ?>'" class="btn btn-primary">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        <button onclick="location.href='admin/complaints/respond.php?id=<?php echo $c['complaint_id']; ?>'" class="btn btn-outline">
+                            <i class="fas fa-reply"></i> Respond
+                        </button>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+                <?php if (empty($complaints)): ?>
+                <div class="no-data">
+                    <i class="fas fa-check-circle"></i>
+                    <p>No complaints found.</p>
+                </div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </main>
+
 <script src="/barangay-residence-system/assets/js/pages/dashboard.js"></script>

@@ -1,23 +1,23 @@
 <?php
-require_once '../includes/init.php';
+require_once '../includes/core/init.php';
 $campaigns = getActiveCampaigns();
 
-include '../includes/header.php';
+include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/campaigns.css">
-<?php include '../includes/navbar.php'; ?>
+<?php include '../includes/layouts/navbar.php'; ?>
 
 <main class="container">
     <div class="campaigns-header">
-        <h2>Active Campaigns & Programs</h2>
-        <p>Stay updated with our ongoing barangay programs and services</p>
+        <h2><?php echo __('campaigns-title'); ?></h2>
+        <p><?php echo __('campaigns-subtitle'); ?></p>
     </div>
 
     <div class="campaigns-grid">
         <?php if (empty($campaigns)): ?>
             <div class="no-campaigns">
                 <i class="fas fa-calendar-times"></i>
-                <p>No active campaigns at the moment.</p>
+                <p><?php echo __('no-campaigns'); ?></p>
             </div>
         <?php else: ?>
             <?php foreach ($campaigns as $campaign): ?>
@@ -91,4 +91,4 @@ setInterval(updateCountdowns, 1000);
 updateCountdowns();
 </script>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../includes/layouts/footer.php'; ?>

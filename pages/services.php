@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/init.php';
+require_once '../includes/core/init.php';
 $services = getServices();
 
 $serviceIcons = [
@@ -35,10 +35,25 @@ $processingTimes = [
 $popularServices = ['Barangay Clearance', 'Certificate of Residency', 'Police Clearance'];
 $newServices = ['First Time Job Seeker', 'Barangay ID'];
 
-include '../includes/header.php';
+$userData = null;
+if (isLoggedIn()) {
+    if (isResident()) {
+        $household_id = $_SESSION['household_id'];
+        $household = getHouseholdById($household_id);
+        $residents = getResidentsByHouseholdId($household_id);
+        $userData = [
+            'email' => $household['email'],
+            'name' => ($residents[0]['first_name'] ?? '') . ' ' . ($residents[0]['last_name'] ?? ''),
+            'address' => $household['address'] ?? '',
+            'contact' => $residents[0]['contact_no'] ?? ''
+        ];
+    }
+}
+
+include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/services.css">
-<?php include '../includes/navbar.php'; ?>
+<?php include '../includes/layouts/navbar.php'; ?>
 
 <main class="container">
     <div id="serviceSelection">
@@ -57,7 +72,7 @@ include '../includes/header.php';
                 $isPopular = in_array($name, $popularServices);
                 $isNew = in_array($name, $newServices);
             ?>
-            <div onclick="showForm('<?php echo $name; ?>', <?php echo $service['base_price']; ?>)" class="card card-hover service-card">
+            <div onclick="openServiceModal('<?php echo addslashes($name); ?>', <?php echo $service['base_price']; ?>)" class="card card-hover service-card">
                 <?php if ($isPopular): ?>
                     <span class="service-badge popular">Popular</span>
                 <?php elseif ($isNew): ?>
@@ -82,67 +97,155 @@ include '../includes/header.php';
             <?php endforeach; ?>
         </div>
     </div>
+</main>
 
-    <div id="serviceForm" class="hidden-section">
-        <div class="card form-card">
-            <h3 id="formTitle" class="form-title">Request Document</h3>
-            <form id="mainRequestForm" method="POST" action="submit_request.php">
+<!-- Service Request Modal -->
+<div id="serviceModal" class="modal-overlay hidden">
+    <div class="modal-content modal-service">
+        <div class="modal-header">
+            <h3 id="modalServiceName">Request Service</h3>
+            <button class="close-modal" onclick="closeServiceModal()">&times;</button>
+        </div>
+        <form id="serviceRequestForm">
+            <div class="modal-body">
+                <input type="hidden" id="modalServicePrice" name="service_price">
+                <input type="hidden" id="modalServiceNameHidden" name="service_name">
+                
+                <?php if (!isLoggedIn()): ?>
+                <div class="login-prompt">
+                    <i class="fas fa-lock"></i>
+                    <p>Please login to request a service</p>
+                    <a href="/barangay-residence-system/pages/login.php" class="btn btn-primary">Login Now</a>
+                </div>
+                <?php else: ?>
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Email</label>
-                        <input type="email" id="inputEmail" name="email" class="form-input" required>
+                        <input type="email" id="reqEmail" name="email" class="form-input" value="<?php echo htmlspecialchars($userData['email'] ?? ''); ?>" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Full Name</label>
-                        <input type="text" id="inputName" name="name" class="form-input" required>
+                        <input type="text" id="reqName" name="name" class="form-input" value="<?php echo htmlspecialchars($userData['name'] ?? ''); ?>" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Address</label>
-                    <input type="text" id="inputAddress" name="address" class="form-input" required>
+                    <input type="text" id="reqAddress" name="address" class="form-input" value="<?php echo htmlspecialchars($userData['address'] ?? ''); ?>" required>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Contact Number</label>
-                        <input type="tel" id="inputContact" name="contact" class="form-input" required>
+                        <input type="tel" id="reqContact" name="contact" class="form-input" value="<?php echo htmlspecialchars($userData['contact'] ?? ''); ?>" required>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Quantity</label>
-                        <input type="number" id="inputQty" name="qty" class="form-input" value="1" min="1" required>
+                        <input type="number" id="reqQty" name="qty" class="form-input" value="1" min="1" required>
                     </div>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Purpose</label>
-                    <textarea id="inputPurpose" name="purpose" class="form-input" rows="4" required></textarea>
+                    <textarea id="reqPurpose" name="purpose" class="form-input" rows="3"></textarea>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Payment Method</label>
-                        <select id="inputPayment" name="payment_method" class="form-input">
-                            <option value="cash">Cash</option>
-                            <option value="gcash">GCash</option>
+                        <select id="reqPayment" name="payment_method" class="form-input">
+                            <option value="cash">Cash (Pay at Barangay Hall)</option>
+                            <option value="gcash">GCash (Online Payment)</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Delivery Method</label>
-                        <select id="inputDelivery" name="delivery_method" class="form-input">
-                            <option value="pickup">Pick-up</option>
+                        <select id="reqDelivery" name="delivery_method" class="form-input">
+                            <option value="pickup">Pick-up at Barangay Hall</option>
                             <option value="delivery">Home Delivery (+₱50)</option>
                         </select>
                     </div>
                 </div>
                 
-                <div class="flex" style="gap: 1rem; margin-top: 1rem;">
-                    <button type="button" onclick="hideForm()" class="btn">Back</button>
-                    <button type="submit" class="btn btn-primary">Preview Document</button>
+                <div class="price-summary">
+                    <div class="summary-row">
+                        <span>Service Fee:</span>
+                        <span id="summaryServiceFee">₱0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Quantity:</span>
+                        <span id="summaryQtyDisplay">1</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Delivery Fee:</span>
+                        <span id="summaryDeliveryFee">₱0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total Amount:</span>
+                        <span id="summaryTotal">₱0.00</span>
+                    </div>
                 </div>
-            </form>
+                <?php endif; ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" onclick="closeServiceModal()">Cancel</button>
+                <?php if (isLoggedIn()): ?>
+                <button type="submit" class="btn btn-primary">Submit Request</button>
+                <?php endif; ?>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- GCash QR Modal -->
+<div id="gcashModal" class="modal-overlay hidden">
+    <div class="modal-content modal-gcash">
+        <div class="modal-header">
+            <h3><i class="fab fa-gcash"></i> GCash Payment</h3>
+            <button class="close-modal" onclick="closeGcashModal()">&times;</button>
+        </div>
+        <div class="modal-body text-center">
+            <div class="qr-container">
+                <img src="/barangay-residence-system/assets/images/qr.jpg" alt="GCash QR Code" class="qr-code">
+            </div>
+            <div class="payment-details">
+                <p><strong>Account Name:</strong> Brgy. San Francisco</p>
+                <p><strong>Account Number:</strong> 0994 556 6094</p>
+                <p><strong>Amount to Pay:</strong> <span id="gcashAmount">₱0.00</span></p>
+            </div>
+            <div class="payment-options">
+                <button class="btn btn-gcash" onclick="openGcashApp()">
+                    <i class="fab fa-gcash"></i> Open GCash App
+                </button>
+                <p class="helper-text">Tap to open GCash app and send payment</p>
+            </div>
+            <div class="payment-instructions">
+                <i class="fas fa-info-circle"></i>
+                <p>Option 1: Click "Open GCash App" to pay directly<br>
+                Option 2: Scan the QR code using your GCash app<br>
+                After payment, click "I Have Paid" to complete your request.</p>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn" onclick="closeGcashModal()">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="confirmGcashPayment()">I Have Paid</button>
         </div>
     </div>
-</main>
+</div>
 
-<?php include '../includes/footer.php'; ?>
+<!-- Success Modal -->
+<div id="successModal" class="modal-overlay hidden">
+    <div class="modal-content modal-success">
+        <div class="success-icon">
+            <i class="fas fa-check-circle"></i>
+        </div>
+        <h3>Request Submitted!</h3>
+        <p>Your service request has been submitted successfully. You can track its status in your dashboard.</p>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="closeSuccessModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<script src="/barangay-residence-system/assets/js/pages/services.js"></script>
+<?php include '../includes/layouts/footer.php'; ?>

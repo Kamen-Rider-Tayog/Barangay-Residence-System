@@ -1,11 +1,11 @@
 <?php
-require_once '../includes/init.php';
+require_once '../includes/core/init.php';
 $stats = getDashboardStats();
 
-include '../includes/header.php';
+include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/index.css">
-<?php include '../includes/navbar.php'; ?>
+<?php include '../includes/layouts/navbar.php'; ?>
 
 <main>
     <section class="hero">
@@ -120,4 +120,4 @@ include '../includes/header.php';
     </section>
 </main>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../includes/layouts/footer.php'; ?>

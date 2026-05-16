@@ -1,0 +1,27 @@
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-blue {
+    background-color: var(--primary-blue-50);
+    color: var(--primary-blue);
+}
+
+.badge-green {
+    background-color: var(--success-green-light);
+    color: var(--success-green);
+}
+
+.badge-red {
+    background-color: var(--error-red-light);
+    color: var(--error-red);
+}
+
+.badge-orange {
+    background-color: var(--warning-orange-light);
+    color: var(--warning-orange);
+}

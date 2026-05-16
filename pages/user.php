@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/init.php';
+require_once '../includes/core/init.php';
 requireLogin();
 
 if (!isResident()) {
@@ -13,10 +13,10 @@ $residents = getResidentsByHouseholdId($household_id);
 $requests = getServiceRequestsByHouseholdId($household_id);
 $complaints = getComplaintsByHouseholdId($household_id);
 
-include '../includes/header.php';
+include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/user.css">
-<?php include '../includes/navbar.php'; ?>
+<?php include '../includes/layouts/navbar.php'; ?>
 
 <main class="container">
     <div class="dashboard-header">
@@ -36,7 +36,7 @@ include '../includes/header.php';
                     <?php endif; ?>
                 </button>
             </div>
-            <a href="/barangay-residence-system/includes/logout.php" class="btn btn-danger">
+            <a href="/barangay-residence-system/includes/core/logout.php" class="btn btn-danger">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
         </div>
@@ -205,5 +205,3 @@ include '../includes/header.php';
 </div>
 
 <script src="/barangay-residence-system/assets/js/pages/user.js"></script>
-</body>
-</html>

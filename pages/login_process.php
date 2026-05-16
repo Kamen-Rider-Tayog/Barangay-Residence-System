@@ -1,5 +1,5 @@
 <?php
-require_once '../includes/init.php';
+require_once '../includes/core/init.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';

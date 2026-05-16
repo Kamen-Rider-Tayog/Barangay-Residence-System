@@ -16,10 +16,6 @@ function changeLanguage(lang) {
     window.location.href = '?lang=' + lang;
 }
 
-function logoutUser() {
-    window.location.href = '../includes/logout.php';
-}
-
 // Tab switching
 function switchTab(tab) {
     const householdsSection = document.getElementById('section-households');
@@ -28,25 +24,54 @@ function switchTab(tab) {
     const complaintsBtn = document.getElementById('nav-complaints');
     
     if (tab === 'households') {
-        if (householdsSection) householdsSection.classList.remove('hidden-section');
-        if (complaintsSection) complaintsSection.classList.add('hidden-section');
-        if (householdsBtn) {
-            householdsBtn.classList.remove('btn-inactive');
-            householdsBtn.classList.add('btn-active');
-            complaintsBtn.classList.remove('btn-active');
-            complaintsBtn.classList.add('btn-inactive');
-        }
+        householdsSection.classList.remove('hidden-section');
+        complaintsSection.classList.add('hidden-section');
+        householdsBtn.classList.remove('btn-inactive');
+        householdsBtn.classList.add('btn-active');
+        complaintsBtn.classList.remove('btn-active');
+        complaintsBtn.classList.add('btn-inactive');
     } else {
-        if (complaintsSection) complaintsSection.classList.remove('hidden-section');
-        if (householdsSection) householdsSection.classList.add('hidden-section');
-        if (complaintsBtn) {
-            complaintsBtn.classList.remove('btn-inactive');
-            complaintsBtn.classList.add('btn-active');
-            householdsBtn.classList.remove('btn-active');
-            householdsBtn.classList.add('btn-inactive');
-        }
+        complaintsSection.classList.remove('hidden-section');
+        householdsSection.classList.add('hidden-section');
+        complaintsBtn.classList.remove('btn-inactive');
+        complaintsBtn.classList.add('btn-active');
+        householdsBtn.classList.remove('btn-active');
+        householdsBtn.classList.add('btn-inactive');
+        
+        // Refresh complaint filters when switching to complaints tab
+        filterComplaints();
     }
 }
+
+// Complaint filtering
+function filterComplaints() {
+    const status = document.getElementById('complaintStatusFilter')?.value;
+    const priority = document.getElementById('complaintPriorityFilter')?.value;
+    const search = document.getElementById('complaintSearch')?.value.toLowerCase() || '';
+    const cards = document.querySelectorAll('#complaintsGrid .complaint-card');
+    
+    cards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+        const cardPriority = card.getAttribute('data-priority');
+        const cardSubject = card.getAttribute('data-subject') || '';
+        const cardName = card.getAttribute('data-name') || '';
+        
+        let show = true;
+        if (status && status !== 'all' && cardStatus !== status) show = false;
+        if (priority && priority !== 'all' && cardPriority !== priority) show = false;
+        if (search && !cardSubject.includes(search) && !cardName.includes(search)) show = false;
+        
+        card.style.display = show ? 'block' : 'none';
+    });
+}
+
+// Set up filter event listeners
+const statusFilter = document.getElementById('complaintStatusFilter');
+const priorityFilter = document.getElementById('complaintPriorityFilter');
+const complaintSearch = document.getElementById('complaintSearch');
+if (statusFilter) statusFilter.addEventListener('change', filterComplaints);
+if (priorityFilter) priorityFilter.addEventListener('change', filterComplaints);
+if (complaintSearch) complaintSearch.addEventListener('keyup', filterComplaints);
 
 // Phase filter dropdown
 const phaseBtn = document.getElementById('phaseBtn');
@@ -69,14 +94,12 @@ function setPhaseFilter(phase) {
     const phaseLabel = phase === 'all' ? 'All Phases' : phase;
     const currentPhaseLabel = document.getElementById('currentPhaseLabel');
     if (currentPhaseLabel) currentPhaseLabel.textContent = phaseLabel;
-    
     if (phaseMenu) phaseMenu.classList.remove('show');
     filterTable();
 }
 
-// Filter table
 function filterTable() {
-    const search = document.getElementById("globalSearch");
+    const search = document.getElementById("searchInput");
     const searchValue = search ? search.value.toUpperCase() : "";
     const table = document.getElementById("householdTable");
     if (!table) return;
@@ -94,65 +117,19 @@ function filterTable() {
             }
         }
         
-        if (!phaseMatch && cells[4]) {
-            phaseMatch = cells[4].textContent.trim() === currentPhase;
+        if (!phaseMatch && cells[3]) {
+            phaseMatch = cells[3].textContent.trim() === currentPhase;
         }
         
         rows[i].style.display = (textMatch && phaseMatch) ? "" : "none";
     }
 }
 
-// Complaint response modal
-function openRespondModal(complaintId, subject, description, currentStatus, currentResponse) {
-    document.getElementById('modal-complaint-id').value = complaintId;
-    document.getElementById('modal-subject').innerText = subject;
-    document.getElementById('modal-desc').innerText = description;
-    document.getElementById('modal-status').value = currentStatus;
-    document.getElementById('modal-response').value = currentResponse || '';
-    toggleModal('complaint-modal', true);
-}
-
-function toggleModal(id, show) {
-    const modal = document.getElementById(id);
-    if (modal) {
-        if (show) {
-            modal.classList.remove('hidden-view');
-        } else {
-            modal.classList.add('hidden-view');
-        }
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+    // Set default active tab
+    const householdsSection = document.getElementById('section-households');
+    if (householdsSection && householdsSection.classList.contains('hidden-section')) {
+        householdsSection.classList.remove('hidden-section');
     }
-}
-
-// Submit complaint response
-const responseForm = document.getElementById('responseForm');
-if (responseForm) {
-    responseForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const complaintId = document.getElementById('modal-complaint-id').value;
-        const status = document.getElementById('modal-status').value;
-        const response = document.getElementById('modal-response').value;
-        
-        const formData = new FormData();
-        formData.append('complaint_id', complaintId);
-        formData.append('status', status);
-        formData.append('response', response);
-        
-        fetch('update_complaint.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(result => {
-            if (result.includes('success')) {
-                toggleModal('complaint-modal', false);
-                location.reload();
-            } else {
-                alert('Error updating complaint. Please try again.');
-            }
-        })
-        .catch(error => {
-            alert('Error updating complaint. Please try again.');
-        });
-    });
-}
+});
