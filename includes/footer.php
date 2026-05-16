@@ -25,6 +25,9 @@
         </div>
     </div>
     <p class="footer-copyright"><?php echo __('footer-copy'); ?></p>
+    <p class="footer-copyright">Made with <i class="fa-regular fa-heart"></i> by 
+        <a href="https://kamen-rider-tayog.github.io/tayog-portfolio/" target="blank">Kagame</a>
+    </p>
 </footer>
 
 <script src="/barangay-residence-system/assets/js/main.js"></script>

@@ -6,6 +6,7 @@ function __($key) {
         'en' => [
             'nav-home' => 'Home',
             'nav-services' => 'Online Services',
+            'nav-programs' => 'Programs',
             'login' => 'Login',
             'logout' => 'Logout',
             'sub-header' => 'Information & Service Management',
@@ -81,6 +82,7 @@ function __($key) {
         'tl' => [
             'nav-home' => 'Home',
             'nav-services' => 'Serbisyong Online',
+            'nav-programs' => 'Programa',
             'login' => 'Mag-login',
             'logout' => 'Mag-logout',
             'sub-header' => 'Pamamahala ng Impormasyon at Serbisyo',

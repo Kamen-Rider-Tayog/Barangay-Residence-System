@@ -22,31 +22,25 @@ function logoutUser() {
 
 // Tab switching
 function switchTab(tab) {
-    const transTab = document.getElementById('transactions');
-    const compTab = document.getElementById('complaints');
-    const tabs = document.querySelectorAll('.tab-btn');
-    const actionBtn = document.querySelector('.tab-header .btn-primary');
-
-    if (!transTab || !compTab) return;
-
+    const transactionsSection = document.getElementById('section-transactions');
+    const complaintsSection = document.getElementById('section-complaints');
+    const transBtn = document.getElementById('nav-transactions');
+    const compBtn = document.getElementById('nav-complaints');
+    
     if (tab === 'transactions') {
-        transTab.classList.add('active');
-        compTab.classList.remove('active');
-        if (tabs[0]) tabs[0].classList.add('active');
-        if (tabs[1]) tabs[1].classList.remove('active');
-        if (actionBtn) {
-            actionBtn.innerHTML = '<i class="fas fa-plus"></i> Request Service';
-            actionBtn.onclick = () => window.location.href = 'services.php';
-        }
+        transactionsSection.classList.remove('hidden-section');
+        complaintsSection.classList.add('hidden-section');
+        transBtn.classList.remove('btn-inactive');
+        transBtn.classList.add('btn-active');
+        compBtn.classList.remove('btn-active');
+        compBtn.classList.add('btn-inactive');
     } else {
-        compTab.classList.add('active');
-        transTab.classList.remove('active');
-        if (tabs[1]) tabs[1].classList.add('active');
-        if (tabs[0]) tabs[0].classList.remove('active');
-        if (actionBtn) {
-            actionBtn.innerHTML = '<i class="fas fa-exclamation-circle"></i> File a Complaint';
-            actionBtn.onclick = () => toggleComplaintModal(true);
-        }
+        complaintsSection.classList.remove('hidden-section');
+        transactionsSection.classList.add('hidden-section');
+        compBtn.classList.remove('btn-inactive');
+        compBtn.classList.add('btn-active');
+        transBtn.classList.remove('btn-active');
+        transBtn.classList.add('btn-inactive');
     }
 }
 
@@ -126,9 +120,17 @@ if (complaintForm) {
 
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
-    const activeTab = document.querySelector('.tab-content.active');
-    if (!activeTab) {
-        const transactions = document.getElementById('transactions');
-        if (transactions) transactions.classList.add('active');
+    // Set default active tab
+    const transactionsSection = document.getElementById('section-transactions');
+    const transBtn = document.getElementById('nav-transactions');
+    
+    if (transactionsSection && !transactionsSection.classList.contains('hidden-section')) {
+        // Already active, do nothing
+    } else if (transactionsSection) {
+        transactionsSection.classList.remove('hidden-section');
+        if (transBtn) {
+            transBtn.classList.add('btn-active');
+            transBtn.classList.remove('btn-inactive');
+        }
     }
 });

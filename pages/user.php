@@ -19,10 +19,31 @@ include '../includes/header.php';
 <?php include '../includes/navbar.php'; ?>
 
 <main class="container">
-    <h2><?php echo __('profile-title'); ?></h2>
+    <div class="dashboard-header">
+        <div>
+            <h2><?php echo __('profile-title'); ?></h2>
+            <p>View your transactions and complaints</p>
+        </div>
+        <div style="display: flex; gap: 1rem; align-items: center;">
+            <div class="nav-buttons">
+                <button id="nav-transactions" class="btn-nav btn-active" onclick="switchTab('transactions')">
+                    <i class="fas fa-file-alt"></i> Transactions
+                </button>
+                <button id="nav-complaints" class="btn-nav btn-inactive" onclick="switchTab('complaints')">
+                    <i class="fas fa-comment-dots"></i> Complaints
+                    <?php if (count($complaints) > 0): ?>
+                    <span class="badge-red"><?php echo count($complaints); ?></span>
+                    <?php endif; ?>
+                </button>
+            </div>
+            <a href="/barangay-residence-system/includes/logout.php" class="btn btn-danger">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
     
     <div class="grid" style="grid-template-columns: 1fr 3fr; gap: 2rem;">
-        <!-- Sidebar -->
+        <!-- Sidebar Profile -->
         <div class="profile-sidebar">
             <div class="card profile-card">
                 <div class="profile-avatar">
@@ -45,74 +66,94 @@ include '../includes/header.php';
                         <div><p class="detail-label">Address</p><p class="detail-value"><?php echo $household['address']; ?></p></div>
                     </div>
                 </div>
-                
-                <div class="logout-sidebar">
-                    <a href="/barangay-residence-system/includes/logout.php" class="btn btn-danger">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                </div>
             </div>
         </div>
         
         <!-- Main Content -->
         <div class="card">
-            <div class="tab-header">
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('transactions')">Transactions</button>
-                    <button class="tab-btn" onclick="switchTab('complaints')">Complaints</button>
+            <div id="section-transactions">
+                <div class="table-header">
+                    <h3><i class="fas fa-file-alt"></i> My Transactions</h3>
+                    <button class="btn btn-primary" onclick="location.href='services.php'">
+                        <i class="fas fa-plus"></i> Request Service
+                    </button>
                 </div>
-                <button class="btn btn-primary" onclick="location.href='services.php'">Request Service</button>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Reference No.</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Payment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($requests as $req): ?>
+                            <tr>
+                                <td><?php echo $req['service_name']; ?></td>
+                                <td><?php echo $req['ref_no']; ?></td>
+                                <td><?php echo date('M d, Y', strtotime($req['date_submitted'])); ?></td>
+                                <td>₱<?php echo $req['total_amount']; ?></td>
+                                <td><span class="badge badge-<?php echo $req['status'] == 'completed' ? 'green' : 'orange'; ?>"><?php echo $req['status']; ?></span></td>
+                                <td><span class="badge badge-<?php echo $req['is_paid'] ? 'green' : 'red'; ?>"><?php echo $req['is_paid'] ? 'Paid' : 'Unpaid'; ?></span></td>
+                            </tr>
+                            <?php endforeach; ?>
+                            <?php if (empty($requests)): ?>
+                            <tr><td colspan="6" class="no-data">No transactions found. <a href="services.php">Request a service</a></td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
-            <div id="transactions" class="tab-content active">
-                <?php foreach ($requests as $req): ?>
-                <div class="transaction-item">
-                    <div class="item-header">
-                        <div class="item-icon"><i class="fas fa-file-alt"></i></div>
-                        <div class="item-info">
-                            <h5 class="item-title"><?php echo $req['service_name']; ?></h5>
-                            <p class="item-ref">Ref: <?php echo $req['ref_no']; ?></p>
-                        </div>
-                        <span class="badge badge-<?php echo $req['status'] == 'completed' ? 'green' : 'orange'; ?>"><?php echo $req['status']; ?></span>
-                    </div>
-                    <div class="item-details">
-                        <div><p class="detail-header">Date</p><p><?php echo date('M d, Y', strtotime($req['date_submitted'])); ?></p></div>
-                        <div><p class="detail-header">Amount</p><p>₱<?php echo $req['total_amount']; ?></p></div>
-                        <div><p class="detail-header">Payment</p><p><?php echo $req['is_paid'] ? 'Paid' : 'Unpaid'; ?></p></div>
-                    </div>
+            <div id="section-complaints" class="hidden-section">
+                <div class="table-header">
+                    <h3><i class="fas fa-comment-dots"></i> My Complaints</h3>
+                    <button class="btn btn-primary" onclick="toggleComplaintModal(true)">
+                        <i class="fas fa-plus"></i> File Complaint
+                    </button>
                 </div>
-                <?php endforeach; ?>
-                <?php if (empty($requests)): ?>
-                <div class="no-data">No transactions found.</div>
-                <?php endif; ?>
-            </div>
-            
-            <div id="complaints" class="tab-content">
-                <?php foreach ($complaints as $comp): ?>
-                <div class="complaint-item">
-                    <div class="item-header">
-                        <div class="item-icon"><i class="fas fa-exclamation-circle"></i></div>
-                        <div class="item-info">
-                            <h5 class="item-title"><?php echo $comp['subject']; ?></h5>
-                            <p class="item-ref">Ref: <?php echo $comp['ref_no']; ?></p>
-                        </div>
-                        <span class="badge badge-<?php echo $comp['status'] == 'resolved' ? 'green' : 'orange'; ?>"><?php echo $comp['status']; ?></span>
-                    </div>
-                    <div class="item-details">
-                        <div><p class="detail-header">Category</p><p><?php echo $comp['category']; ?></p></div>
-                        <div><p class="detail-header">Priority</p><p><?php echo $comp['priority']; ?></p></div>
-                        <div><p class="detail-header">Date</p><p><?php echo date('M d, Y', strtotime($comp['date_submitted'])); ?></p></div>
-                    </div>
-                    <?php if ($comp['admin_response']): ?>
-                    <div class="complaint-response">
-                        <strong>Admin Response:</strong> <?php echo $comp['admin_response']; ?>
-                    </div>
-                    <?php endif; ?>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Reference No.</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($complaints as $comp): ?>
+                            <tr>
+                                <td><?php echo $comp['subject']; ?></td>
+                                <td><?php echo $comp['ref_no']; ?></td>
+                                <td><?php echo ucfirst($comp['category']); ?></td>
+                                <td><span class="badge badge-<?php echo $comp['priority'] == 'high' ? 'red' : ($comp['priority'] == 'medium' ? 'orange' : 'blue'); ?>"><?php echo ucfirst($comp['priority']); ?></span></td>
+                                <td><?php echo date('M d, Y', strtotime($comp['date_submitted'])); ?></td>
+                                <td><span class="badge badge-<?php echo $comp['status'] == 'resolved' ? 'green' : 'orange'; ?>"><?php echo ucfirst($comp['status']); ?></span></td>
+                            </tr>
+                            <?php if ($comp['admin_response']): ?>
+                            <tr class="response-row">
+                                <td colspan="6">
+                                    <div class="complaint-response">
+                                        <strong>Admin Response:</strong> <?php echo $comp['admin_response']; ?>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php endif; ?>
+                            <?php endforeach; ?>
+                            <?php if (empty($complaints)): ?>
+                            <tr><td colspan="6" class="no-data">No complaints filed. <a href="#" onclick="toggleComplaintModal(true)">File a complaint</a></td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
-                <?php endforeach; ?>
-                <?php if (empty($complaints)): ?>
-                <div class="no-data">No complaints filed.</div>
-                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -162,4 +203,7 @@ include '../includes/header.php';
         </form>
     </div>
 </div>
+
 <script src="/barangay-residence-system/assets/js/pages/user.js"></script>
+</body>
+</html>

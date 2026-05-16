@@ -5,11 +5,6 @@ include '../includes/header.php';
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/login.css">
 <div class="login-page">
     <div class="login-container">
-        <a href="index.php" class="logo-link">
-            <div class="logo-circle">
-                <img src="/barangay-residence-system/assets/images/logo.png" alt="Logo" class="logo-img">
-            </div>
-        </a>
         
         <h1>Barangay San Francisco</h1>
         <p class="subtitle">Login to your account</p>
@@ -21,7 +16,7 @@ include '../includes/header.php';
 
             <form id="loginForm" method="POST" action="login_process.php">
                 <div class="form-group">
-                    <label for="emailInput">Email or Username</label>
+                    <label for="emailInput">Email</label>
                     <div class="input-wrapper">
                         <div class="input-icon">
                             <i class="fas fa-envelope"></i>
@@ -52,11 +47,12 @@ include '../includes/header.php';
             Back to Home
         </a>
     </div>
-
-    <?php if (isset($_GET['error'])): ?>
-        <div class="error-alert" style="display: block;">
-            Invalid email or password. Please try again.
-        </div>
-    <?php endif; ?>
 </div>
+
+<?php if (isset($_GET['error'])): ?>
+<script>
+    document.getElementById('errorMessage').style.display = 'block';
+</script>
+<?php endif; ?>
+
 <script src="/barangay-residence-system/assets/js/pages/login.js"></script>
