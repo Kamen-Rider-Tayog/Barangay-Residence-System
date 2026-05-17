@@ -54,7 +54,7 @@ include '../../../includes/layouts/header.php';
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
-    <div class="card">
+    <div class="card form-container">
         <div class="card-header">
             <h2>Add New Household</h2>
             <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
@@ -127,11 +127,9 @@ include '../../../includes/layouts/header.php';
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Household</button>
-                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn">Cancel</a>
+                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 </main>
-
-<?php include '../../../includes/layouts/footer.php'; ?>

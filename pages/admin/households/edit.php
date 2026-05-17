@@ -64,7 +64,7 @@ include '../../../includes/layouts/header.php';
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
-    <div class="card">
+    <div class="card form-container">
         <div class="card-header">
             <h2>Edit Household</h2>
             <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
@@ -91,11 +91,18 @@ include '../../../includes/layouts/header.php';
                         </div>
                         <div class="form-group">
                             <label class="form-label">Phase</label>
-                            <select name="phase_no" class="form-input">
-                                <option value="Phase 1" <?php echo $householdData['phase_no'] == 'Phase 1' ? 'selected' : ''; ?>>Phase 1</option>
-                                <option value="Phase 2" <?php echo $householdData['phase_no'] == 'Phase 2' ? 'selected' : ''; ?>>Phase 2</option>
-                                <option value="Phase 3" <?php echo $householdData['phase_no'] == 'Phase 3' ? 'selected' : ''; ?>>Phase 3</option>
-                            </select>
+                            <div class="filter-dropdown">
+                                <button type="button" id="phaseDropdownBtn" class="btn-filter">
+                                    <span id="phaseDropdownLabel"><?php echo htmlspecialchars($householdData['phase_no']); ?></span>
+                                    <i class="fas fa-angle-down"></i>
+                                </button>
+                                <div id="phaseDropdownMenu" class="dropdown-menu">
+                                    <input type="hidden" name="phase_no" id="selectedPhase" value="<?php echo htmlspecialchars($householdData['phase_no']); ?>">
+                                    <button type="button" class="dropdown-item" data-phase="Phase 1">Phase 1</button>
+                                    <button type="button" class="dropdown-item" data-phase="Phase 2">Phase 2</button>
+                                    <button type="button" class="dropdown-item" data-phase="Phase 3">Phase 3</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,7 +129,7 @@ include '../../../includes/layouts/header.php';
                             <input type="tel" name="contact" class="form-input" value="<?php echo htmlspecialchars($residentData['contact_no'] ?? ''); ?>">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group full-width">
                         <label class="checkbox-label">
                             <input type="checkbox" name="is_voter" value="1" <?php echo ($residentData['is_voter'] ?? 0) ? 'checked' : ''; ?>> Registered Voter
                         </label>
@@ -131,11 +138,39 @@ include '../../../includes/layouts/header.php';
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn">Cancel</a>
+                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 </main>
 
-<?php include '../../../includes/layouts/footer.php'; ?>
+<script src="/barangay-residence-system/assets/js/bootstrap.js"></script>
+<script>
+(function() {
+    const phaseBtn = document.getElementById('phaseDropdownBtn');
+    const phaseMenu = document.getElementById('phaseDropdownMenu');
+    const phaseLabel = document.getElementById('phaseDropdownLabel');
+    const phaseInput = document.getElementById('selectedPhase');
+    
+    if (phaseBtn && phaseMenu) {
+        phaseBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            phaseMenu.classList.toggle('show');
+        });
+        
+        phaseMenu.querySelectorAll('.dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                const phase = this.getAttribute('data-phase');
+                phaseLabel.textContent = phase;
+                if (phaseInput) phaseInput.value = phase;
+                phaseMenu.classList.remove('show');
+            });
+        });
+    }
+    
+    document.addEventListener('click', function() {
+        if (phaseMenu) phaseMenu.classList.remove('show');
+    });
+})();
+</script>

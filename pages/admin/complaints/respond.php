@@ -43,7 +43,7 @@ include '../../../includes/layouts/header.php';
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
-    <div class="card">
+    <div class="card form-container">
         <div class="card-header">
             <h2>Respond to Complaint</h2>
             <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
@@ -62,7 +62,7 @@ include '../../../includes/layouts/header.php';
                     <tr><th>Reference No:</th><td><?php echo htmlspecialchars($complaint['ref_no']); ?></td></tr>
                     <tr><th>Subject:</th><td><?php echo htmlspecialchars($complaint['subject']); ?></td></tr>
                     <tr><th>Description:</th><td><?php echo nl2br(htmlspecialchars($complaint['description'])); ?></td></tr>
-                    <tr><th>Current Status:</th><td><span class="badge badge-<?php echo $complaint['status'] == 'resolved' ? 'green' : ($complaint['status'] == 'pending' ? 'orange' : 'blue'); ?>"><?php echo ucfirst($complaint['status']); ?></span></td></tr>
+                    <tr><th>Current Status:</th><td><span class="badge badge-<?php echo $complaint['status'] == 'resolved' ? 'green' : ($complaint['status'] == 'pending' ? 'orange' : 'blue'); ?>"><?php echo ucfirst($complaint['status']); ?></span></td>
                 </table>
             </div>
             
@@ -71,12 +71,19 @@ include '../../../includes/layouts/header.php';
                     <h3>Your Response</h3>
                     <div class="form-group">
                         <label class="form-label">Update Status</label>
-                        <select name="status" class="form-input">
-                            <option value="pending" <?php echo $complaint['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
-                            <option value="reviewing" <?php echo $complaint['status'] == 'reviewing' ? 'selected' : ''; ?>>Reviewing</option>
-                            <option value="resolved" <?php echo $complaint['status'] == 'resolved' ? 'selected' : ''; ?>>Resolved</option>
-                            <option value="dismissed" <?php echo $complaint['status'] == 'dismissed' ? 'selected' : ''; ?>>Dismissed</option>
-                        </select>
+                        <div class="filter-dropdown">
+                            <button type="button" id="statusDropdownBtn" class="btn-filter">
+                                <span id="statusDropdownLabel"><?php echo ucfirst($complaint['status']); ?></span>
+                                <i class="fas fa-angle-down"></i>
+                            </button>
+                            <div id="statusDropdownMenu" class="dropdown-menu">
+                                <input type="hidden" name="status" id="selectedStatus" value="<?php echo $complaint['status']; ?>">
+                                <button type="button" class="dropdown-item" data-value="pending">Pending</button>
+                                <button type="button" class="dropdown-item" data-value="reviewing">Reviewing</button>
+                                <button type="button" class="dropdown-item" data-value="resolved">Resolved</button>
+                                <button type="button" class="dropdown-item" data-value="dismissed">Dismissed</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Admin Response</label>
@@ -93,4 +100,34 @@ include '../../../includes/layouts/header.php';
     </div>
 </main>
 
-<?php include '../../../includes/layouts/footer.php'; ?>
+<script src="/barangay-residence-system/assets/js/bootstrap.js"></script>
+<script>
+(function() {
+    // Status dropdown
+    const statusBtn = document.getElementById('statusDropdownBtn');
+    const statusMenu = document.getElementById('statusDropdownMenu');
+    const statusLabel = document.getElementById('statusDropdownLabel');
+    const statusInput = document.getElementById('selectedStatus');
+    
+    if (statusBtn && statusMenu) {
+        statusBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            statusMenu.classList.toggle('show');
+        });
+        
+        statusMenu.querySelectorAll('.dropdown-item').forEach(function(item) {
+            item.addEventListener('click', function() {
+                var value = this.getAttribute('data-value');
+                statusLabel.textContent = this.textContent;
+                if (statusInput) statusInput.value = value;
+                statusMenu.classList.remove('show');
+            });
+        });
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function() {
+        if (statusMenu) statusMenu.classList.remove('show');
+    });
+})();
+</script>

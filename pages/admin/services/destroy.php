@@ -4,7 +4,7 @@ requireAdmin();
 
 $service_id = $_GET['id'] ?? 0;
 if (!$service_id) {
-    header('Location: index.php');
+    header('Location: /barangay-residence-system/pages/dashboard.php?tab=services');
     exit();
 }
 
@@ -27,6 +27,6 @@ if ($result['count'] > 0) {
     $_SESSION['flash_message'] = 'Service deleted successfully.';
 }
 
-header('Location: index.php');
+header('Location: /barangay-residence-system/pages/dashboard.php?tab=services');
 exit();
 ?>

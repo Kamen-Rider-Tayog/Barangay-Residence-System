@@ -1,58 +1,79 @@
 .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background-color: rgba(0,0,0,0.5);
-    backdrop-filter: blur(4px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
 .modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-    display: flex;
+  opacity: 1;
+  visibility: visible;
+  display: flex;
 }
 
 .modal-overlay.hidden {
-    display: none;
+  display: none;
 }
 
 .modal-content {
-    background-color: white;
-    border-radius: var(--radius-xl);
-    max-width: 28rem;
-    width: 90%;
-    max-height: 90vh;
-    overflow-y: auto;
-    transform: scale(0.9);
-    transition: transform 0.3s ease;
+  background-color: var(--white);
+  border-radius: var(--radius-xl);
+  max-width: 28rem;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
 }
 
 .modal-overlay.active .modal-content {
-    transform: scale(1);
+  transform: scale(1);
 }
 
 .modal-header {
-    padding: 1.25rem;
-    border-bottom: 1px solid var(--gray-200);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  padding: 1.25rem;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .modal-body {
-    padding: 1.25rem;
+  padding: 1.25rem;
 }
 
 .modal-footer {
-    padding: 1.25rem;
-    border-top: 1px solid var(--gray-200);
-    display: flex;
-    gap: 0.75rem;
-    justify-content: flex-end;
+  padding: 1.25rem;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-500);
+  transition: all 0.2s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-modal:hover {
+  color: var(--error-red);
+  background-color: var(--gray-100);
+  transform: scale(1.1);
 }

@@ -1,295 +1,295 @@
 .service-header {
-    text-align: center;
-    margin-bottom: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
 }
 
 .service-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--gray-800);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--gray-800);
 }
 
 .service-header p {
-    color: var(--gray-500);
+  color: var(--gray-500);
 }
 
 .section-subtitle {
-    margin-bottom: 1.5rem;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: var(--gray-700);
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--gray-700);
 }
 
 .services-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3rem;
 }
 
 .service-card {
-    text-align: center;
-    cursor: pointer;
-    padding: 1.5rem;
-    transition: all 0.3s ease;
-    position: relative;
+  text-align: center;
+  cursor: pointer;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
 .service-card:hover {
-    transform: translateY(-8px);
-    box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lg);
 }
 
 .service-icon {
-    width: 60px;
-    height: 60px;
-    background-color: var(--primary-blue-50);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1rem;
-    color: var(--primary-blue);
-    font-size: 1.75rem;
-    transition: all 0.3s ease;
+  width: 60px;
+  height: 60px;
+  background-color: var(--primary-blue-50);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: var(--primary-blue);
+  font-size: 1.75rem;
+  transition: all 0.3s ease;
 }
 
 .service-card:hover .service-icon {
-    background-color: var(--primary-blue);
-    color: white;
-    transform: scale(1.05);
+  background-color: var(--primary-blue);
+  color: var(--white);
+  transform: scale(1.05);
 }
 
 .service-card h4 {
-    font-size: 1rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: var(--gray-800);
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  color: var(--gray-800);
 }
 
 .service-description {
-    font-size: 0.75rem;
-    color: var(--gray-500);
-    margin-bottom: 1rem;
-    min-height: 2.5rem;
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-bottom: 1rem;
+  min-height: 2.5rem;
 }
 
 .service-price {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--primary-blue);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary-blue);
 }
 
 .service-price.free {
-    color: var(--success-green);
-    font-size: 0.75rem;
-    text-transform: uppercase;
+  color: var(--success-green);
+  font-size: 0.75rem;
+  text-transform: uppercase;
 }
 
 .service-badge {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    background-color: var(--warning-orange);
-    color: white;
-    font-size: 0.625rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
-    font-weight: 600;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background-color: var(--warning-orange);
+  color: var(--white);
+  font-size: 0.625rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-weight: 600;
 }
 
 .service-badge.popular {
-    background-color: var(--primary-blue);
+  background-color: var(--primary-blue);
 }
 
 .service-badge.new {
-    background-color: var(--success-green);
+  background-color: var(--success-green);
 }
 
 .processing-time {
-    font-size: 0.625rem;
-    color: var(--gray-400);
-    margin-top: 0.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
+  font-size: 0.625rem;
+  color: var(--gray-400);
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
 }
 
 .login-prompt {
-    text-align: center;
-    padding: 2rem;
+  text-align: center;
+  padding: 2rem;
 }
 
 .login-prompt i {
-    font-size: 3rem;
-    color: var(--primary-blue);
-    margin-bottom: 1rem;
+  font-size: 3rem;
+  color: var(--primary-blue);
+  margin-bottom: 1rem;
 }
 
 .login-prompt p {
-    margin-bottom: 1.5rem;
-    color: var(--gray-600);
+  margin-bottom: 1.5rem;
+  color: var(--gray-600);
 }
 
 .price-summary {
-    background: var(--gray-50);
-    border-radius: 0.5rem;
-    padding: 1rem;
-    margin-top: 1rem;
+  background: var(--gray-50);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
 }
 
 .summary-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 0;
-    font-size: 0.875rem;
-    color: var(--gray-700);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  font-size: 0.875rem;
+  color: var(--gray-700);
 }
 
 .summary-row.total {
-    border-top: 1px solid var(--gray-200);
-    margin-top: 0.5rem;
-    padding-top: 0.75rem;
-    font-weight: 700;
-    font-size: 1rem;
-    color: var(--primary-blue);
+  border-top: 1px solid var(--gray-200);
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--primary-blue);
 }
 
 .success-icon {
-    width: 80px;
-    height: 80px;
-    background: var(--success-green-light);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1.5rem auto;
+  width: 80px;
+  height: 80px;
+  background: var(--success-green-light);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem auto;
 }
 
 .success-icon i {
-    font-size: 3rem;
-    color: var(--success-green);
+  font-size: 3rem;
+  color: var(--success-green);
 }
 
 .modal-gcash {
-    max-width: 400px;
+  max-width: 400px;
 }
 
 .qr-container {
-    background: white;
-    padding: 1rem;
-    border-radius: 0.75rem;
-    margin-bottom: 1rem;
+  background: var(--white);
+  padding: 1rem;
+  border-radius: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .qr-code {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto;
-    display: block;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  display: block;
 }
 
 .payment-details {
-    background: var(--gray-50);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin-bottom: 1rem;
+  background: var(--gray-50);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .payment-details p {
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
 }
 
 .payment-options {
-    margin: 1rem 0;
+  margin: 1rem 0;
 }
 
 .btn-gcash {
-    background: #00b4d8;
-    color: white;
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    border-radius: 0.5rem;
-    border: none;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  background: #00b4d8;
+  color: var(--white);
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-gcash:hover {
-    background: #0096b8;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+  background: #0096b8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
 }
 
 .helper-text {
-    font-size: 0.7rem;
-    color: var(--gray-500);
-    margin-top: 0.5rem;
-    text-align: center;
+  font-size: 0.7rem;
+  color: var(--gray-500);
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
 .modal-feedback {
-    max-width: 350px;
-    text-align: center;
+  max-width: 350px;
+  text-align: center;
 }
 
 .feedback-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1.5rem auto 1rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem auto 1rem;
 }
 
 .feedback-icon.success {
-    background: var(--success-green-light);
-    color: var(--success-green);
+  background: var(--success-green-light);
+  color: var(--success-green);
 }
 
 .feedback-icon.error {
-    background: var(--error-red-light);
-    color: var(--error-red);
+  background: var(--error-red-light);
+  color: var(--error-red);
 }
 
 .feedback-icon i {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .modal-feedback h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .modal-feedback p {
-    color: var(--gray-600);
-    margin-bottom: 1rem;
+  color: var(--gray-600);
+  margin-bottom: 1rem;
 }
 
 @media (max-width: 1024px) {
-    .services-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
-    .services-grid {
-        grid-template-columns: 1fr;
-    }
-    .form-row {
-        grid-template-columns: 1fr;
-    }
-    .modal-content {
-        width: 95%;
-    }
+  .services-grid {
+    grid-template-columns: 1fr;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .modal-content {
+    width: 95%;
+  }
 }

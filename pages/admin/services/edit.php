@@ -4,7 +4,7 @@ requireAdmin();
 
 $service_id = $_GET['id'] ?? 0;
 if (!$service_id) {
-    header('Location: index.php');
+    header('Location: /barangay-residence-system/pages/dashboard.php?tab=services');
     exit();
 }
 
@@ -15,7 +15,7 @@ $stmt->execute();
 $service = $stmt->get_result()->fetch_assoc();
 
 if (!$service) {
-    header('Location: index.php');
+    header('Location: /barangay-residence-system/pages/dashboard.php?tab=services');
     exit();
 }
 
@@ -53,10 +53,10 @@ include '../../../includes/layouts/header.php';
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
-    <div class="card">
+    <div class="card form-container">
         <div class="card-header">
             <h2>Edit Service</h2>
-            <a href="index.php" class="btn btn-outline">Back to Services</a>
+            <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Back to Dashboard</a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
@@ -91,11 +91,9 @@ include '../../../includes/layouts/header.php';
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="index.php" class="btn">Cancel</a>
+                    <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Cancel</a>
                 </div>
             </form>
         </div>
     </div>
 </main>
-
-<?php include '../../../includes/layouts/footer.php'; ?>

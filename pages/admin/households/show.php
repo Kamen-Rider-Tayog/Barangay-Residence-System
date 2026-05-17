@@ -29,7 +29,7 @@ include '../../../includes/layouts/header.php';
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
-    <div class="card">
+    <div class="card form-container">
         <div class="card-header">
             <h2>Household Details</h2>
             <div>
@@ -71,5 +71,3 @@ include '../../../includes/layouts/header.php';
         </div>
     </div>
 </main>
-
-<?php include '../../../includes/layouts/footer.php'; ?>

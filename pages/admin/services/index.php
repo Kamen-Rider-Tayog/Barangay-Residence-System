@@ -3,20 +3,15 @@ require_once '../../../includes/core/init.php';
 requireAdmin();
 
 $services = getServices();
-
-include '../../../includes/layouts/header.php';
 ?>
-<link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/dashboard.css">
-<?php include '../../../includes/layouts/navbar.php'; ?>
 
-<main class="container">
-    <div class="dashboard-header">
-        <h1>Service Management</h1>
-        <a href="create.php" class="btn btn-primary">+ Add New Service</a>
-    </div>
-    
+<div class="services-section">
     <div class="card">
-        <div class="table-container">
+        <div class="card-header flex-between">
+            <span class="font-bold">Service Management</span>
+            <button onclick="location.href='/barangay-residence-system/pages/admin/services/create.php'" class="btn btn-primary">+ Add Service</button>
+        </div>
+        <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
@@ -29,19 +24,21 @@ include '../../../includes/layouts/header.php';
                 </thead>
                 <tbody>
                     <?php foreach ($services as $s): ?>
-                    <tr>
-                        <td><?php echo $s['service_id']; ?></td>
-                        <td><?php echo htmlspecialchars($s['service_name']); ?></td>
+                    <tr id="service-row-<?php echo $s['service_id']; ?>">
+                        <td class="text-center"><?php echo $s['service_id']; ?></td>
+                        <td class="font-semibold"><?php echo htmlspecialchars($s['service_name']); ?></td>
                         <td><?php echo $s['base_price'] == 0 ? 'FREE' : '₱' . number_format($s['base_price'], 2); ?></td>
-                        <td>
-                            <span class="badge badge-<?php echo $s['is_active'] ? 'green' : 'red'; ?>">
-                                <?php echo $s['is_active'] ? 'Active' : 'Inactive'; ?>
-                            </span>
-                        </td>
+                        <td><span class="badge badge-<?php echo $s['is_active'] ? 'green' : 'red'; ?>"><?php echo $s['is_active'] ? 'Active' : 'Inactive'; ?></span></td>
                         <td class="action-icons">
-                            <a href="show.php?id=<?php echo $s['service_id']; ?>"><i class="fas fa-eye"></i></a>
-                            <a href="edit.php?id=<?php echo $s['service_id']; ?>"><i class="fas fa-edit"></i></a>
-                            <a href="destroy.php?id=<?php echo $s['service_id']; ?>" onclick="return confirm('Delete this service?')"><i class="fas fa-trash"></i></a>
+                            <a href="/barangay-residence-system/pages/admin/services/show.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="/barangay-residence-system/pages/admin/services/edit.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="action-icon delete-item-btn" data-type="service" data-id="<?php echo $s['service_id']; ?>" data-name="<?php echo htmlspecialchars($s['service_name']); ?>" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
                         </td>
                     </tr>
                     <?php endforeach; ?>
@@ -49,6 +46,4 @@ include '../../../includes/layouts/header.php';
             </table>
         </div>
     </div>
-</main>
-
-<?php include '../../../includes/layouts/footer.php'; ?>
+</div>

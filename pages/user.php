@@ -204,4 +204,4 @@ include '../includes/layouts/header.php';
     </div>
 </div>
 
-<script src="/barangay-residence-system/assets/js/pages/user.js"></script>
+<script src="/barangay-residence-system/assets/js/bootstrap.js"></script>

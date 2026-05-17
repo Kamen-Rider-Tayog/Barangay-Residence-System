@@ -1,207 +1,207 @@
 .dashboard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .dashboard-header h2 {
-    font-size: 1.75rem;
-    font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 700;
 }
 
 .dashboard-header p {
-    color: var(--gray-500);
-    margin-top: 0.25rem;
+  color: var(--gray-500);
+  margin-top: 0.25rem;
 }
 
 .profile-card {
-    padding: 1.5rem;
+  padding: 1.5rem;
 }
 
 .profile-avatar {
-    width: 96px;
-    height: 96px;
-    background: var(--primary-blue);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
+  width: 96px;
+  height: 96px;
+  background: var(--primary-blue);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
 }
 
 .profile-avatar span {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: white;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--white);
 }
 
 .profile-name {
-    text-align: center;
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.25rem;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
 }
 
 .profile-email {
-    text-align: center;
-    font-size: 0.75rem;
-    color: var(--gray-500);
-    margin-bottom: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--gray-500);
+  margin-bottom: 1rem;
 }
 
 .profile-details {
-    text-align: left;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--gray-200);
+  text-align: left;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gray-200);
 }
 
 .detail-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
 .detail-item i {
-    width: 18px;
-    color: var(--gray-400);
-    margin-top: 0.125rem;
+  width: 18px;
+  color: var(--gray-400);
+  margin-top: 0.125rem;
 }
 
 .detail-item div {
-    flex: 1;
+  flex: 1;
 }
 
 .detail-label {
-    font-size: 0.625rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--gray-400);
-    margin-bottom: 0.125rem;
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 0.125rem;
 }
 
 .detail-value {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--gray-700);
-    word-break: break-word;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--gray-700);
+  word-break: break-word;
 }
 
 .table-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid var(--gray-200);
-    background: var(--gray-50);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+  background: var(--gray-50);
 }
 
 .table-header h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--gray-700);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--gray-700);
 }
 
 .table-header h3 i {
-    margin-right: 0.5rem;
-    color: var(--primary-blue);
+  margin-right: 0.5rem;
+  color: var(--primary-blue);
 }
 
 .table-container {
-    overflow-x: auto;
-    padding: 1rem;
+  overflow-x: auto;
+  padding: 1rem;
 }
 
 .response-row td {
-    background: var(--primary-blue-50);
-    padding: 0.75rem 1rem;
+  background: var(--primary-blue-50);
+  padding: 0.75rem 1rem;
 }
 
 .complaint-response strong {
-    color: var(--primary-blue);
+  color: var(--primary-blue);
 }
 
 .feedback-modal {
-    max-width: 350px;
-    text-align: center;
+  max-width: 350px;
+  text-align: center;
 }
 
 .feedback-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 1.5rem auto 1rem;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5rem auto 1rem;
 }
 
 .feedback-icon.success {
-    background: var(--success-green-light);
-    color: var(--success-green);
+  background: var(--success-green-light);
+  color: var(--success-green);
 }
 
 .feedback-icon.error {
-    background: var(--error-red-light);
-    color: var(--error-red);
+  background: var(--error-red-light);
+  color: var(--error-red);
 }
 
 .feedback-icon i {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .feedback-modal h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .feedback-modal p {
-    color: var(--gray-600);
-    margin-bottom: 1rem;
+  color: var(--gray-600);
+  margin-bottom: 1rem;
 }
 
 .feedback-modal .modal-footer {
-    justify-content: center;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
-    .dashboard-header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .grid[style*="grid-template-columns: 1fr 3fr"] {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem;
-    }
-    .table-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: stretch;
-    }
-    .table-header h3 {
-        text-align: center;
-    }
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .grid[style*="grid-template-columns: 1fr 3fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem;
+  }
+  .table-header {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: stretch;
+  }
+  .table-header h3 {
+    text-align: center;
+  }
 }
 
 @media (max-width: 480px) {
-    .profile-card {
-        padding: 1rem;
-    }
-    .profile-avatar {
-        width: 70px;
-        height: 70px;
-    }
-    .profile-avatar span {
-        font-size: 1.75rem;
-    }
-    .data-table th,
-    .data-table td {
-        padding: 0.5rem;
-        font-size: 0.75rem;
-    }
+  .profile-card {
+    padding: 1rem;
+  }
+  .profile-avatar {
+    width: 70px;
+    height: 70px;
+  }
+  .profile-avatar span {
+    font-size: 1.75rem;
+  }
+  .data-table th,
+  .data-table td {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
 }

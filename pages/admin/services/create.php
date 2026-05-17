@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         if ($stmt->execute()) {
             $success = 'Service added successfully!';
-            header('refresh:2;url=index.php');
+            header('refresh:2;url=/barangay-residence-system/pages/dashboard.php?tab=services');
         } else {
             $error = 'Failed to add service.';
         }
@@ -33,10 +33,10 @@ include '../../../includes/layouts/header.php';
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
-    <div class="card">
+    <div class="card form-container">
         <div class="card-header">
             <h2>Add New Service</h2>
-            <a href="index.php" class="btn btn-outline">Back to Services</a>
+            <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Back to Dashboard</a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
@@ -71,7 +71,7 @@ include '../../../includes/layouts/header.php';
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Service</button>
-                    <a href="index.php" class="btn">Cancel</a>
+                    <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Cancel</a>
                 </div>
             </form>
         </div>

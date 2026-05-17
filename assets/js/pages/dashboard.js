@@ -1,135 +1,266 @@
-// Language dropdown
-const langBtn = document.getElementById('langBtn');
-const langMenu = document.getElementById('langMenu');
+let currentHouseholdPhase = 'all';
+let currentTab = 'reports';
+let currentStatus = 'all';
+let currentPriority = 'all';
+let currentSort = 'newest';
 
-if (langBtn && langMenu) {
-    langBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        langMenu.classList.toggle('show');
-    });
-    document.addEventListener('click', () => {
-        if (langMenu) langMenu.classList.remove('show');
-    });
-}
-
-function changeLanguage(lang) {
-    window.location.href = '?lang=' + lang;
-}
-
-// Tab switching
-function switchTab(tab) {
-    const householdsSection = document.getElementById('section-households');
-    const complaintsSection = document.getElementById('section-complaints');
-    const householdsBtn = document.getElementById('nav-households');
-    const complaintsBtn = document.getElementById('nav-complaints');
+function loadTab(tab) {
+    currentTab = tab;
     
-    if (tab === 'households') {
-        householdsSection.classList.remove('hidden-section');
-        complaintsSection.classList.add('hidden-section');
-        householdsBtn.classList.remove('btn-inactive');
-        householdsBtn.classList.add('btn-active');
-        complaintsBtn.classList.remove('btn-active');
-        complaintsBtn.classList.add('btn-inactive');
-    } else {
-        complaintsSection.classList.remove('hidden-section');
-        householdsSection.classList.add('hidden-section');
-        complaintsBtn.classList.remove('btn-inactive');
-        complaintsBtn.classList.add('btn-active');
-        householdsBtn.classList.remove('btn-active');
-        householdsBtn.classList.add('btn-inactive');
-        
-        // Refresh complaint filters when switching to complaints tab
-        filterComplaints();
-    }
-}
-
-// Complaint filtering
-function filterComplaints() {
-    const status = document.getElementById('complaintStatusFilter')?.value;
-    const priority = document.getElementById('complaintPriorityFilter')?.value;
-    const search = document.getElementById('complaintSearch')?.value.toLowerCase() || '';
-    const cards = document.querySelectorAll('#complaintsGrid .complaint-card');
-    
-    cards.forEach(card => {
-        const cardStatus = card.getAttribute('data-status');
-        const cardPriority = card.getAttribute('data-priority');
-        const cardSubject = card.getAttribute('data-subject') || '';
-        const cardName = card.getAttribute('data-name') || '';
-        
-        let show = true;
-        if (status && status !== 'all' && cardStatus !== status) show = false;
-        if (priority && priority !== 'all' && cardPriority !== priority) show = false;
-        if (search && !cardSubject.includes(search) && !cardName.includes(search)) show = false;
-        
-        card.style.display = show ? 'block' : 'none';
-    });
-}
-
-// Set up filter event listeners
-const statusFilter = document.getElementById('complaintStatusFilter');
-const priorityFilter = document.getElementById('complaintPriorityFilter');
-const complaintSearch = document.getElementById('complaintSearch');
-if (statusFilter) statusFilter.addEventListener('change', filterComplaints);
-if (priorityFilter) priorityFilter.addEventListener('change', filterComplaints);
-if (complaintSearch) complaintSearch.addEventListener('keyup', filterComplaints);
-
-// Phase filter dropdown
-const phaseBtn = document.getElementById('phaseBtn');
-const phaseMenu = document.getElementById('phaseMenu');
-
-if (phaseBtn && phaseMenu) {
-    phaseBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        phaseMenu.classList.toggle('show');
-    });
-    document.addEventListener('click', () => {
-        if (phaseMenu) phaseMenu.classList.remove('show');
-    });
-}
-
-let currentPhase = 'all';
-
-function setPhaseFilter(phase) {
-    currentPhase = phase;
-    const phaseLabel = phase === 'all' ? 'All Phases' : phase;
-    const currentPhaseLabel = document.getElementById('currentPhaseLabel');
-    if (currentPhaseLabel) currentPhaseLabel.textContent = phaseLabel;
-    if (phaseMenu) phaseMenu.classList.remove('show');
-    filterTable();
-}
-
-function filterTable() {
-    const search = document.getElementById("searchInput");
-    const searchValue = search ? search.value.toUpperCase() : "";
-    const table = document.getElementById("householdTable");
-    if (!table) return;
-    
-    const rows = table.getElementsByTagName("tr");
-    for (let i = 1; i < rows.length; i++) {
-        const cells = rows[i].getElementsByTagName("td");
-        let textMatch = false;
-        let phaseMatch = (currentPhase === 'all');
-        
-        for (let j = 0; j < cells.length - 1; j++) {
-            if (cells[j] && cells[j].textContent.toUpperCase().includes(searchValue)) {
-                textMatch = true;
-                break;
+    const buttons = ['reports', 'households', 'services', 'complaints'];
+    buttons.forEach(btn => {
+        const element = document.getElementById(`nav-${btn}`);
+        if (element) {
+            if (btn === tab) {
+                element.classList.add('btn-active');
+                element.classList.remove('btn-inactive');
+            } else {
+                element.classList.add('btn-inactive');
+                element.classList.remove('btn-active');
             }
         }
-        
-        if (!phaseMatch && cells[3]) {
-            phaseMatch = cells[3].textContent.trim() === currentPhase;
-        }
-        
-        rows[i].style.display = (textMatch && phaseMatch) ? "" : "none";
+    });
+    
+    const contentContainer = document.getElementById('tabContent');
+    contentContainer.innerHTML = '<div class="loading-spinner">Loading...</div>';
+    
+    fetch(`admin/${tab}/index.php`)
+        .then(response => response.text())
+        .then(html => {
+            contentContainer.innerHTML = html;
+            attachDeleteHandlers();
+            attachFilterHandlers();
+            attachRespondPageDropdown();
+        })
+        .catch(() => {
+            contentContainer.innerHTML = '<div class="error-alert">Failed to load content. Please refresh.</div>';
+        });
+}
+
+function attachDeleteHandlers() {
+    document.querySelectorAll('.delete-item-btn').forEach(btn => {
+        btn.removeEventListener('click', handleDeleteClick);
+        btn.addEventListener('click', handleDeleteClick);
+    });
+}
+
+function handleDeleteClick(e) {
+    e.preventDefault();
+    const type = this.getAttribute('data-type');
+    const id = this.getAttribute('data-id');
+    const name = this.getAttribute('data-name');
+    openDeleteModal(type, id, name);
+}
+
+function attachFilterHandlers() {
+    attachDropdownHandler('complaintStatusBtn', 'complaintStatusMenu', handleStatusFilter);
+    attachDropdownHandler('complaintPriorityBtn', 'complaintPriorityMenu', handlePriorityFilter);
+    attachDropdownHandler('complaintSortBtn', 'complaintSortMenu', handleSortFilter);
+    attachDropdownHandler('householdPhaseBtn', 'householdPhaseMenu', handleHouseholdPhaseClick);
+    
+    const complaintSearch = document.getElementById('complaintSearchInput');
+    if (complaintSearch) {
+        complaintSearch.removeEventListener('keyup', filterAndSortComplaints);
+        complaintSearch.addEventListener('keyup', filterAndSortComplaints);
+    }
+    
+    const householdSearch = document.getElementById('householdSearchInput');
+    if (householdSearch) {
+        householdSearch.removeEventListener('keyup', filterHouseholds);
+        householdSearch.addEventListener('keyup', filterHouseholds);
     }
 }
 
-// Initialize on load
-document.addEventListener('DOMContentLoaded', function() {
-    // Set default active tab
-    const householdsSection = document.getElementById('section-households');
-    if (householdsSection && householdsSection.classList.contains('hidden-section')) {
-        householdsSection.classList.remove('hidden-section');
+function attachRespondPageDropdown() {
+    const statusBtn = document.getElementById('statusDropdownBtn');
+    const statusMenu = document.getElementById('statusDropdownMenu');
+    const statusLabel = document.getElementById('statusDropdownLabel');
+    const statusInput = document.getElementById('selectedStatus');
+    
+    if (statusBtn && statusMenu) {
+        const newBtn = statusBtn.cloneNode(true);
+        statusBtn.parentNode.replaceChild(newBtn, statusBtn);
+        const newMenu = statusMenu.cloneNode(true);
+        statusMenu.parentNode.replaceChild(newMenu, statusMenu);
+        
+        newBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            newMenu.classList.toggle('show');
+        });
+        
+        newMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const value = this.getAttribute('data-value');
+                statusLabel.textContent = this.textContent;
+                if (statusInput) statusInput.value = value;
+                newMenu.classList.remove('show');
+            });
+        });
     }
+}
+
+function attachDropdownHandler(btnId, menuId, handler) {
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    
+    if (btn && menu) {
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        const newMenu = menu.cloneNode(true);
+        menu.parentNode.replaceChild(newMenu, menu);
+        
+        newBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            newMenu.classList.toggle('show');
+        });
+        
+        newMenu.querySelectorAll('.dropdown-item').forEach(item => {
+            item.removeEventListener('click', handler);
+            item.addEventListener('click', handler);
+        });
+    }
+}
+
+function handleStatusFilter(e) {
+    currentStatus = this.getAttribute('data-status');
+    const label = document.getElementById('complaintStatusLabel');
+    if (label) label.textContent = this.textContent;
+    closeAllDropdowns();
+    filterAndSortComplaints();
+}
+
+function handlePriorityFilter(e) {
+    currentPriority = this.getAttribute('data-priority');
+    const label = document.getElementById('complaintPriorityLabel');
+    if (label) label.textContent = this.textContent;
+    closeAllDropdowns();
+    filterAndSortComplaints();
+}
+
+function handleSortFilter(e) {
+    currentSort = this.getAttribute('data-sort');
+    const label = document.getElementById('complaintSortLabel');
+    if (label) label.textContent = this.textContent;
+    closeAllDropdowns();
+    filterAndSortComplaints();
+}
+
+function handleHouseholdPhaseClick(e) {
+    const phase = this.getAttribute('data-phase');
+    if (phase) {
+        currentHouseholdPhase = phase;
+        const label = document.getElementById('householdPhaseLabel');
+        if (label) label.textContent = phase === 'all' ? 'All Phases' : phase;
+        closeAllDropdowns();
+        filterHouseholds();
+    }
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('show');
+    });
+}
+
+function filterAndSortComplaints() {
+    let rows = Array.from(document.querySelectorAll('#complaintTable tbody tr'));
+    const search = document.getElementById('complaintSearchInput')?.value.toLowerCase() || '';
+    
+    rows = rows.filter(row => !row.querySelector('.no-data'));
+    
+    rows = rows.filter(row => {
+        const rowStatus = row.getAttribute('data-status');
+        const rowPriority = row.getAttribute('data-priority');
+        const rowSubject = row.getAttribute('data-subject') || '';
+        const rowName = row.getAttribute('data-name') || '';
+        
+        let show = true;
+        if (currentStatus !== 'all' && rowStatus !== currentStatus) show = false;
+        if (currentPriority !== 'all' && rowPriority !== currentPriority) show = false;
+        if (search && !rowSubject.includes(search) && !rowName.includes(search)) show = false;
+        return show;
+    });
+    
+    rows.sort((a, b) => {
+        const dateA = new Date(a.getAttribute('data-date'));
+        const dateB = new Date(b.getAttribute('data-date'));
+        return currentSort === 'newest' ? dateB - dateA : dateA - dateB;
+    });
+    
+    const tbody = document.getElementById('complaintTableBody');
+    rows.forEach(row => tbody.appendChild(row));
+    
+    let noDataRow = tbody.querySelector('.no-data-row');
+    if (rows.length === 0 && !noDataRow) {
+        const emptyRow = document.createElement('tr');
+        emptyRow.className = 'no-data-row';
+        emptyRow.innerHTML = '<td colspan="7" class="no-data"><i class="fas fa-check-circle"></i><p>No complaints found.</p></td>';
+        tbody.appendChild(emptyRow);
+    } else if (rows.length > 0 && noDataRow) {
+        noDataRow.remove();
+    }
+}
+
+function filterHouseholds() {
+    const searchInput = document.getElementById('householdSearchInput');
+    const searchValue = searchInput ? searchInput.value.toLowerCase() : '';
+    const rows = document.querySelectorAll('#householdTable tbody tr');
+    
+    rows.forEach(row => {
+        const rowPhase = row.getAttribute('data-phase') || '';
+        let textMatch = false;
+        
+        if (searchValue) {
+            const cells = row.querySelectorAll('td');
+            for (let i = 0; i < cells.length - 1; i++) {
+                if (cells[i] && cells[i].textContent.toLowerCase().includes(searchValue)) {
+                    textMatch = true;
+                    break;
+                }
+            }
+        } else {
+            textMatch = true;
+        }
+        
+        const phaseMatch = (currentHouseholdPhase === 'all' || rowPhase === currentHouseholdPhase);
+        row.style.display = (textMatch && phaseMatch) ? '' : 'none';
+    });
+}
+
+document.addEventListener('click', function() {
+    closeAllDropdowns();
 });
+
+function openDeleteModal(type, id, name) {
+    const modalTitle = document.getElementById('deleteModalTitle');
+    const itemName = document.getElementById('deleteItemName');
+    const warningText = document.getElementById('deleteWarningText');
+    const confirmLink = document.getElementById('deleteConfirmLink');
+    
+    if (type === 'household') {
+        modalTitle.textContent = 'Delete Household';
+        itemName.textContent = name;
+        warningText.textContent = 'This will also delete all residents in this household.';
+        confirmLink.href = `admin/households/destroy.php?id=${id}`;
+    } else if (type === 'service') {
+        modalTitle.textContent = 'Delete Service';
+        itemName.textContent = name;
+        warningText.textContent = 'This action cannot be undone.';
+        confirmLink.href = `admin/services/destroy.php?id=${id}`;
+    }
+    
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('active');
+    setTimeout(() => modal.classList.add('hidden'), 300);
+}
+
+const urlParams = new URLSearchParams(window.location.search);
+const tabParam = urlParams.get('tab');
+const initialTab = (tabParam === 'households' || tabParam === 'services' || tabParam === 'complaints') ? tabParam : 'reports';
+loadTab(initialTab);

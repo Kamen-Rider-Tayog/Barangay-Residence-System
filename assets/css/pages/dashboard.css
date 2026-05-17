@@ -16,6 +16,32 @@
     font-weight: 800;
 }
 
+.tab-content-container {
+    min-height: 400px;
+}
+
+.loading-spinner {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray-500);
+}
+
+.loading-spinner::after {
+    content: '';
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--gray-200);
+    border-top-color: var(--primary-blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -23,121 +49,35 @@
     margin-bottom: 2rem;
 }
 
-.charts-grid {
+.charts-row {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
 
-.chart-card {
-    padding: 1.5rem;
+.recent-activity {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
 }
 
-.chart-title {
+.btn-sm {
+    padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    color: var(--primary-blue);
-    margin-bottom: 1rem;
-}
-
-.chart-container {
-    height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .search-bar {
-    padding: 1rem;
-    border-bottom: 1px solid var(--gray-200);
+    align-items: center;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
 }
 
-.search-input {
-    flex: 1;
-    position: relative;
-}
-
-.search-input input {
-    width: 100%;
-    padding: 0.5rem 0.75rem 0.5rem 2rem;
-    border: 1px solid var(--gray-200);
-    border-radius: var(--border-radius-lg);
-    font-size: 0.875rem;
-}
-
-.search-input i {
-    position: absolute;
-    left: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--gray-400);
-}
-
-.filter-dropdown {
-    position: relative;
-}
-
-.filter-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: white;
-    border: 1px solid var(--gray-300);
-    border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-size: 0.875rem;
-    color: var(--gray-700);
-}
-
-.filter-btn:hover {
-    border-color: var(--primary-blue);
-    background: var(--gray-50);
-}
-
-.filter-menu {
-    position: absolute;
-    right: 0;
-    top: 100%;
-    margin-top: 0.5rem;
-    min-width: 160px;
-    background-color: white;
-    border-radius: 0.5rem;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--gray-200);
-    overflow: hidden;
-    z-index: 100;
-    display: none;
-}
-
-.filter-menu.show {
-    display: block;
-}
-
-.filter-menu button {
-    width: 100%;
-    text-align: left;
-    padding: 0.625rem 1rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    color: var(--gray-700);
-}
-
-.filter-menu button:hover {
-    background-color: var(--primary-blue-50);
-    color: var(--primary-blue);
-}
-
 .complaints-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     padding: 1.5rem;
 }
@@ -164,7 +104,7 @@
 .complaint-title {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 0.75rem;
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -174,11 +114,7 @@
     font-size: 1rem;
     font-weight: 700;
     color: var(--gray-800);
-}
-
-.complaint-badges {
-    display: flex;
-    gap: 0.5rem;
+    margin: 0;
 }
 
 .complaint-meta {
@@ -189,9 +125,16 @@
     color: var(--gray-500);
 }
 
+.complaint-meta p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
 .complaint-meta i {
-    margin-right: 0.25rem;
     width: 12px;
+    font-size: 0.7rem;
 }
 
 .complaint-preview {
@@ -200,6 +143,7 @@
     color: var(--gray-600);
     line-height: 1.4;
     border-bottom: 1px solid var(--gray-100);
+    margin: 0;
 }
 
 .response-preview {
@@ -208,6 +152,11 @@
     font-size: 0.75rem;
     color: var(--primary-blue);
     border-bottom: 1px solid var(--gray-100);
+    margin: 0;
+}
+
+.response-preview i {
+    margin-right: 0.25rem;
 }
 
 .complaint-actions {
@@ -232,7 +181,7 @@
     flex-wrap: wrap;
 }
 
-.filter-select {
+.form-select {
     padding: 0.5rem 1rem;
     border: 1px solid var(--gray-300);
     border-radius: 0.5rem;
@@ -241,35 +190,16 @@
     cursor: pointer;
 }
 
-.modal-details {
-    max-width: 550px;
-}
-
-.detail-section {
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--gray-100);
-}
-
-.detail-section h4 {
-    font-size: 0.7rem;
-    font-weight: 700;
+.no-data {
+    text-align: center;
+    padding: 3rem;
     color: var(--gray-500);
-    text-transform: uppercase;
-    margin-bottom: 0.25rem;
 }
 
-.detail-section p {
-    font-size: 0.875rem;
-    color: var(--gray-800);
-}
-
-.detail-text {
-    background: var(--gray-50);
-    padding: 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 0.875rem;
-    color: var(--gray-700);
+.no-data i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
 }
 
 .household-form {
@@ -292,10 +222,13 @@
 
 .form-actions {
     display: flex;
+    gap: 0.5rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
-    margin-top: 2rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--gray-200);
 }
 
 .checkbox-label {
@@ -320,11 +253,24 @@
     padding: 0.5rem;
 }
 
+.form-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.detail-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 @media (max-width: 1024px) {
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
     }
-    .charts-grid {
+    .charts-row {
+        grid-template-columns: 1fr;
+    }
+    .recent-activity {
         grid-template-columns: 1fr;
     }
 }
@@ -347,33 +293,14 @@
         flex-direction: column;
         width: 100%;
     }
-    .complaint-filters .filter-select,
+    .complaint-filters .form-select,
     .complaint-filters .search-input {
         width: 100%;
     }
     .complaint-actions {
         flex-direction: column;
     }
-}
-
-.btn-nav {
-    padding: 0.625rem 1.25rem;
-    border-radius: 2rem;
-    font-weight: 700;
-    font-size: 0.875rem;
-    cursor: pointer;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.btn-nav.btn-active {
-    background-color: var(--primary-blue);
-    color: white;
-}
-
-.btn-nav.btn-inactive {
-    background: var(--gray-200);
-    color: var(--gray-600);
+    .form-row {
+        grid-template-columns: 1fr;
+    }
 }
