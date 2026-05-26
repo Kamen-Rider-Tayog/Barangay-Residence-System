@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 18, 2026 at 08:26 AM
+-- Generation Time: May 26, 2026 at 02:37 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -124,6 +124,36 @@ CREATE TABLE IF NOT EXISTS `announcement` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `announcements`
+--
+
+DROP TABLE IF EXISTS `announcements`;
+CREATE TABLE IF NOT EXISTS `announcements` (
+  `announcement_id` int NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_by` int DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`announcement_id`),
+  KEY `created_by` (`created_by`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `announcements`
+--
+
+INSERT INTO `announcements` (`announcement_id`, `title`, `content`, `created_by`, `created_at`, `updated_at`) VALUES
+(1, 'Community Clean-Up', 'Join us for a clean-up initiative in San Francisco this Saturday at 6:00 AM. Please bring your own gloves and trash bags. Meeting point at the barangay hall.', 1, '2026-05-15 02:00:00', '2026-05-26 01:13:33'),
+(2, 'Medical Mission', 'Free consultation and medicines available at the barangay hall. Services include blood pressure check, blood sugar test, and dental checkup. First come, first served.', 1, '2026-05-20 02:00:00', '2026-05-26 01:13:33'),
+(3, 'Barangay Assembly', 'Everyone is invited to the assembly at 2:00 PM at the barangay covered court. Agenda includes upcoming projects, budget discussion, and community concerns.', 1, '2026-05-25 02:00:00', '2026-05-26 01:13:33'),
+(4, 'test', 'test', 1, '2026-05-26 01:31:34', '2026-05-26 01:31:34'),
+(5, '1', '1', 1, '2026-05-26 01:33:52', '2026-05-26 01:33:52'),
+(6, 'fkc y', '11', 1, '2026-05-26 02:27:44', '2026-05-26 02:27:44');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `campaigns`
 --
 
@@ -200,14 +230,15 @@ CREATE TABLE IF NOT EXISTS `household` (
   PRIMARY KEY (`household_id`),
   UNIQUE KEY `email` (`email`),
   KEY `idx_household_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `household`
 --
 
 INSERT INTO `household` (`household_id`, `email`, `password`, `address`, `phase_no`, `preferred_language`, `created_at`) VALUES
-(1, 'maria.santos@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 5, Lot 12, Phase 1', 'Phase 1', '', '2026-05-12 18:46:11');
+(1, 'maria.santos@email.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 5, Lot 12, Phase 1', 'Phase 1', '', '2026-05-12 18:46:11'),
+(3, 'test@gmail.com', '$2y$10$9AKRjTUHHzkpfeewtGwulOcTGAbhw8mXLkBs37l4R6G9.akDboHIO', 'Blk 5, Lot 12, Phase 1', 'Phase 2', 'tagalog', '2026-05-25 23:45:06');
 
 -- --------------------------------------------------------
 
@@ -287,15 +318,16 @@ CREATE TABLE IF NOT EXISTS `resident` (
   `profile_photo_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`resident_id`),
   KEY `household_id` (`household_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `resident`
 --
 
 INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`, `suffix`, `age`, `is_voter`, `is_head`, `relationship_to_head`, `contact_no`, `profile_photo_url`) VALUES
-(1, 1, 'Maria', 'Santos', NULL, 42, 1, 1, 'Self', '09171234567', 'maria.santos@brgy.com'),
-(2, 2, 'James', 'Malakiburat', NULL, 69, 1, 1, 'Self', '9123456789', 'james.malakiburat@brgy.com');
+(1, 1, 'Maria', 'Santos', '', 42, 1, 1, 'Head', '9171234567', 'maria.santos@brgy.com'),
+(3, 3, 'test', 'test', '', 32, 1, 1, 'Head', '9171234567', 'test.test@brgy.com'),
+(7, 1, 'james', 'james', '', 3, 1, 0, 'Parent', '0', 'james.james@brgy.com');
 
 --
 -- Triggers `resident`
