@@ -12,17 +12,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_active = isset($_POST['is_active']) ? 1 : 0;
     
     if (empty($service_name)) {
-        $error = 'Service name is required.';
+        $error = __('service-name-required');
     } else {
         $sql = "INSERT INTO service (service_name, base_price, description, is_active) VALUES (?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sdsi", $service_name, $base_price, $description, $is_active);
         
         if ($stmt->execute()) {
-            $success = 'Service added successfully!';
+            $success = __('service-added-success');
             header('refresh:2;url=/barangay-residence-system/pages/dashboard.php?tab=services');
         } else {
-            $error = 'Failed to add service.';
+            $error = __('service-add-failed');
         }
     }
 }
@@ -35,8 +35,8 @@ include '../../../includes/layouts/header.php';
 <main class="container">
     <div class="card form-container">
         <div class="card-header">
-            <h2>Add New Service</h2>
-            <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Back to Dashboard</a>
+            <h2><?php echo __('add-new-service'); ?></h2>
+            <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline"><?php echo __('back-to-dashboard'); ?></a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
@@ -48,30 +48,30 @@ include '../../../includes/layouts/header.php';
             
             <form method="POST" class="service-form">
                 <div class="form-group">
-                    <label class="form-label">Service Name *</label>
+                    <label class="form-label"><?php echo __('service-name'); ?> *</label>
                     <input type="text" name="service_name" class="form-input" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Price</label>
+                    <label class="form-label"><?php echo __('price'); ?></label>
                     <input type="number" name="base_price" class="form-input" step="0.01" value="0.00">
-                    <small class="form-hint">Set to 0 for free services</small>
+                    <small class="form-hint"><?php echo __('price-hint'); ?></small>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Description</label>
-                    <textarea name="description" class="form-input" rows="3" placeholder="Brief description of the service"></textarea>
+                    <label class="form-label"><?php echo __('description'); ?></label>
+                    <textarea name="description" class="form-input" rows="3" placeholder="<?php echo __('service-description-placeholder'); ?>"></textarea>
                 </div>
                 
                 <div class="form-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="is_active" value="1" checked> Active
+                        <input type="checkbox" name="is_active" value="1" checked> <?php echo __('active'); ?>
                     </label>
                 </div>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Service</button>
-                    <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><?php echo __('save-service'); ?></button>
+                    <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline"><?php echo __('cancel'); ?></a>
                 </div>
             </form>
         </div>

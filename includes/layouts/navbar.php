@@ -12,9 +12,8 @@
     <div class="navbar-links">
         <a href="/barangay-residence-system/pages/index.php"><?php echo __('nav-home'); ?></a>
         <a href="/barangay-residence-system/pages/services.php"><?php echo __('nav-services'); ?></a>
-        <a href="/barangay-residence-system/pages/announcements.php">Announcements</a>
+        <a href="/barangay-residence-system/pages/announcements.php"><?php echo __('nav-announcements'); ?></a>
 
-        
         <div class="lang-dropdown">
             <button id="langBtn" class="lang-btn">
                 <i class="fas fa-language"></i>

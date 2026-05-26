@@ -29,20 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $is_active = isset($_POST['is_active']) ? 1 : 0;
     
     if (empty($service_name)) {
-        $error = 'Service name is required.';
+        $error = __('service-name-required');
     } else {
         $sql = "UPDATE service SET service_name = ?, base_price = ?, description = ?, is_active = ? WHERE service_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("sdsii", $service_name, $base_price, $description, $is_active, $service_id);
         
         if ($stmt->execute()) {
-            $success = 'Service updated successfully!';
+            $success = __('service-updated-success');
             $service['service_name'] = $service_name;
             $service['base_price'] = $base_price;
             $service['description'] = $description;
             $service['is_active'] = $is_active;
         } else {
-            $error = 'Failed to update service.';
+            $error = __('service-update-failed');
         }
     }
 }
@@ -55,8 +55,8 @@ include '../../../includes/layouts/header.php';
 <main class="container">
     <div class="card form-container">
         <div class="card-header">
-            <h2>Edit Service</h2>
-            <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Back to Dashboard</a>
+            <h2><?php echo __('edit-service'); ?></h2>
+            <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline"><?php echo __('back-to-dashboard'); ?></a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
@@ -68,30 +68,30 @@ include '../../../includes/layouts/header.php';
             
             <form method="POST" class="service-form">
                 <div class="form-group">
-                    <label class="form-label">Service Name *</label>
+                    <label class="form-label"><?php echo __('service-name'); ?> *</label>
                     <input type="text" name="service_name" class="form-input" value="<?php echo htmlspecialchars($service['service_name']); ?>" required>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Price</label>
+                    <label class="form-label"><?php echo __('price'); ?></label>
                     <input type="number" name="base_price" class="form-input" step="0.01" value="<?php echo $service['base_price']; ?>">
-                    <small class="form-hint">Set to 0 for free services</small>
+                    <small class="form-hint"><?php echo __('price-hint'); ?></small>
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Description</label>
+                    <label class="form-label"><?php echo __('description'); ?></label>
                     <textarea name="description" class="form-input" rows="3"><?php echo htmlspecialchars($service['description'] ?? ''); ?></textarea>
                 </div>
                 
                 <div class="form-group">
                     <label class="checkbox-label">
-                        <input type="checkbox" name="is_active" value="1" <?php echo $service['is_active'] ? 'checked' : ''; ?>> Active
+                        <input type="checkbox" name="is_active" value="1" <?php echo $service['is_active'] ? 'checked' : ''; ?>> <?php echo __('active'); ?>
                     </label>
                 </div>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                    <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><?php echo __('save-changes'); ?></button>
+                    <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn btn-outline"><?php echo __('cancel'); ?></a>
                 </div>
             </form>
         </div>

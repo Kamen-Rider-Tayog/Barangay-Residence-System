@@ -9,8 +9,8 @@ include '../includes/layouts/header.php';
 <main>
     <div class="container">
         <div class="announcements-header">
-            <h1>Latest Announcements</h1>
-            <p>Stay updated with the latest barangay announcements and news</p>
+            <h1><?php echo __('announcements-page-title'); ?></h1>
+            <p><?php echo __('announcements-page-desc'); ?></p>
         </div>
 
         <div class="announcements-list">
@@ -22,7 +22,7 @@ include '../includes/layouts/header.php';
             if (empty($announcements)): ?>
                 <div class="no-announcements">
                     <i class="fas fa-bullhorn"></i>
-                    <p>No announcements yet. Please check back later.</p>
+                    <p><?php echo __('no-announcements'); ?></p>
                 </div>
             <?php else: ?>
                 <?php foreach ($announcements as $a): ?>

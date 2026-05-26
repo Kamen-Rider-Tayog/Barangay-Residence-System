@@ -114,8 +114,8 @@ include '../../../includes/layouts/header.php';
 <main class="container">
     <div class="card form-container">
         <div class="card-header">
-            <h2>Add New Household</h2>
-            <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
+            <h2><?php echo __('add-household'); ?></h2>
+            <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline"><?php echo __('back-to-dashboard'); ?></a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
@@ -129,24 +129,24 @@ include '../../../includes/layouts/header.php';
                 <input type="hidden" name="members" id="membersData" value="[]">
                 
                 <div class="form-section">
-                    <h3>Account Information</h3>
+                    <h3><?php echo __('account-information'); ?></h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Email *</label>
+                            <label class="form-label"><?php echo __('email'); ?> *</label>
                             <input type="email" name="email" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Password *</label>
+                            <label class="form-label"><?php echo __('password'); ?> *</label>
                             <input type="password" name="password" class="form-input">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Address *</label>
+                            <label class="form-label"><?php echo __('address'); ?> *</label>
                             <input type="text" name="address" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Phase</label>
+                            <label class="form-label"><?php echo __('phase'); ?></label>
                             <select name="phase_no" class="form-input">
                                 <option value="Phase 1">Phase 1</option>
                                 <option value="Phase 2">Phase 2</option>
@@ -157,93 +157,93 @@ include '../../../includes/layouts/header.php';
                 </div>
                 
                 <div class="form-section">
-                    <h3>Head of Household</h3>
+                    <h3><?php echo __('head-of-household'); ?></h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">First Name *</label>
+                            <label class="form-label"><?php echo __('first-name'); ?> *</label>
                             <input type="text" name="first_name" class="form-input">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Last Name *</label>
+                            <label class="form-label"><?php echo __('last-name'); ?> *</label>
                             <input type="text" name="last_name" class="form-input">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Suffix</label>
+                            <label class="form-label"><?php echo __('suffix'); ?></label>
                             <input type="text" name="suffix" class="form-input" placeholder="Jr., Sr., III">
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Age</label>
+                            <label class="form-label"><?php echo __('age'); ?></label>
                             <input type="number" name="age" class="form-input">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="form-label">Contact Number</label>
+                            <label class="form-label"><?php echo __('contact-number'); ?></label>
                             <input type="tel" name="contact" class="form-input" placeholder="09123456789">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="is_voter" value="1"> Registered Voter
+                            <input type="checkbox" name="is_voter" value="1"> <?php echo __('registered-voter'); ?>
                         </label>
                     </div>
                 </div>
                 
                 <div class="form-section">
                     <div class="household-members-header">
-                        <h3>Household Members</h3>
-                        <button type="button" id="showMemberFormBtn" class="btn btn-outline">+ Add Member</button>
+                        <h3><?php echo __('household-members'); ?></h3>
+                        <button type="button" id="showMemberFormBtn" class="btn btn-outline"><?php echo __('add-member'); ?></button>
                     </div>
                     
                     <div id="memberFormContainer" style="display: none;" class="member-form-container">
                         <div class="member-form-row">
                             <div class="form-group">
-                                <label>First Name</label>
+                                <label><?php echo __('first-name'); ?></label>
                                 <input type="text" id="memberFirstName" class="form-input">
                             </div>
                             <div class="form-group">
-                                <label>Last Name</label>
+                                <label><?php echo __('last-name'); ?></label>
                                 <input type="text" id="memberLastName" class="form-input">
                             </div>
                         </div>
                         <div class="member-form-row">
                             <div class="form-group">
-                                <label>Suffix</label>
+                                <label><?php echo __('suffix'); ?></label>
                                 <input type="text" id="memberSuffix" class="form-input" placeholder="Jr., Sr., III">
                             </div>
                             <div class="form-group">
-                                <label>Age</label>
+                                <label><?php echo __('age'); ?></label>
                                 <input type="number" id="memberAge" class="form-input">
                             </div>
                         </div>
                         <div class="member-form-row">
                             <div class="form-group">
-                                <label>Contact</label>
+                                <label><?php echo __('contact-number'); ?></label>
                                 <input type="tel" id="memberContact" class="form-input" placeholder="09123456789">
                             </div>
                             <div class="form-group">
-                                <label>Relationship</label>
+                                <label><?php echo __('relationship'); ?></label>
                                 <select id="memberRelationship" class="form-input">
-                                    <option value="Spouse">Spouse</option>
-                                    <option value="Child">Child</option>
-                                    <option value="Parent">Parent</option>
-                                    <option value="Sibling">Sibling</option>
-                                    <option value="Other">Other</option>
+                                    <option value="Spouse"><?php echo __('spouse'); ?></option>
+                                    <option value="Child"><?php echo __('child'); ?></option>
+                                    <option value="Parent"><?php echo __('parent'); ?></option>
+                                    <option value="Sibling"><?php echo __('sibling'); ?></option>
+                                    <option value="Other"><?php echo __('other'); ?></option>
                                 </select>
                             </div>
                         </div>
                         <div class="member-form-row">
                             <div class="form-group">
                                 <label class="checkbox-label">
-                                    <input type="checkbox" id="memberIsVoter"> Registered Voter
+                                    <input type="checkbox" id="memberIsVoter"> <?php echo __('registered-voter'); ?>
                                 </label>
                             </div>
                         </div>
                         <div class="form-actions">
-                            <button type="button" id="saveMemberBtn" class="btn btn-primary">Add to List</button>
-                            <button type="button" id="cancelMemberBtn" class="btn btn-outline">Cancel</button>
+                            <button type="button" id="saveMemberBtn" class="btn btn-primary"><?php echo __('add-to-list'); ?></button>
+                            <button type="button" id="cancelMemberBtn" class="btn btn-outline"><?php echo __('cancel'); ?></button>
                         </div>
                     </div>
                     
@@ -251,19 +251,19 @@ include '../../../includes/layouts/header.php';
                         <table class="data-table" id="membersTable">
                             <thead>
                                 <tr>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Suffix</th>
-                                    <th>Age</th>
-                                    <th>Contact</th>
-                                    <th>Voter</th>
-                                    <th>Relationship</th>
+                                    <th><?php echo __('first-name'); ?></th>
+                                    <th><?php echo __('last-name'); ?></th>
+                                    <th><?php echo __('suffix'); ?></th>
+                                    <th><?php echo __('age'); ?></th>
+                                    <th><?php echo __('contact'); ?></th>
+                                    <th><?php echo __('voter'); ?></th>
+                                    <th><?php echo __('relationship'); ?></th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody id="membersTableBody">
                                 <tr id="noMembersRow">
-                                    <td colspan="8" class="text-center">No household members added yet. Use "Add Member" to add.</td>
+                                    <td colspan="8" class="text-center"><?php echo __('no-members-added'); ?></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -271,8 +271,8 @@ include '../../../includes/layouts/header.php';
                 </div>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Save Household</button>
-                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><?php echo __('save-household'); ?></button>
+                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline"><?php echo __('cancel'); ?></a>
                 </div>
             </form>
         </div>
@@ -280,4 +280,4 @@ include '../../../includes/layouts/header.php';
 </main>
 
 <script src="/barangay-residence-system/assets/js/pages/households.js"></script>
-<script src="/barangay-residence-system/assets/js/bootstrap.js"></script>   qw
+<script src="/barangay-residence-system/assets/js/bootstrap.js"></script>

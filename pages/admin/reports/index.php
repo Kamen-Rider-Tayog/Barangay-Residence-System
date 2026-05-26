@@ -324,7 +324,9 @@ $maxMonthly = max($monthlyCounts) ?: 1;
 
 .status-pending { background: #fef3c7; color: #d97706; }
 .status-approved { background: #dbeafe; color: #2563eb; }
+.status-processing { background: #e9d5ff; color: #7e22ce; }
 .status-completed { background: #d1fae5; color: #059669; }
+.status-rejected { background: #fee2e2; color: #dc2626; }
 .status-resolved { background: #d1fae5; color: #059669; }
 
 /* Top Services List */
@@ -398,7 +400,7 @@ $maxMonthly = max($monthlyCounts) ?: 1;
                 <i class="fas fa-users"></i>
             </div>
             <div class="reports-stat-info">
-                <p>Total Residents</p>
+                <p><?php echo __('total-residents'); ?></p>
                 <p class="reports-stat-number"><?php echo number_format($stats['total_residents'] ?? 0); ?></p>
             </div>
         </div>
@@ -407,7 +409,7 @@ $maxMonthly = max($monthlyCounts) ?: 1;
                 <i class="fas fa-home"></i>
             </div>
             <div class="reports-stat-info">
-                <p>Total Households</p>
+                <p><?php echo __('total-households'); ?></p>
                 <p class="reports-stat-number"><?php echo number_format($stats['total_households'] ?? 0); ?></p>
             </div>
         </div>
@@ -416,7 +418,7 @@ $maxMonthly = max($monthlyCounts) ?: 1;
                 <i class="fas fa-check-circle"></i>
             </div>
             <div class="reports-stat-info">
-                <p>Total Voters</p>
+                <p><?php echo __('total-voters'); ?></p>
                 <p class="reports-stat-number"><?php echo number_format($stats['total_voters'] ?? 0); ?></p>
             </div>
         </div>
@@ -425,7 +427,7 @@ $maxMonthly = max($monthlyCounts) ?: 1;
                 <i class="fas fa-file-alt"></i>
             </div>
             <div class="reports-stat-info">
-                <p>Service Requests</p>
+                <p><?php echo __('total-service-requests'); ?></p>
                 <p class="reports-stat-number"><?php echo number_format($stats['total_requests'] ?? 0); ?></p>
             </div>
         </div>
@@ -434,8 +436,8 @@ $maxMonthly = max($monthlyCounts) ?: 1;
     <!-- Daily Requests Chart (Last 7 Days) -->
     <div class="report-card">
         <div class="report-card-header">
-            <h3><i class="fas fa-chart-line"></i> Daily Service Requests (Last 7 Days)</h3>
-            <span class="badge badge-blue">Total: <?php echo array_sum($dailyCounts); ?></span>
+            <h3><i class="fas fa-chart-line"></i> <?php echo __('daily-requests'); ?></h3>
+            <span class="badge badge-blue"><?php echo __('total'); ?>: <?php echo array_sum($dailyCounts); ?></span>
         </div>
         <div class="report-card-body">
             <div class="bar-chart">
@@ -459,14 +461,14 @@ $maxMonthly = max($monthlyCounts) ?: 1;
         <!-- Complaints by Category -->
         <div class="report-card">
             <div class="report-card-header">
-                <h3><i class="fas fa-chart-pie"></i> Complaints by Category</h3>
-                <span class="badge badge-orange">Total: <?php echo array_sum($categoryCounts); ?></span>
+                <h3><i class="fas fa-chart-pie"></i> <?php echo __('complaints-by-category'); ?></h3>
+                <span class="badge badge-orange"><?php echo __('total'); ?>: <?php echo array_sum($categoryCounts); ?></span>
             </div>
             <div class="report-card-body">
                 <?php if (empty($categories)): ?>
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
-                        <p>No complaints yet</p>
+                        <p><?php echo __('no-data'); ?></p>
                     </div>
                 <?php else: ?>
                     <?php foreach ($categories as $index => $category): ?>
@@ -491,14 +493,14 @@ $maxMonthly = max($monthlyCounts) ?: 1;
         <!-- Top Requested Services -->
         <div class="report-card">
             <div class="report-card-header">
-                <h3><i class="fas fa-trophy"></i> Top Requested Services</h3>
-                <span class="badge badge-green">Most Popular</span>
+                <h3><i class="fas fa-trophy"></i> <?php echo __('top-requested-services'); ?></h3>
+                <span class="badge badge-green"><?php echo __('most-popular'); ?></span>
             </div>
             <div class="report-card-body">
                 <?php if (empty($topServices)): ?>
                     <div class="empty-state">
                         <i class="fas fa-inbox"></i>
-                        <p>No services requested yet</p>
+                        <p><?php echo __('no-data'); ?></p>
                     </div>
                 <?php else: ?>
                     <?php foreach ($topServices as $service): ?>
@@ -512,13 +514,12 @@ $maxMonthly = max($monthlyCounts) ?: 1;
         </div>
     </div>
 
-
     <!-- Monthly Trend -->
     <?php if (!empty($monthlyLabels)): ?>
     <div class="report-card">
         <div class="report-card-header">
-            <h3><i class="fas fa-chart-bar"></i> Monthly Trend (Last 6 Months)</h3>
-            <span class="badge badge-blue">Total: <?php echo array_sum($monthlyCounts); ?></span>
+            <h3><i class="fas fa-chart-bar"></i> <?php echo __('monthly-trend'); ?></h3>
+            <span class="badge badge-blue"><?php echo __('total'); ?>: <?php echo array_sum($monthlyCounts); ?></span>
         </div>
         <div class="report-card-body">
             <div class="bar-chart">
@@ -549,12 +550,12 @@ $maxMonthly = max($monthlyCounts) ?: 1;
     }
     $statuses = ['pending', 'approved', 'processing', 'completed', 'rejected'];
     $statusColors = ['#f59e0b', '#3b82f6', '#8b5cf6', '#10b981', '#ef4444'];
-    $statusLabels = ['Pending', 'Approved', 'Processing', 'Completed', 'Rejected'];
+    $statusLabels = [__('pending'), __('approved'), __('processing'), __('completed'), __('rejected')];
     ?>
     
     <div class="report-card">
         <div class="report-card-header">
-            <h3><i class="fas fa-chart-simple"></i> Request Status Distribution</h3>
+            <h3><i class="fas fa-chart-simple"></i> <?php echo __('request-status-distribution'); ?></h3>
         </div>
         <div class="report-card-body">
             <div class="progress-ring-container">

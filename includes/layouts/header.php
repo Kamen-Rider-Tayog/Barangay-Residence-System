@@ -16,7 +16,7 @@ if (isset($_GET['reset_announcement'])) {
     <link rel="shortcut icon" href="/barangay-residence-system/assets/images/logo.ico" type="image/x-icon">
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Single CSS file that imports everything -->
     <link rel="stylesheet" href="/barangay-residence-system/assets/css/main.css">

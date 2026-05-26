@@ -12,7 +12,6 @@
                 <li><a href="/barangay-residence-system/pages/index.php"><?php echo __('nav-home'); ?></a></li>
                 <li><a href="/barangay-residence-system/pages/services.php"><?php echo __('nav-services'); ?></a></li>
                 <li><a href="/barangay-residence-system/pages/login.php"><?php echo __('login'); ?></a></li>
-                <li><a href="?reset_announcement=1" style="font-size: 0.625rem; color: gray;">Reset Announcement</a></li>
             </ul>
         </div>
         <div>

@@ -31,37 +31,37 @@ include '../../../includes/layouts/header.php';
 <main class="container">
     <div class="card form-container">
         <div class="card-header">
-            <h2>Household Details</h2>
+            <h2><?php echo __('household-details'); ?></h2>
             <div>
-                <a href="edit.php?id=<?php echo $household_id; ?>" class="btn btn-primary">Edit</a>
-                <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back</a>
+                <a href="edit.php?id=<?php echo $household_id; ?>" class="btn btn-primary"><?php echo __('edit'); ?></a>
+                <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline"><?php echo __('back'); ?></a>
             </div>
         </div>
         <div class="card-body">
             <div class="detail-section">
-                <h3>Account Information</h3>
+                <h3><?php echo __('account-information'); ?></h3>
                 <table class="detail-table">
-                    <tr><th>Email:</th><td><?php echo htmlspecialchars($householdData['email']); ?></td></tr>
-                    <tr><th>Address:</th><td><?php echo htmlspecialchars($householdData['address']); ?></td></tr>
-                    <tr><th>Phase:</th><td><?php echo htmlspecialchars($householdData['phase_no']); ?></td></tr>
-                    <tr><th>Registered:</th><td><?php echo date('M d, Y', strtotime($householdData['created_at'])); ?></td></tr>
+                    <tr><th><?php echo __('email'); ?>:</th><td><?php echo htmlspecialchars($householdData['email']); ?></td></tr>
+                    <tr><th><?php echo __('address'); ?>:</th><td><?php echo htmlspecialchars($householdData['address']); ?></td></tr>
+                    <tr><th><?php echo __('phase'); ?>:</th><td><?php echo htmlspecialchars($householdData['phase_no']); ?></td></tr>
+                    <tr><th><?php echo __('registered'); ?>:</th><td><?php echo date('M d, Y', strtotime($householdData['created_at'])); ?></td></tr>
                 </table>
             </div>
             
             <div class="detail-section">
-                <h3>Residents</h3>
+                <h3><?php echo __('residents'); ?></h3>
                 <table class="data-table">
                     <thead>
-                        <tr><th>Name</th><th>Age</th><th>Contact</th><th>Head?</th><th>Voter?</th><th>Role</th></tr>
+                        <tr><th><?php echo __('name'); ?></th><th><?php echo __('age'); ?></th><th><?php echo __('contact'); ?></th><th><?php echo __('head'); ?></th><th><?php echo __('voter'); ?></th><th><?php echo __('role'); ?></th></tr>
                     </thead>
                     <tbody>
                         <?php foreach ($residentsData as $r): ?>
                         <tr>
                             <td><?php echo htmlspecialchars($r['first_name'] . ' ' . $r['last_name']); ?></td>
                             <td><?php echo $r['age']; ?></td>
-                            <td><?php echo htmlspecialchars($r['contact_no'] ?? 'N/A'); ?></td>
-                            <td><?php echo $r['is_head'] ? 'Yes' : 'No'; ?></td>
-                            <td><?php echo $r['is_voter'] ? 'Yes' : 'No'; ?></td>
+                            <td><?php echo htmlspecialchars($r['contact_no'] ?? __('n-a')); ?></td>
+                            <td><?php echo $r['is_head'] ? __('yes') : __('no'); ?></td>
+                            <td><?php echo $r['is_voter'] ? __('yes') : __('no'); ?></td>
                             <td><?php echo htmlspecialchars($r['relationship_to_head'] ?? ''); ?></td>
                         </tr>
                         <?php endforeach; ?>

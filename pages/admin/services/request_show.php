@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $updateStmt = $conn->prepare($updateSql);
             $updateStmt->bind_param("si", $new_status, $request_id);
             if ($updateStmt->execute()) {
-                $message = "Status updated successfully!";
+                $message = __('status-updated-success');
                 $messageType = "success";
             } else {
-                $message = "Failed to update status.";
+                $message = __('status-update-failed');
                 $messageType = "error";
             }
         }
@@ -41,10 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $updateStmt = $conn->prepare($updateSql);
         $updateStmt->bind_param("isi", $is_paid, $paid_at, $request_id);
         if ($updateStmt->execute()) {
-            $message = "Payment status updated!";
+            $message = __('payment-updated-success');
             $messageType = "success";
         } else {
-            $message = "Failed to update payment.";
+            $message = __('payment-update-failed');
             $messageType = "error";
         }
     }
@@ -102,9 +102,9 @@ include '../../../includes/layouts/header.php';
 <main class="container">
     <div class="detail-container">
         <div class="flex-between mb-4">
-            <h2><i class="fas fa-clipboard-list"></i> Service Request Details</h2>
+            <h2><i class="fas fa-clipboard-list"></i> <?php echo __('service-request-details'); ?></h2>
             <a href="/barangay-residence-system/pages/dashboard.php?tab=services" class="btn-outline">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
+                <i class="fas fa-arrow-left"></i> <?php echo __('back-to-dashboard'); ?>
             </a>
         </div>
         
@@ -117,60 +117,60 @@ include '../../../includes/layouts/header.php';
         
         <!-- Request Information Card -->
         <div class="card detail-card">
-            <div class="card-header"><span class="font-bold">Request Information</span></div>
+            <div class="card-header"><span class="font-bold"><?php echo __('request-information'); ?></span></div>
             <div class="card-body">
                 <div class="detail-grid">
-                    <div><div class="detail-label">Reference No.</div><div class="detail-value"><?php echo $request['ref_no']; ?></div></div>
-                    <div><div class="detail-label">Date Submitted</div><div class="detail-value"><?php echo date('F d, Y h:i A', strtotime($request['date_submitted'])); ?></div></div>
-                    <div><div class="detail-label">Delivery Method</div><div class="detail-value"><?php echo ucfirst($request['delivery_method']); ?></div></div>
-                    <div><div class="detail-label">Purpose</div><div class="detail-value"><?php echo nl2br(htmlspecialchars($request['purpose'] ?? 'N/A')); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('ref-no'); ?></div><div class="detail-value"><?php echo $request['ref_no']; ?></div></div>
+                    <div><div class="detail-label"><?php echo __('date-submitted'); ?></div><div class="detail-value"><?php echo date('F d, Y h:i A', strtotime($request['date_submitted'])); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('delivery-method'); ?></div><div class="detail-value"><?php echo ucfirst($request['delivery_method']); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('purpose'); ?></div><div class="detail-value"><?php echo nl2br(htmlspecialchars($request['purpose'] ?? __('n-a'))); ?></div></div>
                 </div>
             </div>
         </div>
         
         <!-- Resident Information Card -->
         <div class="card detail-card">
-            <div class="card-header"><span class="font-bold">Resident Information</span></div>
+            <div class="card-header"><span class="font-bold"><?php echo __('resident-information'); ?></span></div>
             <div class="card-body">
                 <div class="detail-grid">
-                    <div><div class="detail-label">Resident</div><div class="detail-value"><?php echo $request['resident_info'] ?? 'N/A'; ?></div></div>
-                    <div><div class="detail-label">Email</div><div class="detail-value"><?php echo $request['email']; ?></div></div>
-                    <div><div class="detail-label">Address</div><div class="detail-value"><?php echo $request['address']; ?></div></div>
-                    <div><div class="detail-label">Phase</div><div class="detail-value"><?php echo $request['phase_no'] ?? 'N/A'; ?></div></div>
+                    <div><div class="detail-label"><?php echo __('resident'); ?></div><div class="detail-value"><?php echo $request['resident_info'] ?? __('n-a'); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('email'); ?></div><div class="detail-value"><?php echo $request['email']; ?></div></div>
+                    <div><div class="detail-label"><?php echo __('address'); ?></div><div class="detail-value"><?php echo $request['address']; ?></div></div>
+                    <div><div class="detail-label"><?php echo __('phase'); ?></div><div class="detail-value"><?php echo $request['phase_no'] ?? __('n-a'); ?></div></div>
                 </div>
             </div>
         </div>
         
         <!-- Service & Payment Card -->
         <div class="card detail-card">
-            <div class="card-header"><span class="font-bold">Service & Payment Information</span></div>
+            <div class="card-header"><span class="font-bold"><?php echo __('service-payment-information'); ?></span></div>
             <div class="card-body">
                 <div class="detail-grid">
-                    <div><div class="detail-label">Service</div><div class="detail-value"><?php echo $request['service_name']; ?></div></div>
-                    <div><div class="detail-label">Base Price</div><div class="detail-value">₱<?php echo number_format($request['base_price'], 2); ?></div></div>
-                    <div><div class="detail-label">Total Amount</div><div class="detail-value">₱<?php echo number_format($request['total_amount'] ?? 0, 2); ?></div></div>
-                    <div><div class="detail-label">Payment Method</div><div class="detail-value"><?php echo ucfirst($request['payment_method'] ?? 'N/A'); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('service'); ?></div><div class="detail-value"><?php echo $request['service_name']; ?></div></div>
+                    <div><div class="detail-label"><?php echo __('base-price'); ?></div><div class="detail-value">₱<?php echo number_format($request['base_price'], 2); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('total-amount'); ?></div><div class="detail-value">₱<?php echo number_format($request['total_amount'] ?? 0, 2); ?></div></div>
+                    <div><div class="detail-label"><?php echo __('payment-method'); ?></div><div class="detail-value"><?php echo ucfirst($request['payment_method'] ?? __('n-a')); ?></div></div>
                 </div>
             </div>
         </div>
         
         <!-- Update Status Form -->
         <div class="card detail-card">
-            <div class="card-header"><span class="font-bold">Update Status</span></div>
+            <div class="card-header"><span class="font-bold"><?php echo __('update-status'); ?></span></div>
             <div class="card-body">
                 <form method="POST">
                     <div class="form-group">
-                        <label class="form-label">Current Status</label>
+                        <label class="form-label"><?php echo __('current-status'); ?></label>
                         <select name="status" class="form-select">
-                            <option value="pending" <?php echo $request['status'] == 'pending' ? 'selected' : ''; ?>>Pending</option>
-                            <option value="approved" <?php echo $request['status'] == 'approved' ? 'selected' : ''; ?>>Approved</option>
-                            <option value="processing" <?php echo $request['status'] == 'processing' ? 'selected' : ''; ?>>Processing</option>
-                            <option value="completed" <?php echo $request['status'] == 'completed' ? 'selected' : ''; ?>>Completed</option>
-                            <option value="rejected" <?php echo $request['status'] == 'rejected' ? 'selected' : ''; ?>>Rejected</option>
+                            <option value="pending" <?php echo $request['status'] == 'pending' ? 'selected' : ''; ?>><?php echo __('pending'); ?></option>
+                            <option value="approved" <?php echo $request['status'] == 'approved' ? 'selected' : ''; ?>><?php echo __('approved'); ?></option>
+                            <option value="processing" <?php echo $request['status'] == 'processing' ? 'selected' : ''; ?>><?php echo __('processing'); ?></option>
+                            <option value="completed" <?php echo $request['status'] == 'completed' ? 'selected' : ''; ?>><?php echo __('completed'); ?></option>
+                            <option value="rejected" <?php echo $request['status'] == 'rejected' ? 'selected' : ''; ?>><?php echo __('rejected'); ?></option>
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" name="update_status" class="btn-primary">Update Status</button>
+                        <button type="submit" name="update_status" class="btn-primary"><?php echo __('update-status'); ?></button>
                     </div>
                 </form>
             </div>
@@ -178,18 +178,18 @@ include '../../../includes/layouts/header.php';
         
         <!-- Update Payment Form -->
         <div class="card detail-card">
-            <div class="card-header"><span class="font-bold">Update Payment</span></div>
+            <div class="card-header"><span class="font-bold"><?php echo __('update-payment'); ?></span></div>
             <div class="card-body">
                 <form method="POST">
                     <div class="form-group">
-                        <label class="form-label">Payment Status</label>
+                        <label class="form-label"><?php echo __('payment-status'); ?></label>
                         <select name="is_paid" class="form-select">
-                            <option value="0" <?php echo !$request['is_paid'] ? 'selected' : ''; ?>>Unpaid</option>
-                            <option value="1" <?php echo $request['is_paid'] ? 'selected' : ''; ?>>Paid</option>
+                            <option value="0" <?php echo !$request['is_paid'] ? 'selected' : ''; ?>><?php echo __('unpaid'); ?></option>
+                            <option value="1" <?php echo $request['is_paid'] ? 'selected' : ''; ?>><?php echo __('paid'); ?></option>
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" name="update_payment" class="btn-primary">Update Payment</button>
+                        <button type="submit" name="update_payment" class="btn-primary"><?php echo __('update-payment'); ?></button>
                     </div>
                 </form>
             </div>

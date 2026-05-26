@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = updateComplaintResponse($complaint_id, $status, $response);
     
     if ($result !== false) {
-        $success = 'Response submitted successfully!';
+        $success = __('response-submitted-success');
         $complaint['status'] = $status;
         $complaint['admin_response'] = $response;
     } else {
-        $error = 'Failed to submit response.';
+        $error = __('response-submit-failed');
     }
 }
 
@@ -45,8 +45,8 @@ include '../../../includes/layouts/header.php';
 <main class="container">
     <div class="card form-container">
         <div class="card-header">
-            <h2>Respond to Complaint</h2>
-            <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back to Dashboard</a>
+            <h2><?php echo __('respond-to-complaint'); ?></h2>
+            <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline"><?php echo __('back-to-dashboard'); ?></a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
@@ -57,20 +57,20 @@ include '../../../includes/layouts/header.php';
             <?php endif; ?>
             
             <div class="detail-section">
-                <h3>Complaint Details</h3>
+                <h3><?php echo __('complaint-details'); ?></h3>
                 <table class="detail-table">
-                    <tr><th>Reference No:</th><td><?php echo htmlspecialchars($complaint['ref_no']); ?></td></tr>
-                    <tr><th>Subject:</th><td><?php echo htmlspecialchars($complaint['subject']); ?></td></tr>
-                    <tr><th>Description:</th><td><?php echo nl2br(htmlspecialchars($complaint['description'])); ?></td></tr>
-                    <tr><th>Current Status:</th><td><span class="badge badge-<?php echo $complaint['status'] == 'resolved' ? 'green' : ($complaint['status'] == 'pending' ? 'orange' : 'blue'); ?>"><?php echo ucfirst($complaint['status']); ?></span></td>
+                    <tr><th><?php echo __('reference-no'); ?>:</th><td><?php echo htmlspecialchars($complaint['ref_no']); ?></a>
+                    <tr><th><?php echo __('subject'); ?>:</th><td><?php echo htmlspecialchars($complaint['subject']); ?></a>
+                    <tr><th><?php echo __('description'); ?>:</th><td><?php echo nl2br(htmlspecialchars($complaint['description'])); ?></a>
+                    <tr><th><?php echo __('current-status'); ?>:</th><td><span class="badge badge-<?php echo $complaint['status'] == 'resolved' ? 'green' : ($complaint['status'] == 'pending' ? 'orange' : 'blue'); ?>"><?php echo ucfirst($complaint['status']); ?></span></a>
                 </table>
             </div>
             
             <form method="POST">
                 <div class="form-section">
-                    <h3>Your Response</h3>
+                    <h3><?php echo __('your-response'); ?></h3>
                     <div class="form-group">
-                        <label class="form-label">Update Status</label>
+                        <label class="form-label"><?php echo __('update-status'); ?></label>
                         <div class="filter-dropdown">
                             <button type="button" id="statusDropdownBtn" class="btn-filter">
                                 <span id="statusDropdownLabel"><?php echo ucfirst($complaint['status']); ?></span>
@@ -78,22 +78,22 @@ include '../../../includes/layouts/header.php';
                             </button>
                             <div id="statusDropdownMenu" class="dropdown-menu">
                                 <input type="hidden" name="status" id="selectedStatus" value="<?php echo $complaint['status']; ?>">
-                                <button type="button" class="dropdown-item" data-value="pending">Pending</button>
-                                <button type="button" class="dropdown-item" data-value="reviewing">Reviewing</button>
-                                <button type="button" class="dropdown-item" data-value="resolved">Resolved</button>
-                                <button type="button" class="dropdown-item" data-value="dismissed">Dismissed</button>
+                                <button type="button" class="dropdown-item" data-value="pending"><?php echo __('pending'); ?></button>
+                                <button type="button" class="dropdown-item" data-value="reviewing"><?php echo __('reviewing'); ?></button>
+                                <button type="button" class="dropdown-item" data-value="resolved"><?php echo __('resolved'); ?></button>
+                                <button type="button" class="dropdown-item" data-value="dismissed"><?php echo __('dismissed'); ?></button>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Admin Response</label>
-                        <textarea name="response" class="form-input" rows="6" placeholder="Enter your response..."><?php echo htmlspecialchars($complaint['admin_response'] ?? ''); ?></textarea>
+                        <label class="form-label"><?php echo __('admin-response'); ?></label>
+                        <textarea name="response" class="form-input" rows="6" placeholder="<?php echo __('admin-response-placeholder'); ?>"><?php echo htmlspecialchars($complaint['admin_response'] ?? ''); ?></textarea>
                     </div>
                 </div>
                 
                 <div class="form-actions">
-                    <button type="submit" class="btn btn-primary">Submit Response</button>
-                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><?php echo __('submit-response'); ?></button>
+                    <a href="/barangay-residence-system/pages/dashboard.php" class="btn"><?php echo __('cancel'); ?></a>
                 </div>
             </form>
         </div>

@@ -68,18 +68,18 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
     <!-- SECTION 1: SERVICE OFFERINGS (available services) -->
     <div class="card">
         <div class="card-header flex-between">
-            <span class="font-bold"><i class="fas fa-cogs"></i> Service Offerings</span>
-            <button onclick="location.href='/barangay-residence-system/pages/admin/services/create.php'" class="btn btn-primary">+ Add Service</button>
+            <span class="font-bold"><i class="fas fa-cogs"></i> <?php echo __('service-offerings'); ?></span>
+            <button onclick="location.href='/barangay-residence-system/pages/admin/services/create.php'" class="btn btn-primary"><?php echo __('add-service'); ?></button>
         </div>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Service Name</th>
-                        <th>Price</th>
-                        <th>Status</th>
-                        <th>Actions</th>
+                        <th><?php echo __('service-id'); ?></th>
+                        <th><?php echo __('service-name'); ?></th>
+                        <th><?php echo __('price'); ?></th>
+                        <th><?php echo __('status'); ?></th>
+                        <th><?php echo __('actions'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -87,16 +87,16 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
                     <tr id="service-row-<?php echo $s['service_id']; ?>">
                         <td class="text-center"><?php echo $s['service_id']; ?></td>
                         <td class="font-semibold"><?php echo htmlspecialchars($s['service_name']); ?></td>
-                        <td><?php echo $s['base_price'] == 0 ? 'FREE' : '₱' . number_format($s['base_price'], 2); ?></td>
-                        <td><span class="badge badge-<?php echo $s['is_active'] ? 'green' : 'red'; ?>"><?php echo $s['is_active'] ? 'Active' : 'Inactive'; ?></span></a>
+                        <td><?php echo $s['base_price'] == 0 ? __('free') : '₱' . number_format($s['base_price'], 2); ?></td>
+                        <td><span class="badge badge-<?php echo $s['is_active'] ? 'green' : 'red'; ?>"><?php echo $s['is_active'] ? __('active') : __('inactive'); ?></span></td>
                         <td class="action-icons">
-                            <a href="/barangay-residence-system/pages/admin/services/show.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="View">
+                            <a href="/barangay-residence-system/pages/admin/services/show.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="<?php echo __('view'); ?>">
                                 <i class="fas fa-eye"></i>
                             </a>
-                            <a href="/barangay-residence-system/pages/admin/services/edit.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="Edit">
+                            <a href="/barangay-residence-system/pages/admin/services/edit.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="<?php echo __('edit'); ?>">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <a href="/barangay-residence-system/pages/admin/services/destroy.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="Delete" onclick="return confirm('Delete this service?')">
+                            <a href="/barangay-residence-system/pages/admin/services/destroy.php?id=<?php echo $s['service_id']; ?>" class="action-icon" title="<?php echo __('delete'); ?>" onclick="return confirm('<?php echo __('delete-service-confirm'); ?>')">
                                 <i class="fas fa-trash"></i>
                             </a>
                         </a>
@@ -110,21 +110,21 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
     <!-- SECTION 2: SERVICE REQUESTS (READ-ONLY TABLE) -->
     <div class="card" style="margin-top: 2rem;">
         <div class="card-header">
-            <span class="font-bold"><i class="fas fa-clipboard-list"></i> Service Requests</span>
-            <span class="badge badge-blue"><?php echo count($requests); ?> Total</span>
+            <span class="font-bold"><i class="fas fa-clipboard-list"></i> <?php echo __('service-requests'); ?></span>
+            <span class="badge badge-blue"><?php echo __('total'); ?>: <?php echo count($requests); ?></span>
         </div>
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Ref No.</th>
-                        <th>Resident</th>
-                        <th>Service</th>
-                        <th>Date</th>
-                        <th>Status</th>
-                        <th>Payment</th>
-                        <th>Actions</th>
+                        <th><?php echo __('request-id'); ?></th>
+                        <th><?php echo __('ref-no'); ?></th>
+                        <th><?php echo __('resident'); ?></th>
+                        <th><?php echo __('service'); ?></th>
+                        <th><?php echo __('date'); ?></th>
+                        <th><?php echo __('status'); ?></th>
+                        <th><?php echo __('payment'); ?></th>
+                        <th><?php echo __('actions'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,7 +132,7 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
                     <tr>
                         <td colspan="8" class="no-data text-center">
                             <i class="fas fa-inbox"></i>
-                            <p>No service requests yet.</p>
+                            <p><?php echo __('no-service-requests'); ?></p>
                         </a>
                     </tr>
                     <?php else: ?>
@@ -140,21 +140,24 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
                         <tr>
                             <td class="text-center"><?php echo $req['request_id']; ?></a>
                             <td class="font-semibold"><?php echo htmlspecialchars($req['ref_no']); ?></a>
-                            <td><?php echo htmlspecialchars($req['resident_name'] ?? 'N/A'); ?></a>
+                            <td><?php echo htmlspecialchars($req['resident_name'] ?? __('n-a')); ?></a>
                             <td><?php echo htmlspecialchars($req['service_name']); ?></a>
                             <td><?php echo date('M d, Y', strtotime($req['date_submitted'])); ?></a>
                             
                             <!-- Status Badge (READ ONLY) -->
                             <td>
                                 <span class="status-badge status-<?php echo $req['status']; ?>">
-                                    <?php echo ucfirst($req['status']); ?>
+                                    <?php 
+                                        $statusKey = $req['status'];
+                                        echo __($statusKey);
+                                    ?>
                                 </span>
                             </a>
                             
                             <!-- Payment Badge (READ ONLY) -->
                             <td>
                                 <span class="badge badge-<?php echo $req['is_paid'] ? 'green' : 'red'; ?>">
-                                    <?php echo $req['is_paid'] ? 'Paid' : 'Unpaid'; ?>
+                                    <?php echo $req['is_paid'] ? __('paid') : __('unpaid'); ?>
                                 </span>
                                 <?php if ($req['total_amount'] > 0): ?>
                                 <small style="font-size: 0.6rem; display: block;">₱<?php echo number_format($req['total_amount'], 2); ?></small>
@@ -164,7 +167,7 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
                             <!-- Actions: View Only -->
                             <td>
                                 <a href="/barangay-residence-system/pages/admin/services/request_show.php?id=<?php echo $req['request_id']; ?>" class="btn-view">
-                                    <i class="fas fa-eye"></i> View & Edit
+                                    <i class="fas fa-eye"></i> <?php echo __('view-edit'); ?>
                                 </a>
                             </a>
                         </tr>

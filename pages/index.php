@@ -100,49 +100,49 @@ include '../includes/layouts/header.php';
         <div class="container">
             <div class="section-title">
                 <i class="fas fa-users"></i>
-                <h3>Barangay Officials</h3>
+                <h3><?php echo __('officials-title'); ?></h3>
             </div>
             <div class="officials-grid">
                 <div class="card official-card">
                     <div class="official-image">
                         <img src="/barangay-residence-system/assets/images/officials/captain.jpg" alt="Barangay Captain" class="official-img">
                     </div>
-                    <h4>Barangay Captain</h4>
+                    <h4><?php echo __('official-captain'); ?></h4>
                     <p class="official-name">Jenny Lyn Roquid</p>
                 </div>
                 <div class="card official-card">
                     <div class="official-image">
                         <img src="/barangay-residence-system/assets/images/officials/chairperson.jpg" alt="Chairperson" class="official-img">
                     </div>
-                    <h4>Chairperson</h4>
+                    <h4><?php echo __('official-chairperson'); ?></h4>
                     <p class="official-name">Chlarenz Togueño</p>
                 </div>
                 <div class="card official-card">
                     <div class="official-image">
                         <img src="/barangay-residence-system/assets/images/officials/secretary.jpg" alt="Secretary" class="official-img">
                     </div>
-                    <h4>Secretary</h4>
+                    <h4><?php echo __('official-secretary'); ?></h4>
                     <p class="official-name">Rhea Mae Gregorio</p>
                 </div>
                 <div class="card official-card">
                     <div class="official-image">
                         <img src="/barangay-residence-system/assets/images/officials/treasurer.jpg" alt="Treasurer" class="official-img">
                     </div>
-                    <h4>Treasurer</h4>
+                    <h4><?php echo __('official-treasurer'); ?></h4>
                     <p class="official-name">Kate Ashly Baldonado</p>
                 </div>
                 <div class="card official-card">
                     <div class="official-image">
                         <img src="/barangay-residence-system/assets/images/officials/sk-chairperson.jpg" alt="SK Chairperson" class="official-img">
                     </div>
-                    <h4>SK Chairperson</h4>
+                    <h4><?php echo __('official-sk'); ?></h4>
                     <p class="official-name">Cristina Mariano</p>
                 </div>
                 <div class="card official-card">
                     <div class="official-image">
                         <img src="/barangay-residence-system/assets/images/officials/tanod.jpg" alt="Tanod" class="official-img">
                     </div>
-                    <h4>Tanod</h4>
+                    <h4><?php echo __('official-tanod'); ?></h4>
                     <p class="official-name">Tayog</p>
                 </div>
             </div>
