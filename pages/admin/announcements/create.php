@@ -8,19 +8,23 @@ $success = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title'] ?? '');
     $content = trim($_POST['content'] ?? '');
-    $user_id = $_SESSION['user_id'] ?? 0;
+    $created_by = $_SESSION['admin_id'];
     
     if (empty($title) || empty($content)) {
-        $error = 'Please fill in all required fields.';
+        $error = 'Title and content are required.';
     } else {
-        $stmt = $conn->prepare("INSERT INTO announcements (title, content, created_by) VALUES (?, ?, ?)");
-        $stmt->bind_param("ssi", $title, $content, $user_id);
+        $sql = "INSERT INTO announcements (title, content, created_by) VALUES (?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("ssi", $title, $content, $created_by);
         
         if ($stmt->execute()) {
-            $success = 'Announcement added successfully!';
-            header('refresh:2;url=index.php');
+            // Redirect to dashboard with success message
+            $_SESSION['flash_message'] = 'Announcement created successfully!';
+            $_SESSION['flash_type'] = 'success';
+            header('Location: /barangay-residence-system/pages/dashboard.php?tab=announcements');
+            exit();
         } else {
-            $error = 'Failed to add announcement.';
+            $error = 'Failed to create announcement.';
         }
     }
 }
@@ -28,42 +32,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 include '../../../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/dashboard.css">
-<style>
-.form-section {
-    margin-bottom: 2rem;
-}
-</style>
 <?php include '../../../includes/layouts/navbar.php'; ?>
 
 <main class="container">
     <div class="card form-container">
         <div class="card-header">
-            <h2>Add New Announcement</h2>
-            <a href="/barangay-residence-system/pages/dashboard.php" class="btn btn-outline">Back to Announcements</a>
+            <h2>Create New Announcement</h2>
+            <a href="/barangay-residence-system/pages/dashboard.php?tab=announcements" class="btn btn-outline">Back to Dashboard</a>
         </div>
         <div class="card-body">
             <?php if ($error): ?>
                 <div class="error-alert"><?php echo $error; ?></div>
             <?php endif; ?>
-            <?php if ($success): ?>
-                <div class="success-alert"><?php echo $success; ?></div>
-            <?php endif; ?>
             
             <form method="POST" class="announcement-form">
-                <div class="form-section">
-                    <div class="form-group">
-                        <label class="form-label">Title *</label>
-                        <input type="text" name="title" class="form-input" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Content *</label>
-                        <textarea name="content" class="form-input" rows="10" required></textarea>
-                    </div>
+                <div class="form-group">
+                    <label class="form-label">Title *</label>
+                    <input type="text" name="title" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Content *</label>
+                    <textarea name="content" class="form-input" rows="8" required></textarea>
                 </div>
                 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Save Announcement</button>
-                    <a href="index.php" class="btn btn-outline">Cancel</a>
+                    <a href="/barangay-residence-system/pages/dashboard.php?tab=announcements" class="btn btn-outline">Cancel</a>
                 </div>
             </form>
         </div>

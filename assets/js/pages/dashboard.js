@@ -3,8 +3,9 @@ let currentTab = 'reports';
 let currentStatus = 'all';
 let currentPriority = 'all';
 let currentSort = 'newest';
+let currentServicesSubTab = 'offerings'; // Track which sub-tab in services
 
-function loadTab(tab) {
+function loadTab(tab, subTab = null) {
     currentTab = tab;
     
     const buttons = ['reports', 'households', 'services', 'complaints', 'announcements'];
@@ -24,17 +25,133 @@ function loadTab(tab) {
     const contentContainer = document.getElementById('tabContent');
     contentContainer.innerHTML = '<div class="loading-spinner">Loading...</div>';
     
-    fetch(`admin/${tab}/index.php`)
+    let url = `admin/${tab}/index.php`;
+    
+    // Handle services sub-tabs
+    if (tab === 'services') {
+        if (subTab === 'requests') {
+            url = `admin/services/requests.php`;
+            currentServicesSubTab = 'requests';
+        } else if (subTab === 'offerings') {
+            url = `admin/services/index.php`;
+            currentServicesSubTab = 'offerings';
+        } else {
+            // Default to offerings, but check if we have a saved state
+            url = currentServicesSubTab === 'requests' ? `admin/services/requests.php` : `admin/services/index.php`;
+        }
+    }
+    
+    fetch(url)
         .then(response => response.text())
         .then(html => {
             contentContainer.innerHTML = html;
             attachDeleteHandlers();
             attachFilterHandlers();
             attachRespondPageDropdown();
+            attachServicesSubNavHandlers();
+            attachRequestFilterHandlers();
         })
         .catch(() => {
             contentContainer.innerHTML = '<div class="error-alert">Failed to load content. Please refresh.</div>';
         });
+}
+
+function attachServicesSubNavHandlers() {
+    // Handle clicks on service sub-navigation links
+    const subNavLinks = document.querySelectorAll('.sub-nav-link');
+    if (subNavLinks.length > 0) {
+        subNavLinks.forEach(link => {
+            link.removeEventListener('click', handleSubNavClick);
+            link.addEventListener('click', handleSubNavClick);
+        });
+    }
+}
+
+function handleSubNavClick(e) {
+    e.preventDefault();
+    const href = this.getAttribute('href');
+    
+    // Update active class
+    document.querySelectorAll('.sub-nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    this.classList.add('active');
+    
+    // Load the appropriate content
+    const contentContainer = document.getElementById('tabContent');
+    contentContainer.innerHTML = '<div class="loading-spinner">Loading...</div>';
+    
+    fetch(href)
+        .then(response => response.text())
+        .then(html => {
+            contentContainer.innerHTML = html;
+            attachDeleteHandlers();
+            attachFilterHandlers();
+            attachServicesSubNavHandlers();
+            attachRequestFilterHandlers();
+        })
+        .catch(() => {
+            contentContainer.innerHTML = '<div class="error-alert">Failed to load content. Please refresh.</div>';
+        });
+}
+
+function attachRequestFilterHandlers() {
+    // Status filter buttons for service requests
+    const filterBtns = document.querySelectorAll('.status-filter-btn');
+    const searchInput = document.getElementById('searchInput');
+    
+    if (filterBtns.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.removeEventListener('click', handleRequestFilterClick);
+            btn.addEventListener('click', handleRequestFilterClick);
+        });
+    }
+    
+    if (searchInput) {
+        searchInput.removeEventListener('input', handleRequestSearch);
+        searchInput.addEventListener('input', handleRequestSearch);
+    }
+}
+
+let searchTimeout;
+function handleRequestSearch(e) {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+        const searchValue = e.target.value;
+        const activeStatus = document.querySelector('.status-filter-btn.active')?.getAttribute('data-status') || 'all';
+        loadFilteredRequests(activeStatus, searchValue);
+    }, 500);
+}
+
+function handleRequestFilterClick(e) {
+    const status = this.getAttribute('data-status');
+    const searchValue = document.getElementById('searchInput')?.value || '';
+    
+    // Update active class
+    document.querySelectorAll('.status-filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    this.classList.add('active');
+    
+    loadFilteredRequests(status, searchValue);
+}
+
+function loadFilteredRequests(status, search) {
+    const url = `admin/services/ajax-requests.php?status=${status}&search=${encodeURIComponent(search)}`;
+    const tbody = document.getElementById('requestsTableBody');
+    
+    if (tbody) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
+        
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                tbody.innerHTML = html;
+            })
+            .catch(() => {
+                tbody.innerHTML = '<tr><td colspan="8" class="no-data text-center"><p>Failed to load data.</p></td></tr>';
+            });
+    }
 }
 
 function attachDeleteHandlers() {
@@ -272,6 +389,11 @@ function openDeleteModal(type, id, name) {
         itemName.textContent = name;
         warningText.textContent = 'This action cannot be undone.';
         confirmLink.href = `admin/services/destroy.php?id=${id}`;
+    } else if (type === 'announcement') {
+        modalTitle.textContent = 'Delete Announcement';
+        itemName.textContent = name;
+        warningText.textContent = 'This action cannot be undone.';
+        confirmLink.href = `admin/announcements/destroy.php?id=${id}`;
     }
     
     const modal = document.getElementById('deleteModal');
