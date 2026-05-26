@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 26, 2026 at 05:48 PM
+-- Generation Time: May 26, 2026 at 09:32 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -20,63 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `barangay_system`
 --
-
-DELIMITER $$
---
--- Procedures
---
-DROP PROCEDURE IF EXISTS `sp_create_service_request`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_create_service_request` (IN `p_household_id` INT, IN `p_service_id` INT, IN `p_purpose` TEXT, IN `p_delivery_method` VARCHAR(20), IN `p_payment_method` VARCHAR(20), OUT `p_request_id` INT, OUT `p_message` VARCHAR(255))   BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        SET p_message = 'Failed to create service request';
-        SET p_request_id = 0;
-    END;
-    
-    START TRANSACTION;
-    
-    -- Insert service request
-    INSERT INTO service_request (household_id, service_id, ref_no, purpose, delivery_method, status)
-    VALUES (p_household_id, p_service_id, CONCAT('BRG-', DATE_FORMAT(NOW(), '%Y%m%d'), '-', FLOOR(RAND() * 9000 + 1000)), 
-            p_purpose, p_delivery_method, 'pending');
-    
-    SET p_request_id = LAST_INSERT_ID();
-    
-    -- Insert payment record
-    INSERT INTO payment (request_id, total_amount, payment_method, ref_no, is_paid)
-    SELECT p_request_id, s.base_price, p_payment_method, CONCAT('PAY-', DATE_FORMAT(NOW(), '%Y%m%d'), '-', FLOOR(RAND() * 9000 + 1000)), 0
-    FROM service s WHERE s.service_id = p_service_id;
-    
-    COMMIT;
-    SET p_message = 'Service request created successfully';
-END$$
-
-DROP PROCEDURE IF EXISTS `sp_get_household_profile`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_get_household_profile` (IN `p_household_id` INT)   BEGIN
-    -- Basic household info
-    SELECT * FROM household WHERE household_id = p_household_id;
-    
-    -- All residents in household
-    SELECT * FROM resident WHERE household_id = p_household_id;
-    
-    -- Recent service requests (last 5)
-    SELECT sr.*, s.service_name, p.is_paid, p.total_amount
-    FROM service_request sr
-    JOIN service s ON sr.service_id = s.service_id
-    LEFT JOIN payment p ON sr.request_id = p.request_id
-    WHERE sr.household_id = p_household_id
-    ORDER BY sr.date_submitted DESC
-    LIMIT 5;
-    
-    -- Recent complaints (last 5)
-    SELECT * FROM complaint
-    WHERE household_id = p_household_id
-    ORDER BY date_submitted DESC
-    LIMIT 5;
-END$$
-
-DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -140,25 +83,6 @@ INSERT INTO `announcements` (`announcement_id`, `title`, `content`, `created_by`
 (13, 'Fire Prevention Month', 'Fire safety seminar on March 5, 2026 at 9 AM. Everyone is encouraged to attend.', 1, '2026-02-20 05:45:00', '2026-02-20 05:45:00'),
 (14, 'Flu Vaccination Drive', 'Free flu vaccination for senior citizens on April 15, 2026. Please bring senior citizen ID.', 1, '2026-04-01 02:00:00', '2026-04-01 02:00:00'),
 (15, 'Barangay Sports Fest', 'Barangay sports festival on May 30, 2026. Register your team at barangay hall.', 1, '2026-05-15 01:00:00', '2026-05-15 01:00:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `campaigns`
---
-
-DROP TABLE IF EXISTS `campaigns`;
-CREATE TABLE IF NOT EXISTS `campaigns` (
-  `campaign_id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `start_date` datetime NOT NULL,
-  `end_date` datetime NOT NULL,
-  `type` enum('voters','assistance','scholarship','medical','permit','other') COLLATE utf8mb4_unicode_ci DEFAULT 'other',
-  `is_active` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`campaign_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -460,22 +384,6 @@ INSERT INTO `household` (`household_id`, `email`, `password`, `address`, `phase_
 (128, 'household98@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 198, Lot 8, Rizal St, Phase 1', 'Phase 1', 'english', '2024-10-15 02:45:00'),
 (129, 'household99@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 199, Lot 9, Bonifacio St, Phase 1', 'Phase 1', 'tagalog', '2024-11-18 04:00:00'),
 (130, 'household100@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 200, Lot 10, Luna St, Phase 1', 'Phase 1', 'english', '2024-12-22 05:15:00');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `localization`
---
-
-DROP TABLE IF EXISTS `localization`;
-CREATE TABLE IF NOT EXISTS `localization` (
-  `localization_id` int NOT NULL AUTO_INCREMENT,
-  `household_id` int NOT NULL,
-  `language` enum('english','tagalog') COLLATE utf8mb4_unicode_ci DEFAULT 'tagalog',
-  `date_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`localization_id`),
-  UNIQUE KEY `unique_household_lang` (`household_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 

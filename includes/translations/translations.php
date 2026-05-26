@@ -354,6 +354,13 @@ function __($key) {
             'complaint-subject' => 'Subject',
             'complaint-description' => 'Description',
             'submit-complaint' => 'Submit Complaint',
+
+            'payment' => 'Payment',
+            'all-payments' => 'All Payments',
+            'search-requests-placeholder' => 'Search by Ref No., Resident, or Service...',
+            'apply-filters' => 'Apply Filters',
+            'clear-filters' => 'Clear Filters',
+            'total' => 'Total',
         ],
         'tl' => [
             // ========== NAVIGATION ==========
@@ -706,6 +713,13 @@ function __($key) {
             'complaint-subject' => 'Paksa',
             'complaint-description' => 'Paglalarawan',
             'submit-complaint' => 'Ipasa ang Reklamo',
+
+            'payment' => 'Pagbabayad',
+            'all-payments' => 'Lahat ng Pagbabayad',
+            'search-requests-placeholder' => 'Maghanap sa Ref No., Residente, o Serbisyo...',
+            'apply-filters' => 'Ilapat ang Filter',
+            'clear-filters' => 'Burahin ang Filter',
+            'total' => 'Kabuuan',
         ]
     ];
     

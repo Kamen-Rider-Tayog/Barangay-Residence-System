@@ -5,7 +5,12 @@ requireAdmin();
 // Get all services (offerings)
 $services = getServices();
 
-// Get all service requests with JOIN (read-only)
+// Get filter parameters
+$status_filter = $_GET['status'] ?? 'all';
+$payment_filter = $_GET['payment'] ?? 'all';
+$search = $_GET['search'] ?? '';
+
+// Build query for service requests with filters
 $requestsSql = "SELECT sr.*, s.service_name, s.base_price, 
         h.email, h.address, h.phase_no,
         p.payment_id, p.is_paid, p.total_amount, p.payment_method, p.paid_at,
@@ -14,10 +19,42 @@ $requestsSql = "SELECT sr.*, s.service_name, s.base_price,
         JOIN service s ON sr.service_id = s.service_id
         JOIN household h ON sr.household_id = h.household_id
         LEFT JOIN payment p ON sr.request_id = p.request_id
-        ORDER BY sr.date_submitted DESC";
+        WHERE 1=1";
+
+if ($status_filter !== 'all') {
+    $requestsSql .= " AND sr.status = '" . $conn->real_escape_string($status_filter) . "'";
+}
+
+if ($payment_filter !== 'all') {
+    $is_paid = ($payment_filter === 'paid') ? 1 : 0;
+    $requestsSql .= " AND p.is_paid = " . $is_paid;
+}
+
+if (!empty($search)) {
+    $requestsSql .= " AND (sr.ref_no LIKE '%" . $conn->real_escape_string($search) . "%' 
+                       OR (SELECT CONCAT(first_name, ' ', last_name) FROM resident WHERE household_id = sr.household_id AND is_head = 1 LIMIT 1) LIKE '%" . $conn->real_escape_string($search) . "%'
+                       OR s.service_name LIKE '%" . $conn->real_escape_string($search) . "%')";
+}
+
+$requestsSql .= " ORDER BY sr.date_submitted DESC";
 
 $requestsResult = $conn->query($requestsSql);
 $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
+
+// Get counts for filter badges
+$countsSql = "SELECT 
+    COUNT(*) as total,
+    SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending,
+    SUM(CASE WHEN status = 'approved' THEN 1 ELSE 0 END) as approved,
+    SUM(CASE WHEN status = 'processing' THEN 1 ELSE 0 END) as processing,
+    SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed,
+    SUM(CASE WHEN status = 'rejected' THEN 1 ELSE 0 END) as rejected,
+    SUM(CASE WHEN p.is_paid = 1 THEN 1 ELSE 0 END) as paid,
+    SUM(CASE WHEN p.is_paid = 0 OR p.is_paid IS NULL THEN 1 ELSE 0 END) as unpaid
+FROM service_request sr
+LEFT JOIN payment p ON sr.request_id = p.request_id";
+$countsResult = $conn->query($countsSql);
+$counts = $countsResult->fetch_assoc();
 ?>
 
 <style>
@@ -56,10 +93,91 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
         background: var(--primary-blue-dark);
     }
     
+    /* Filter Bar Styles */
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        align-items: flex-end;
+        padding: 1rem;
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--gray-200);
+        justify-content: center;
+    }
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    .filter-group label {
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--gray-500);
+        text-transform: uppercase;
+    }
+    .filter-select {
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        background: white;
+        cursor: pointer;
+    }
+    .filter-select:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+    }
+    .search-box input {
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--gray-300);
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        width: 250px;
+    }
+    .search-box input:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+    }
+    .apply-btn {
+        padding: 0.5rem 1.25rem;
+        background: var(--primary-blue);
+        color: white;
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    .apply-btn:hover {
+        background: var(--primary-blue-dark);
+    }
+    .reset-btn {
+        padding: 0.5rem 1rem;
+        background: var(--gray-200);
+        color: var(--gray-700);
+        border: none;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        text-decoration: none;
+        font-size: 0.875rem;
+    }
+    .reset-btn:hover {
+        background: var(--gray-300);
+    }
+    
     @media (max-width: 768px) {
         .data-table th, .data-table td {
             font-size: 0.7rem;
             padding: 0.5rem;
+        }
+        .filter-bar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+        .filter-group {
+            width: 100%;
+        }
+        .filter-select, .search-box input, .apply-btn, .reset-btn {
+            width: 100%;
         }
     }
 </style>
@@ -107,12 +225,51 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
         </div>
     </div>
 
-    <!-- SECTION 2: SERVICE REQUESTS (READ-ONLY TABLE) -->
+    <!-- SECTION 2: SERVICE REQUESTS (WITH DROPDOWN FILTERS) -->
     <div class="card" style="margin-top: 2rem;">
         <div class="card-header">
             <span class="font-bold"><i class="fas fa-clipboard-list"></i> <?php echo __('service-requests'); ?></span>
-            <span class="badge badge-blue"><?php echo __('total'); ?>: <?php echo count($requests); ?></span>
+            <span class="badge badge-blue"><?php echo __('total'); ?>: <?php echo $counts['total']; ?></span>
         </div>
+        
+        <div class="filter-bar">
+            <div class="filter-group">
+                <label><?php echo __('status'); ?></label>
+                <select id="requestStatusFilter" class="filter-select">
+                    <option value="all"><?php echo __('all-status'); ?></option>
+                    <option value="pending"><?php echo __('pending'); ?></option>
+                    <option value="approved"><?php echo __('approved'); ?></option>
+                    <option value="processing"><?php echo __('processing'); ?></option>
+                    <option value="completed"><?php echo __('completed'); ?></option>
+                    <option value="rejected"><?php echo __('rejected'); ?></option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label><?php echo __('payment'); ?></label>
+                <select id="requestPaymentFilter" class="filter-select">
+                    <option value="all"><?php echo __('all-payments'); ?></option>
+                    <option value="paid"><?php echo __('paid'); ?></option>
+                    <option value="unpaid"><?php echo __('unpaid'); ?></option>
+                </select>
+            </div>
+            
+            <div class="search-box">
+                <label>&nbsp;</label>
+                <input type="text" id="requestSearchInput" placeholder="<?php echo __('search-requests-placeholder'); ?>">
+            </div>
+            
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button id="applyRequestFilters" class="apply-btn"><i class="fas fa-search"></i> <?php echo __('apply-filters'); ?></button>
+            </div>
+            
+            <div class="filter-group">
+                <label>&nbsp;</label>
+                <button id="clearRequestFilters" class="reset-btn"><i class="fas fa-times"></i> <?php echo __('clear-filters'); ?></button>
+            </div>
+        </div>
+        
         <div class="table-responsive">
             <table class="data-table">
                 <thead>
@@ -129,32 +286,29 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
                 </thead>
                 <tbody>
                     <?php if (empty($requests)): ?>
-                    <tr>
+                    <tr class="text-center">
                         <td colspan="8" class="no-data text-center">
                             <i class="fas fa-inbox"></i>
-                            <p><?php echo __('no-service-requests'); ?></p>
+                            <p>No service requests found.</p>
                         </a>
                     </tr>
                     <?php else: ?>
                         <?php foreach ($requests as $req): ?>
                         <tr>
-                            <td class="text-center"><?php echo $req['request_id']; ?></a>
-                            <td class="font-semibold"><?php echo htmlspecialchars($req['ref_no']); ?></a>
-                            <td><?php echo htmlspecialchars($req['resident_name'] ?? __('n-a')); ?></a>
-                            <td><?php echo htmlspecialchars($req['service_name']); ?></a>
-                            <td><?php echo date('M d, Y', strtotime($req['date_submitted'])); ?></a>
+                            <td class="text-center"><?php echo $req['request_id']; ?></td>
+                            <td class="font-semibold"><?php echo htmlspecialchars($req['ref_no']); ?></td>
+                            <td><?php echo htmlspecialchars($req['resident_name'] ?? 'N/A'); ?></td>
+                            <td><?php echo htmlspecialchars($req['service_name']); ?></td>
+                            <td><?php echo date('M d, Y', strtotime($req['date_submitted'])); ?></td>
                             
-                            <!-- Status Badge (READ ONLY) -->
+                            <!-- Status Badge -->
                             <td>
                                 <span class="status-badge status-<?php echo $req['status']; ?>">
-                                    <?php 
-                                        $statusKey = $req['status'];
-                                        echo __($statusKey);
-                                    ?>
+                                    <?php echo ucfirst($req['status']); ?>
                                 </span>
                             </a>
                             
-                            <!-- Payment Badge (READ ONLY) -->
+                            <!-- Payment Badge -->
                             <td>
                                 <span class="badge badge-<?php echo $req['is_paid'] ? 'green' : 'red'; ?>">
                                     <?php echo $req['is_paid'] ? __('paid') : __('unpaid'); ?>
@@ -164,8 +318,8 @@ $requests = $requestsResult->fetch_all(MYSQLI_ASSOC);
                                 <?php endif; ?>
                             </a>
                             
-                            <!-- Actions: View Only -->
-                            <td>
+                            <!-- Actions -->
+                            <td class="action-buttons">
                                 <a href="/barangay-residence-system/pages/admin/services/request_show.php?id=<?php echo $req['request_id']; ?>" class="btn-view">
                                     <i class="fas fa-eye"></i> <?php echo __('view-edit'); ?>
                                 </a>

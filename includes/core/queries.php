@@ -94,8 +94,19 @@ function getAllComplaints() {
 
 function getAllHouseholds() {
     global $conn;
-    $sql = "SELECT h.*, COUNT(r.resident_id) as member_count,
-            (SELECT CONCAT(first_name, ' ', last_name) FROM resident WHERE household_id = h.household_id AND is_head = 1 LIMIT 1) as head_name
+    $sql = "SELECT 
+                h.*, 
+                COUNT(r.resident_id) as member_count,
+                COALESCE(
+                    (SELECT CONCAT(first_name, ' ', last_name) FROM resident WHERE household_id = h.household_id AND is_head = 1 LIMIT 1),
+                    (SELECT CONCAT(first_name, ' ', last_name) FROM resident WHERE household_id = h.household_id LIMIT 1),
+                    'Unnamed'
+                ) as head_name,
+                COALESCE(
+                    (SELECT contact_no FROM resident WHERE household_id = h.household_id AND is_head = 1 LIMIT 1),
+                    (SELECT contact_no FROM resident WHERE household_id = h.household_id LIMIT 1),
+                    'N/A'
+                ) as contact_no
             FROM household h 
             LEFT JOIN resident r ON h.household_id = r.household_id 
             GROUP BY h.household_id
@@ -103,30 +114,6 @@ function getAllHouseholds() {
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
-function getActiveCampaigns() {
-    global $conn;
-    $sql = "SELECT * FROM campaigns WHERE is_active = 1 AND end_date > NOW() ORDER BY end_date ASC";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
-}
-
-function getLatestCampaign() {
-    global $conn;
-    $sql = "SELECT * FROM campaigns WHERE is_active = 1 AND end_date > NOW() ORDER BY end_date ASC LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    return $stmt->get_result()->fetch_assoc();
-}
-
-function getTopAnnouncement() {
-    global $conn;
-    $sql = "SELECT * FROM campaigns WHERE is_active = 1 AND end_date > NOW() ORDER BY end_date ASC LIMIT 1";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    return $stmt->get_result()->fetch_assoc();
 }
 
 function getAllPhases() {

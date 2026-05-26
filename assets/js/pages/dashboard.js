@@ -3,7 +3,12 @@ let currentTab = 'reports';
 let currentStatus = 'all';
 let currentPriority = 'all';
 let currentSort = 'newest';
-let currentServicesSubTab = 'offerings'; // Track which sub-tab in services
+let currentServicesSubTab = 'offerings';
+
+// Request filter variables
+let currentRequestStatus = 'all';
+let currentRequestPayment = 'all';
+let currentRequestSearch = '';
 
 function loadTab(tab, subTab = null) {
     currentTab = tab;
@@ -27,7 +32,6 @@ function loadTab(tab, subTab = null) {
     
     let url = `admin/${tab}/index.php`;
     
-    // Handle services sub-tabs
     if (tab === 'services') {
         if (subTab === 'requests') {
             url = `admin/services/requests.php`;
@@ -36,9 +40,13 @@ function loadTab(tab, subTab = null) {
             url = `admin/services/index.php`;
             currentServicesSubTab = 'offerings';
         } else {
-            // Default to offerings, but check if we have a saved state
             url = currentServicesSubTab === 'requests' ? `admin/services/requests.php` : `admin/services/index.php`;
         }
+    }
+    
+    // Add filter parameters to URL for services tab
+    if (tab === 'services' && (currentRequestStatus !== 'all' || currentRequestPayment !== 'all' || currentRequestSearch !== '')) {
+        url += `?status=${currentRequestStatus}&payment=${currentRequestPayment}&search=${encodeURIComponent(currentRequestSearch)}`;
     }
     
     fetch(url)
@@ -50,14 +58,77 @@ function loadTab(tab, subTab = null) {
             attachRespondPageDropdown();
             attachServicesSubNavHandlers();
             attachRequestFilterHandlers();
+            // Re-populate filter values if they exist
+            restoreFilterValues();
         })
         .catch(() => {
             contentContainer.innerHTML = '<div class="error-alert">Failed to load content. Please refresh.</div>';
         });
 }
 
+function restoreFilterValues() {
+    const statusFilter = document.getElementById('requestStatusFilter');
+    const paymentFilter = document.getElementById('requestPaymentFilter');
+    const searchInput = document.getElementById('requestSearchInput');
+    
+    if (statusFilter) statusFilter.value = currentRequestStatus;
+    if (paymentFilter) paymentFilter.value = currentRequestPayment;
+    if (searchInput) searchInput.value = currentRequestSearch;
+}
+
+function attachRequestFilterHandlers() {
+    const applyBtn = document.getElementById('applyRequestFilters');
+    const clearBtn = document.getElementById('clearRequestFilters');
+    const statusFilter = document.getElementById('requestStatusFilter');
+    const paymentFilter = document.getElementById('requestPaymentFilter');
+    const searchInput = document.getElementById('requestSearchInput');
+    
+    if (applyBtn) {
+        applyBtn.removeEventListener('click', handleRequestFilterApply);
+        applyBtn.addEventListener('click', handleRequestFilterApply);
+    }
+    
+    if (clearBtn) {
+        clearBtn.removeEventListener('click', handleRequestFilterClear);
+        clearBtn.addEventListener('click', handleRequestFilterClear);
+    }
+    
+    // Enter key on search input
+    if (searchInput) {
+        searchInput.removeEventListener('keypress', handleRequestSearchKeypress);
+        searchInput.addEventListener('keypress', handleRequestSearchKeypress);
+    }
+}
+
+function handleRequestFilterApply() {
+    const statusFilter = document.getElementById('requestStatusFilter');
+    const paymentFilter = document.getElementById('requestPaymentFilter');
+    const searchInput = document.getElementById('requestSearchInput');
+    
+    currentRequestStatus = statusFilter ? statusFilter.value : 'all';
+    currentRequestPayment = paymentFilter ? paymentFilter.value : 'all';
+    currentRequestSearch = searchInput ? searchInput.value : '';
+    
+    // Reload the services tab with filters
+    loadTab('services');
+}
+
+function handleRequestFilterClear() {
+    currentRequestStatus = 'all';
+    currentRequestPayment = 'all';
+    currentRequestSearch = '';
+    
+    // Reload the services tab without filters
+    loadTab('services');
+}
+
+function handleRequestSearchKeypress(e) {
+    if (e.key === 'Enter') {
+        handleRequestFilterApply();
+    }
+}
+
 function attachServicesSubNavHandlers() {
-    // Handle clicks on service sub-navigation links
     const subNavLinks = document.querySelectorAll('.sub-nav-link');
     if (subNavLinks.length > 0) {
         subNavLinks.forEach(link => {
@@ -71,13 +142,11 @@ function handleSubNavClick(e) {
     e.preventDefault();
     const href = this.getAttribute('href');
     
-    // Update active class
     document.querySelectorAll('.sub-nav-link').forEach(link => {
         link.classList.remove('active');
     });
     this.classList.add('active');
     
-    // Load the appropriate content
     const contentContainer = document.getElementById('tabContent');
     contentContainer.innerHTML = '<div class="loading-spinner">Loading...</div>';
     
@@ -93,65 +162,6 @@ function handleSubNavClick(e) {
         .catch(() => {
             contentContainer.innerHTML = '<div class="error-alert">Failed to load content. Please refresh.</div>';
         });
-}
-
-function attachRequestFilterHandlers() {
-    // Status filter buttons for service requests
-    const filterBtns = document.querySelectorAll('.status-filter-btn');
-    const searchInput = document.getElementById('searchInput');
-    
-    if (filterBtns.length > 0) {
-        filterBtns.forEach(btn => {
-            btn.removeEventListener('click', handleRequestFilterClick);
-            btn.addEventListener('click', handleRequestFilterClick);
-        });
-    }
-    
-    if (searchInput) {
-        searchInput.removeEventListener('input', handleRequestSearch);
-        searchInput.addEventListener('input', handleRequestSearch);
-    }
-}
-
-let searchTimeout;
-function handleRequestSearch(e) {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(() => {
-        const searchValue = e.target.value;
-        const activeStatus = document.querySelector('.status-filter-btn.active')?.getAttribute('data-status') || 'all';
-        loadFilteredRequests(activeStatus, searchValue);
-    }, 500);
-}
-
-function handleRequestFilterClick(e) {
-    const status = this.getAttribute('data-status');
-    const searchValue = document.getElementById('searchInput')?.value || '';
-    
-    // Update active class
-    document.querySelectorAll('.status-filter-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    this.classList.add('active');
-    
-    loadFilteredRequests(status, searchValue);
-}
-
-function loadFilteredRequests(status, search) {
-    const url = `admin/services/ajax-requests.php?status=${status}&search=${encodeURIComponent(search)}`;
-    const tbody = document.getElementById('requestsTableBody');
-    
-    if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="8" class="text-center"><i class="fas fa-spinner fa-spin"></i> Loading...</td></tr>';
-        
-        fetch(url)
-            .then(response => response.text())
-            .then(html => {
-                tbody.innerHTML = html;
-            })
-            .catch(() => {
-                tbody.innerHTML = '<tr><td colspan="8" class="no-data text-center"><p>Failed to load data.</p></td></tr>';
-            });
-    }
 }
 
 function attachDeleteHandlers() {
