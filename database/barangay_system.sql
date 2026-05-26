@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 26, 2026 at 02:37 AM
+-- Generation Time: May 26, 2026 at 03:01 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -101,25 +101,6 @@ CREATE TABLE IF NOT EXISTS `admin` (
 
 INSERT INTO `admin` (`admin_id`, `username`, `password`, `role`, `created_at`) VALUES
 (1, 'admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'super_admin', '2026-05-12 18:46:11');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `announcement`
---
-
-DROP TABLE IF EXISTS `announcement`;
-CREATE TABLE IF NOT EXISTS `announcement` (
-  `announcement_id` int NOT NULL AUTO_INCREMENT,
-  `admin_id` int NOT NULL,
-  `title` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `target_audience` enum('all','phase1','phase2','phase3') COLLATE utf8mb4_unicode_ci DEFAULT 'all',
-  `is_active` tinyint(1) DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`announcement_id`),
-  KEY `admin_id` (`admin_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -443,12 +424,12 @@ DELIMITER ;
 --
 DROP VIEW IF EXISTS `vw_admin_dashboard`;
 CREATE TABLE IF NOT EXISTS `vw_admin_dashboard` (
-`pending_complaints` decimal(23,0)
-,`pending_requests` decimal(23,0)
-,`total_complaints` bigint
-,`total_households` bigint
-,`total_requests` bigint
+`total_households` bigint
 ,`total_residents` bigint
+,`total_requests` bigint
+,`total_complaints` bigint
+,`pending_requests` decimal(23,0)
+,`pending_complaints` decimal(23,0)
 ,`total_revenue` decimal(32,2)
 );
 
@@ -460,11 +441,11 @@ CREATE TABLE IF NOT EXISTS `vw_admin_dashboard` (
 --
 DROP VIEW IF EXISTS `vw_monthly_requests`;
 CREATE TABLE IF NOT EXISTS `vw_monthly_requests` (
-`completed` decimal(23,0)
-,`month` varchar(7)
+`month` varchar(7)
+,`total_requests` bigint
+,`completed` decimal(23,0)
 ,`pending` decimal(23,0)
 ,`rejected` decimal(23,0)
-,`total_requests` bigint
 );
 
 -- --------------------------------------------------------
