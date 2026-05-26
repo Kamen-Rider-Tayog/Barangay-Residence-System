@@ -74,7 +74,7 @@ if (complaintForm) {
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
         submitBtn.disabled = true;
         
-        fetch('submit_complaint.php', { method: 'POST', body: formData })
+        fetch('/barangay-residence-system/pages/api/submit_complaint.php', { method: 'POST', body: formData })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {

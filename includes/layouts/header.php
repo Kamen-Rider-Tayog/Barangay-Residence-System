@@ -22,22 +22,3 @@ if (isset($_GET['reset_announcement'])) {
     <link rel="stylesheet" href="/barangay-residence-system/assets/css/main.css">
 </head>
 <body>
-
-<?php
-$topAnnouncement = getTopAnnouncement();
-$showAnnouncement = !isset($_COOKIE['announcement_closed']) || $_COOKIE['announcement_closed'] != $topAnnouncement['campaign_id'];
-if ($topAnnouncement && $showAnnouncement):
-?>
-<div id="topAnnouncementBar" class="top-announcement-bar">
-    <div class="container">
-        <div class="top-announcement-content">
-            <i class="fas fa-bullhorn"></i>
-            <span><strong><?php echo htmlspecialchars($topAnnouncement['title']); ?></strong> - <?php echo htmlspecialchars($topAnnouncement['description']); ?></span>
-            <a href="/barangay-residence-system/pages/campaigns.php" class="announcement-link">Learn More <i class="fas fa-arrow-right"></i></a>
-            <button class="close-announcement" onclick="closeAnnouncement(<?php echo $topAnnouncement['campaign_id']; ?>)" aria-label="Close">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    </div>
-</div>
-<?php endif; ?>
