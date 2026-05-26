@@ -13,6 +13,8 @@
         <a href="/barangay-residence-system/pages/index.php"><?php echo __('nav-home'); ?></a>
         <a href="/barangay-residence-system/pages/services.php"><?php echo __('nav-services'); ?></a>
         <a href="/barangay-residence-system/pages/campaigns.php"><?php echo __('nav-programs'); ?></a>
+        <a href="/barangay-residence-system/pages/announcements.php">Announcements</a>
+
         
         <div class="lang-dropdown">
             <button id="langBtn" class="lang-btn">

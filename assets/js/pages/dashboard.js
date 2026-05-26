@@ -7,7 +7,7 @@ let currentSort = 'newest';
 function loadTab(tab) {
     currentTab = tab;
     
-    const buttons = ['reports', 'households', 'services', 'complaints'];
+    const buttons = ['reports', 'households', 'services', 'complaints', 'announcements'];
     buttons.forEach(btn => {
         const element = document.getElementById(`nav-${btn}`);
         if (element) {
@@ -163,41 +163,66 @@ function closeAllDropdowns() {
 }
 
 function filterAndSortComplaints() {
-    let rows = Array.from(document.querySelectorAll('#complaintTable tbody tr'));
+    const tbody = document.getElementById('complaintTableBody');
+    
+    if (!tbody) return;
+    
+    let rows = Array.from(tbody.querySelectorAll('tr.complaint-row'));
+    let noDataRow = tbody.querySelector('.no-data-row');
+    
+    if (rows.length === 0) {
+        if (noDataRow) noDataRow.style.display = '';
+        return;
+    }
+    
     const search = document.getElementById('complaintSearchInput')?.value.toLowerCase() || '';
     
-    rows = rows.filter(row => !row.querySelector('.no-data'));
+    rows.forEach(row => {
+        row.style.display = '';
+    });
     
-    rows = rows.filter(row => {
+    const filteredRows = rows.filter(row => {
         const rowStatus = row.getAttribute('data-status');
         const rowPriority = row.getAttribute('data-priority');
         const rowSubject = row.getAttribute('data-subject') || '';
         const rowName = row.getAttribute('data-name') || '';
         
         let show = true;
+        
         if (currentStatus !== 'all' && rowStatus !== currentStatus) show = false;
         if (currentPriority !== 'all' && rowPriority !== currentPriority) show = false;
         if (search && !rowSubject.includes(search) && !rowName.includes(search)) show = false;
+        
         return show;
     });
     
-    rows.sort((a, b) => {
+    rows.forEach(row => {
+        if (!filteredRows.includes(row)) {
+            row.style.display = 'none';
+        }
+    });
+    
+    filteredRows.sort((a, b) => {
         const dateA = new Date(a.getAttribute('data-date'));
         const dateB = new Date(b.getAttribute('data-date'));
         return currentSort === 'newest' ? dateB - dateA : dateA - dateB;
     });
     
-    const tbody = document.getElementById('complaintTableBody');
-    rows.forEach(row => tbody.appendChild(row));
+    filteredRows.forEach(row => {
+        tbody.appendChild(row);
+    });
     
-    let noDataRow = tbody.querySelector('.no-data-row');
-    if (rows.length === 0 && !noDataRow) {
-        const emptyRow = document.createElement('tr');
-        emptyRow.className = 'no-data-row';
-        emptyRow.innerHTML = '<td colspan="7" class="no-data"><i class="fas fa-check-circle"></i><p>No complaints found.</p></td>';
-        tbody.appendChild(emptyRow);
-    } else if (rows.length > 0 && noDataRow) {
-        noDataRow.remove();
+    if (filteredRows.length === 0) {
+        if (noDataRow) {
+            noDataRow.style.display = '';
+        } else {
+            const emptyRow = document.createElement('tr');
+            emptyRow.className = 'no-data-row';
+            emptyRow.innerHTML = '<td colspan="7" class="no-data"><p>No complaints found.</p></td>';
+            tbody.appendChild(emptyRow);
+        }
+    } else if (noDataRow) {
+        noDataRow.style.display = 'none';
     }
 }
 
@@ -260,7 +285,8 @@ function closeDeleteModal() {
     setTimeout(() => modal.classList.add('hidden'), 300);
 }
 
-const urlParams = new URLSearchParams(window.location.search);
-const tabParam = urlParams.get('tab');
-const initialTab = (tabParam === 'households' || tabParam === 'services' || tabParam === 'complaints') ? tabParam : 'reports';
+// Restore tab from URL hash
+var savedHash = window.location.hash.substring(1);
+var validTabs = ['reports', 'households', 'services', 'complaints', 'announcements'];
+var initialTab = (savedHash && validTabs.includes(savedHash)) ? savedHash : 'reports';
 loadTab(initialTab);

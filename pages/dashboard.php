@@ -11,7 +11,6 @@ requireAdmin();
     <div class="dashboard-header">
         <div>
             <h1>Admin Dashboard</h1>
-            <p>Manage households, services, and monitor barangay activities</p>
         </div>
         <div style="display: flex; gap: 1rem; align-items: center;">
             <div class="nav-buttons">
@@ -26,6 +25,9 @@ requireAdmin();
                 </button>
                 <button id="nav-complaints" class="btn-nav btn-inactive" onclick="loadTab('complaints')">
                     <i class="fas fa-comment-dots"></i> Complaints
+                </button>
+                <button id="nav-announcements" class="btn-nav btn-inactive" onclick="loadTab('announcements')">
+                    <i class="fas fa-bullhorn"></i> Announcements
                 </button>
             </div>
             <a href="/barangay-residence-system/includes/core/logout.php" class="btn btn-outline" style="background: var(--error-red); color: var(--white); border: none;">

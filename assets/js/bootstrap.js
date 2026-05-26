@@ -48,7 +48,7 @@
     loadScript(0);
 })();
 
-// Language dropdown toggle (added directly here to ensure it runs)
+// Language dropdown toggle
 document.addEventListener('DOMContentLoaded', function() {
     const langBtn = document.getElementById('langBtn');
     const langMenu = document.getElementById('langMenu');
@@ -78,3 +78,29 @@ document.addEventListener('DOMContentLoaded', function() {
 function changeLanguage(lang) {
     window.location.href = '?lang=' + lang;
 }
+
+// Hash navigation for dashboard tabs
+function setupHashNavigation() {
+    if (typeof loadTab !== 'function') {
+        setTimeout(setupHashNavigation, 100);
+        return;
+    }
+    
+    var originalLoadTab = loadTab;
+    
+    window.loadTab = function(tab) {
+        window.location.hash = tab;
+        originalLoadTab(tab);
+    };
+    
+    var savedHash = window.location.hash.substring(1);
+    var validTabs = ['reports', 'households', 'services', 'complaints', 'announcements'];
+    
+    if (savedHash && validTabs.includes(savedHash)) {
+        setTimeout(function() {
+            loadTab(savedHash);
+        }, 50);
+    }
+}
+
+setupHashNavigation();

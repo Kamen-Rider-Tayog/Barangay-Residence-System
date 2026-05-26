@@ -3,7 +3,6 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--gray-200);
-  overflow: hidden;
   transition: all 0.3s ease;
 }
 
