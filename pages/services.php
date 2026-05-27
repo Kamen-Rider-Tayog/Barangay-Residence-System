@@ -2,6 +2,7 @@
 require_once '../includes/core/init.php';
 $services = getServices();
 
+// Service icons mapping
 $serviceIcons = [
     'Barangay Clearance' => 'fa-file-signature',
     'Certificate of Residency' => 'fa-home',
@@ -17,19 +18,52 @@ $serviceIcons = [
     'Travel Pass' => 'fa-passport'
 ];
 
+// Service processing times
 $processingTimes = [
-    'Barangay Clearance' => __('processing-1-2-days'),
-    'Certificate of Residency' => __('processing-same-day'),
-    'Business Permit' => __('processing-3-5-days'),
-    'Indigency Certificate' => __('processing-same-day'),
-    'Police Clearance' => __('processing-1-2-days'),
-    'Cedula (Community Tax)' => __('processing-15-min'),
-    'Certificate of Good Moral' => __('processing-1-day'),
-    'First Time Job Seeker' => __('processing-same-day'),
-    'Barangay ID' => __('processing-1-week'),
-    'Health Certificate' => __('processing-2-3-days'),
-    'Building Permit' => __('processing-1-2-weeks'),
-    'Travel Pass' => __('processing-same-day')
+    'Barangay Clearance' => '1-2 days',
+    'Certificate of Residency' => 'Same day',
+    'Business Permit' => '3-5 days',
+    'Indigency Certificate' => 'Same day',
+    'Police Clearance' => '1-2 days',
+    'Cedula (Community Tax)' => '15 minutes',
+    'Certificate of Good Moral' => '1 day',
+    'First Time Job Seeker' => 'Same day',
+    'Barangay ID' => '1 week',
+    'Health Certificate' => '2-3 days',
+    'Building Permit' => '1-2 weeks',
+    'Travel Pass' => 'Same day'
+];
+
+// Service name translations (direct mapping)
+$serviceNames = [
+    'Barangay Clearance' => __('srv-barangay-clearance'),
+    'Certificate of Residency' => __('srv-cert-residency'),
+    'Business Permit' => __('srv-business-permit'),
+    'Indigency Certificate' => __('srv-indigency'),
+    'Police Clearance' => __('srv-police-clearance'),
+    'Cedula (Community Tax)' => __('srv-cedula'),
+    'Certificate of Good Moral' => __('srv-good-moral'),
+    'First Time Job Seeker' => __('srv-first-time-job'),
+    'Barangay ID' => __('srv-barangay-id'),
+    'Health Certificate' => __('srv-health-cert'),
+    'Building Permit' => __('srv-building-permit'),
+    'Travel Pass' => __('srv-travel-pass')
+];
+
+// Service descriptions translations
+$serviceDescriptions = [
+    'Barangay Clearance' => __('srv-clearance-d'),
+    'Certificate of Residency' => __('srv-residency-d'),
+    'Business Permit' => __('srv-permit-d'),
+    'Indigency Certificate' => __('srv-indigency-d'),
+    'Police Clearance' => __('srv-police-d'),
+    'Cedula (Community Tax)' => __('srv-cedula-d'),
+    'Certificate of Good Moral' => __('srv-moral-d'),
+    'First Time Job Seeker' => __('srv-job-d'),
+    'Barangay ID' => __('srv-id-d'),
+    'Health Certificate' => __('srv-health-d'),
+    'Building Permit' => __('srv-building-d'),
+    'Travel Pass' => __('srv-travel-d')
 ];
 
 $popularServices = ['Barangay Clearance', 'Certificate of Residency', 'Police Clearance'];
@@ -72,10 +106,9 @@ include '../includes/layouts/header.php';
                 $isPopular = in_array($name, $popularServices);
                 $isNew = in_array($name, $newServices);
                 
-                // Map service name to translation key
-                $serviceKey = strtolower(str_replace(' ', '-', $name));
-                $serviceNameTrans = __("srv-$serviceKey") ?? $name;
-                $serviceDescTrans = __("srv-$serviceKey-d") ?? ($service['description'] ?? '');
+                // Get translated name and description
+                $displayName = $serviceNames[$name] ?? $name;
+                $displayDesc = $serviceDescriptions[$name] ?? ($service['description'] ?? '');
             ?>
             <div onclick="openServiceModal('<?php echo addslashes($name); ?>', <?php echo $service['base_price']; ?>)" class="card card-hover service-card">
                 <?php if ($isPopular): ?>
@@ -87,8 +120,8 @@ include '../includes/layouts/header.php';
                 <div class="service-icon">
                     <i class="fas <?php echo $icon; ?>"></i>
                 </div>
-                <h4><?php echo $serviceNameTrans; ?></h4>
-                <p class="service-description"><?php echo $serviceDescTrans; ?></p>
+                <h4><?php echo $displayName; ?></h4>
+                <p class="service-description"><?php echo $displayDesc; ?></p>
                 <?php if ($service['base_price'] == 0): ?>
                     <p class="service-price free"><?php echo __('free'); ?></p>
                 <?php else: ?>
