@@ -2,6 +2,11 @@
 require_once '../includes/core/init.php';
 $stats = getDashboardStats();
 
+// Get latest 3 announcements
+$announcementStmt = $conn->prepare("SELECT * FROM announcements ORDER BY created_at DESC LIMIT 3");
+$announcementStmt->execute();
+$latestAnnouncements = $announcementStmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
 include '../includes/layouts/header.php';
 ?>
 <link rel="stylesheet" href="/barangay-residence-system/assets/css/pages/index.css">
@@ -14,7 +19,7 @@ include '../includes/layouts/header.php';
             <p><?php echo __('hero-desc'); ?></p>
             <div class="flex" style="gap: 1rem; justify-content: center;">
                 <a href="services.php" class="btn btn-primary-hero"><?php echo __('btn-request'); ?></a>
-                <a href="campaigns.php" class="btn btn-outline-hero"><?php echo __('btn-learn'); ?></a>
+                <a href="announcements.php" class="btn btn-outline-hero"><?php echo __('btn-learn'); ?></a>
             </div>
         </div>
     </section>
@@ -60,42 +65,44 @@ include '../includes/layouts/header.php';
         </div>
     </div>
 
+    <!-- DYNAMIC ANNOUNCEMENTS SECTION -->
     <section class="announcement-section">
         <div class="container">
             <div class="section-title">
+                <div class="section-title-div">
                 <i class="fas fa-bullhorn"></i>
                 <h3><?php echo __('announcement-title'); ?></h3>
+                </div>
+                <a href="announcements.php" class="btn-outline">
+                    <?php echo __('view-all'); ?> <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
             <div class="grid grid-cols-3">
-                <div class="card card-hover announcement-card">
-                    <div class="announcement-date">
-                        <i class="far fa-calendar-alt"></i>
-                        <span>Mayo 15, 2026</span>
+                <?php if (empty($latestAnnouncements)): ?>
+                    <div class="card announcement-card" style="grid-column: span 3; text-align: center;">
+                        <div class="announcement-date">
+                            <i class="far fa-calendar-alt"></i>
+                            <span><?php echo __('no-announcements'); ?></span>
+                        </div>
                     </div>
-                    <h4><?php echo __('ann-1-title'); ?></h4>
-                    <p><?php echo __('ann-1-desc'); ?></p>
-                </div>
-                <div class="card card-hover announcement-card">
-                    <div class="announcement-date">
-                        <i class="far fa-calendar-alt"></i>
-                        <span>Mayo 20, 2026</span>
+                <?php else: ?>
+                    <?php foreach ($latestAnnouncements as $announcement): ?>
+                    <div class="card card-hover announcement-card">
+                        <div class="announcement-date">
+                            <i class="far fa-calendar-alt"></i>
+                            <span><?php echo date('F d, Y', strtotime($announcement['created_at'])); ?></span>
+                        </div>
+                        <h4><?php echo htmlspecialchars($announcement['title']); ?></h4>
+                        <p><?php echo htmlspecialchars(substr($announcement['content'], 0, 120)) . (strlen($announcement['content']) > 120 ? '...' : ''); ?></p>
+                        <a href="announcements.php" class="read-more"><?php echo __('read-more'); ?> <i class="fas fa-chevron-right"></i></a>
                     </div>
-                    <h4><?php echo __('ann-2-title'); ?></h4>
-                    <p><?php echo __('ann-2-desc'); ?></p>
-                </div>
-                <div class="card card-hover announcement-card">
-                    <div class="announcement-date">
-                        <i class="far fa-calendar-alt"></i>
-                        <span>Mayo 25, 2026</span>
-                    </div>
-                    <h4><?php echo __('ann-3-title'); ?></h4>
-                    <p><?php echo __('ann-3-desc'); ?></p>
-                </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </div>
         </div>
     </section>
 
-    <!-- Barangay Officials Section -->
+    <!-- BARANGAY OFFICIALS SECTION (USING FONT AWESOME ICONS) -->
     <section class="officials-section">
         <div class="container">
             <div class="section-title">
@@ -104,43 +111,43 @@ include '../includes/layouts/header.php';
             </div>
             <div class="officials-grid">
                 <div class="card official-card">
-                    <div class="official-image">
-                        <img src="/barangay-residence-system/assets/images/officials/captain.jpg" alt="Barangay Captain" class="official-img">
+                    <div class="official-icon">
+                        <i class="fas fa-user-tie"></i>
                     </div>
                     <h4><?php echo __('official-captain'); ?></h4>
                     <p class="official-name">Jenny Lyn Roquid</p>
                 </div>
                 <div class="card official-card">
-                    <div class="official-image">
-                        <img src="/barangay-residence-system/assets/images/officials/chairperson.jpg" alt="Chairperson" class="official-img">
+                    <div class="official-icon">
+                        <i class="fas fa-gavel"></i>
                     </div>
                     <h4><?php echo __('official-chairperson'); ?></h4>
                     <p class="official-name">Chlarenz Togueño</p>
                 </div>
                 <div class="card official-card">
-                    <div class="official-image">
-                        <img src="/barangay-residence-system/assets/images/officials/secretary.jpg" alt="Secretary" class="official-img">
+                    <div class="official-icon">
+                        <i class="fas fa-file-alt"></i>
                     </div>
                     <h4><?php echo __('official-secretary'); ?></h4>
                     <p class="official-name">Rhea Mae Gregorio</p>
                 </div>
                 <div class="card official-card">
-                    <div class="official-image">
-                        <img src="/barangay-residence-system/assets/images/officials/treasurer.jpg" alt="Treasurer" class="official-img">
+                    <div class="official-icon">
+                        <i class="fas fa-coins"></i>
                     </div>
                     <h4><?php echo __('official-treasurer'); ?></h4>
                     <p class="official-name">Kate Ashly Baldonado</p>
                 </div>
                 <div class="card official-card">
-                    <div class="official-image">
-                        <img src="/barangay-residence-system/assets/images/officials/sk-chairperson.jpg" alt="SK Chairperson" class="official-img">
+                    <div class="official-icon">
+                        <i class="fas fa-users"></i>
                     </div>
                     <h4><?php echo __('official-sk'); ?></h4>
                     <p class="official-name">Cristina Mariano</p>
                 </div>
                 <div class="card official-card">
-                    <div class="official-image">
-                        <img src="/barangay-residence-system/assets/images/officials/tanod.jpg" alt="Tanod" class="official-img">
+                    <div class="official-icon">
+                        <i class="fas fa-shield-alt"></i>
                     </div>
                     <h4><?php echo __('official-tanod'); ?></h4>
                     <p class="official-name">Tayog</p>

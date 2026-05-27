@@ -361,6 +361,8 @@ function __($key) {
             'apply-filters' => 'Apply Filters',
             'clear-filters' => 'Clear Filters',
             'total' => 'Total',
+            'view-all' => 'View All',
+            'read-more' => 'Read More',
         ],
         'tl' => [
             // ========== NAVIGATION ==========
@@ -720,6 +722,8 @@ function __($key) {
             'apply-filters' => 'Ilapat ang Filter',
             'clear-filters' => 'Burahin ang Filter',
             'total' => 'Kabuuan',
+            'view-all' => 'Tingnan Lahat',
+            'read-more' => 'Magbasa Pa',
         ]
     ];
     
