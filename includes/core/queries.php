@@ -110,7 +110,7 @@ function getAllHouseholds() {
             FROM household h 
             LEFT JOIN resident r ON h.household_id = r.household_id 
             GROUP BY h.household_id
-            ORDER BY h.created_at DESC";
+            ORDER BY h.household_id DESC";  
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: May 27, 2026 at 12:51 AM
+-- Generation Time: May 27, 2026 at 08:28 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `announcements` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`announcement_id`),
-  KEY `created_by` (`created_by`)
-) ENGINE=MyISAM AUTO_INCREMENT=500 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `fk_announcement_admin` (`created_by`)
+) ENGINE=InnoDB AUTO_INCREMENT=500 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `announcements`
@@ -152,66 +152,6 @@ INSERT INTO `announcements` (`announcement_id`, `title`, `content`, `created_by`
 (73, 'Children\'s Rights Forum', 'Know your children\'s rights on July 23 at barangay hall.', 8, '2026-05-27 00:00:00', '2026-05-27 00:00:00'),
 (74, 'Senior Citizens Forum', 'Forum on senior citizen benefits and rights on July 24.', 9, '2026-05-27 01:00:00', '2026-05-27 01:00:00'),
 (75, 'PWD Rights and Privileges', 'Learn about PWD discounts and benefits on July 26.', 10, '2026-05-27 02:00:00', '2026-05-27 02:00:00'),
-(76, 'Barangay Assembly 2026', 'Annual Barangay Assembly on August 10, 2026 at 2 PM. All residents invited.', 1, '2026-05-31 16:00:00', '2026-05-31 16:00:00'),
-(77, 'Midyear Budget Hearing', 'Budget hearing for 2nd half of 2026 on June 15 at 1 PM.', 2, '2026-06-01 16:00:00', '2026-06-01 16:00:00'),
-(78, 'New Traffic Scheme', 'New one-way traffic scheme on Phase 2 starting July 1.', 3, '2026-06-02 16:00:00', '2026-06-02 16:00:00'),
-(79, 'Street Lighting Project', 'LED street lights installation in Phase 3-5 starting June 20.', 4, '2026-06-03 16:00:00', '2026-06-03 16:00:00'),
-(80, 'Drainage Cleaning Schedule', 'Drainage cleaning in Phase 1 on June 25-27.', 5, '2026-06-04 16:00:00', '2026-06-04 16:00:00'),
-(81, 'Free Hypertension Screening', 'Blood pressure check every Tuesday at health center.', 6, '2026-06-05 16:00:00', '2026-06-05 16:00:00'),
-(82, 'Diabetes Awareness', 'Free blood sugar testing on June 18 at 8 AM.', 7, '2026-06-06 16:00:00', '2026-06-06 16:00:00'),
-(83, 'Mental Health Seminar', 'Stress management and mental health awareness on June 22.', 8, '2026-06-07 16:00:00', '2026-06-07 16:00:00'),
-(84, 'Breastfeeding Support Group', 'Monthly meeting for breastfeeding moms every first Friday.', 9, '2026-06-08 16:00:00', '2026-06-08 16:00:00'),
-(85, 'Newborn Screening', 'Free newborn screening at health center every Wednesday.', 10, '2026-06-09 16:00:00', '2026-06-09 16:00:00'),
-(86, 'Teen Health Forum', 'Reproductive health education for teens on June 29.', 1, '2026-06-10 16:00:00', '2026-06-10 16:00:00'),
-(87, 'Elderly Fitness Program', 'Gentle exercise program for seniors every MWF at 7 AM.', 2, '2026-06-11 16:00:00', '2026-06-11 16:00:00'),
-(88, 'Women\'s Livelihood Training', 'Dressmaking and embroidery workshop starting July 5.', 3, '2026-06-12 16:00:00', '2026-06-12 16:00:00'),
-(89, 'Entrepreneurship Seminar', 'Small business management seminar on July 8 at 9 AM.', 4, '2026-06-13 16:00:00', '2026-06-13 16:00:00'),
-(90, 'Financial Literacy', 'Basic budgeting and savings workshop on July 10.', 5, '2026-06-14 16:00:00', '2026-06-14 16:00:00'),
-(91, 'Computer Literacy Program', 'Free basic computer classes every Saturday starting July 12.', 6, '2026-06-15 16:00:00', '2026-06-15 16:00:00'),
-(92, 'English for OFWs', 'English communication skills for aspiring OFWs on July 15-16.', 7, '2026-06-16 16:00:00', '2026-06-16 16:00:00'),
-(93, 'Drivers License Assistance', 'Help with student permit and drivers license application every Thursday.', 8, '2026-06-17 16:00:00', '2026-06-17 16:00:00'),
-(94, 'Passport Appointment', 'Assistance with DFA passport appointment scheduling.', 9, '2026-06-18 16:00:00', '2026-06-18 16:00:00'),
-(95, 'Postal ID Processing', 'Postal ID application assistance every Tuesday and Thursday.', 10, '2026-06-19 16:00:00', '2026-06-19 16:00:00'),
-(96, 'National ID Registration', 'PhilSys registration ongoing at barangay hall every weekday.', 1, '2026-06-20 16:00:00', '2026-06-20 16:00:00'),
-(97, 'Voter Registration Extended', 'COMELEC voter registration extended until July 31.', 2, '2026-06-21 16:00:00', '2026-06-21 16:00:00'),
-(98, 'Barangay ID for Students', 'Free Barangay ID for students until August 15.', 3, '2026-06-22 16:00:00', '2026-06-22 16:00:00'),
-(99, 'Police Clearance Online', 'Online application for police clearance now available.', 4, '2026-06-23 16:00:00', '2026-06-23 16:00:00'),
-(100, 'Business One-Stop Shop', 'Business permit renewal one-stop shop on July 20-22.', 5, '2026-06-24 16:00:00', '2026-06-24 16:00:00'),
-(101, 'Tax Payment Deadline', 'Real property tax deadline extended to August 31.', 6, '2026-06-25 16:00:00', '2026-06-25 16:00:00'),
-(102, 'Scholarship for College', '50 college scholarships available. Apply until August 15.', 7, '2026-06-26 16:00:00', '2026-06-26 16:00:00'),
-(103, 'Scholarship for HS', 'High school scholarship for 100 students. Apply at barangay hall.', 8, '2026-06-27 16:00:00', '2026-06-27 16:00:00'),
-(104, 'Vocational Scholarship', 'TESDA scholarship for 30 residents. Register now.', 9, '2026-06-28 16:00:00', '2026-06-28 16:00:00'),
-(105, 'Summer Job for Students', 'SPES program for students. 200 slots available.', 10, '2026-06-29 16:00:00', '2026-06-29 16:00:00'),
-(106, 'Job Placement Program', 'Free job matching service every Monday and Wednesday.', 1, '2026-06-30 16:00:00', '2026-06-30 16:00:00'),
-(107, 'OFW Reintegration', 'Assistance for returning OFWs. Visit barangay hall.', 2, '2026-07-01 16:00:00', '2026-07-01 16:00:00'),
-(108, 'Senior Citizens Day', 'Monthly senior citizens gathering on July 25 at 1 PM.', 3, '2026-07-02 16:00:00', '2026-07-02 16:00:00'),
-(109, 'PWD Day Celebration', 'Special event for PWDs on July 29. Games and prizes.', 4, '2026-07-03 16:00:00', '2026-07-03 16:00:00'),
-(110, 'Children\'s Month', 'Activities for children every Saturday of July.', 5, '2026-07-04 16:00:00', '2026-07-04 16:00:00'),
-(111, 'Youth Summit', 'Leadership training for youth on July 18-19.', 6, '2026-07-05 16:00:00', '2026-07-05 16:00:00'),
-(112, 'Sports Clinic', 'Free basketball and volleyball clinic for kids every Sunday.', 7, '2026-07-06 16:00:00', '2026-07-06 16:00:00'),
-(113, 'Chess Tournament', 'Barangay chess tournament on July 26. Register until July 20.', 8, '2026-07-07 16:00:00', '2026-07-07 16:00:00'),
-(114, 'Badminton Tournament', 'Mixed doubles badminton on August 1-2.', 9, '2026-07-08 16:00:00', '2026-07-08 16:00:00'),
-(115, 'Fun Run', 'Barangay fun run for a cause on August 10 at 5 AM.', 10, '2026-07-09 16:00:00', '2026-07-09 16:00:00'),
-(116, 'Zumba Competition', 'Inter-purok Zumba competition on August 5.', 1, '2026-07-10 16:00:00', '2026-07-10 16:00:00'),
-(117, 'Singing Contest', 'Barangay singing contest on August 8. Auditions on July 25.', 2, '2026-07-11 16:00:00', '2026-07-11 16:00:00'),
-(118, 'Dance Contest', 'Street dance competition on August 15 during fiesta.', 3, '2026-07-12 16:00:00', '2026-07-12 16:00:00'),
-(119, 'Float Parade', 'Fiesta float parade on August 15. Register your entry.', 4, '2026-07-13 16:00:00', '2026-07-13 16:00:00'),
-(120, 'Food Festival', 'Food bazaar at the plaza every night of fiesta week.', 5, '2026-07-14 16:00:00', '2026-07-14 16:00:00'),
-(121, 'Fireworks Display', 'Fiesta fireworks display on August 15 at 8 PM.', 6, '2026-07-15 16:00:00', '2026-07-15 16:00:00'),
-(122, 'Miss Gay Pageant', 'Annual Miss Gay Barangay pageant on August 12.', 7, '2026-07-16 16:00:00', '2026-07-16 16:00:00'),
-(123, 'Mr and Ms Barangay', 'Search for Mr and Ms Barangay 2026 on August 13.', 8, '2026-07-17 16:00:00', '2026-07-17 16:00:00'),
-(124, 'Battle of the Bands', 'Inter-barangay battle of the bands on August 14.', 9, '2026-07-18 16:00:00', '2026-07-18 16:00:00'),
-(125, 'Mobile Legends Cup', 'ML tournament with cash prize on August 1-2.', 10, '2026-07-19 16:00:00', '2026-07-19 16:00:00'),
-(126, 'Valorant Tournament', 'Valorant competition for youth on August 3.', 1, '2026-07-20 16:00:00', '2026-07-20 16:00:00'),
-(127, 'COD Mobile Tournament', 'COD Mobile tournament on August 4. Register at youth desk.', 2, '2026-07-21 16:00:00', '2026-07-21 16:00:00'),
-(128, 'Pokemon Go Event', 'Community Pokemon Go gathering on August 7 at plaza.', 3, '2026-07-22 16:00:00', '2026-07-22 16:00:00'),
-(129, 'Board Games Day', 'Family board games day every last Sunday of the month.', 4, '2026-07-23 16:00:00', '2026-07-23 16:00:00'),
-(130, 'Book Club', 'Barangay book club meeting every Wednesday at 4 PM.', 5, '2026-07-24 16:00:00', '2026-07-24 16:00:00'),
-(131, 'Art Workshop', 'Free painting and drawing workshop for kids on July 27.', 6, '2026-07-25 16:00:00', '2026-07-25 16:00:00'),
-(132, 'Photography Contest', 'Barangay photography contest theme: \'Our Community\'', 7, '2026-07-26 16:00:00', '2026-07-26 16:00:00'),
-(133, 'Recycling Art Contest', 'Art made from recycled materials. Submit by August 10.', 8, '2026-07-27 16:00:00', '2026-07-27 16:00:00'),
-(134, 'Garden Show', 'Best garden competition. Judging on August 20.', 9, '2026-07-28 16:00:00', '2026-07-28 16:00:00'),
-(135, 'Tree Planting II', 'Second tree planting activity on August 25 at watershed.', 10, '2026-07-29 16:00:00', '2026-07-29 16:00:00'),
 (200, 'Barangay Health Fair 2024', 'Free health checkup on March 15, 2024', 1, '2024-01-31 17:00:00', '2024-01-31 17:00:00'),
 (201, 'Summer Sports League', 'Basketball registration until April 30', 2, '2024-02-29 18:00:00', '2024-02-29 18:00:00'),
 (202, 'Earth Day Celebration', 'Tree planting on April 22 at 7 AM', 3, '2024-03-14 19:00:00', '2024-03-14 19:00:00'),
@@ -251,14 +191,6 @@ INSERT INTO `announcements` (`announcement_id`, `title`, `content`, `created_by`
 (236, 'Women\'s Month 2026', 'March activities', 7, '2026-03-01 05:00:00', '2026-03-01 05:00:00'),
 (237, 'Summer Programs 2026', 'Registration starts April', 8, '2026-04-01 06:00:00', '2026-04-01 06:00:00'),
 (238, 'Election Day 2026', 'May 9, 2026 go out and vote', 9, '2026-05-01 07:00:00', '2026-05-01 07:00:00'),
-(239, 'Independence Day 2026', 'June 12 celebration', 10, '2026-06-01 08:00:00', '2026-06-01 08:00:00'),
-(240, 'Nutrition Month 2026', 'July feeding program', 1, '2026-07-01 09:00:00', '2026-07-01 09:00:00'),
-(241, 'Barangay Fiesta 2026', 'August 15!', 2, '2026-08-01 10:00:00', '2026-08-01 10:00:00'),
-(242, 'Scholarship 2026', 'Apply until September', 3, '2026-09-01 11:00:00', '2026-09-01 11:00:00'),
-(243, 'Halloween 2026', 'October 31 costume party', 4, '2026-10-01 12:00:00', '2026-10-01 12:00:00'),
-(244, 'Christmas 2026', 'December celebrations', 5, '2026-11-01 13:00:00', '2026-11-01 13:00:00'),
-(245, 'Year-end Assembly', 'December 28', 6, '2026-12-01 14:00:00', '2026-12-01 14:00:00'),
-(246, 'New Year 2027', 'Countdown at plaza', 7, '2026-12-30 15:00:00', '2026-12-30 15:00:00'),
 (247, 'Free Legal Advice', 'Every Wednesday at barangay hall', 8, '2026-01-14 16:00:00', '2026-01-14 16:00:00'),
 (248, 'Business Permit Renewal', 'Deadline January 31', 9, '2026-01-09 17:00:00', '2026-01-09 17:00:00'),
 (249, 'Tax Declaration Assistance', 'Every Tuesday and Thursday', 10, '2026-01-31 18:00:00', '2026-01-31 18:00:00'),
@@ -286,8 +218,8 @@ CREATE TABLE IF NOT EXISTS `complaint` (
   `admin_response` text COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`complaint_id`),
   UNIQUE KEY `ref_no` (`ref_no`),
-  KEY `household_id` (`household_id`),
-  KEY `idx_complaint_status` (`status`)
+  KEY `idx_complaint_status` (`status`),
+  KEY `fk_complaint_household` (`household_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1500 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -470,46 +402,6 @@ INSERT INTO `complaint` (`complaint_id`, `household_id`, `ref_no`, `subject`, `d
 (173, 258, 'CMP-20260527-5128', 'Poisoned cats', 'Cats being poisoned', 'peace_order', '2026-05-28 05:00:00', 'pending', 'high', NULL),
 (174, 259, 'CMP-20260527-5129', 'Sewage overflow', 'Sewage on street', 'waste', '2026-05-28 06:00:00', 'pending', 'high', NULL),
 (175, 260, 'CMP-20260527-5130', 'Helicopter noise', 'Helicopters fly low', 'noise', '2026-05-28 07:00:00', 'resolved', 'low', 'Airport notified'),
-(176, 261, 'CMP-20260527-5131', 'Playground broken', 'Equipment broken', 'infrastructure', '2026-05-28 08:00:00', 'pending', 'medium', NULL),
-(177, 262, 'CMP-20260527-5132', 'Rumors', 'Spreading false rumors', 'peace_order', '2026-05-28 09:00:00', 'pending', 'medium', NULL),
-(178, 263, 'CMP-20260527-5133', 'Chemical waste', 'Factory dumping chemicals', 'waste', '2026-05-28 10:00:00', 'reviewing', 'high', 'DENR notified'),
-(179, 264, 'CMP-20260527-5134', 'Grinding machine', 'Grinding at 5 AM', 'noise', '2026-05-28 11:00:00', 'pending', 'medium', NULL),
-(180, 265, 'CMP-20260527-5135', 'Uneven sidewalk', 'Sidewalk causes falls', 'infrastructure', '2026-05-28 12:00:00', 'pending', 'low', NULL),
-(181, 266, 'CMP-20260527-5136', 'Parking spot', 'Neighbor takes parking', 'peace_order', '2026-05-28 13:00:00', 'pending', 'low', NULL),
-(182, 267, 'CMP-20260527-5137', 'Medical waste', 'Clinic waste in trash', 'waste', '2026-05-28 14:00:00', 'resolved', 'high', 'Clinic warned'),
-(183, 268, 'CMP-20260527-5138', 'Fireworks', 'Fireworks at midnight', 'noise', '2026-05-28 15:00:00', 'pending', 'high', NULL),
-(184, 269, 'CMP-20260527-5139', 'Cracked pavement', 'Pavement cracking', 'infrastructure', '2026-05-28 16:00:00', 'pending', 'medium', NULL),
-(185, 270, 'CMP-20260527-5140', 'Damaged fence', 'Neighbor hit fence', 'peace_order', '2026-05-28 17:00:00', 'resolved', 'medium', 'Paid repairs'),
-(186, 271, 'CMP-20260527-5141', 'Flies from piggery', 'Thousands of flies', 'waste', '2026-05-28 18:00:00', 'pending', 'high', NULL),
-(187, 272, 'CMP-20260527-5142', 'Kids shouting', 'Shouting all day', 'noise', '2026-05-28 19:00:00', 'pending', 'low', NULL),
-(188, 273, 'CMP-20260527-5143', 'Drainage cover stolen', 'Metal cover stolen', 'infrastructure', '2026-05-28 20:00:00', 'resolved', 'high', 'New cover'),
-(189, 274, 'CMP-20260527-5144', 'Package stolen', 'Neighbor kept package', 'peace_order', '2026-05-28 21:00:00', 'pending', 'medium', NULL),
-(190, 275, 'CMP-20260527-5145', 'Garbage bin stolen', 'Bin taken by neighbor', 'waste', '2026-05-28 22:00:00', 'resolved', 'low', 'Bin returned'),
-(191, 276, 'CMP-20260527-5146', 'KTV bar noise', 'Bar too loud', 'noise', '2026-05-28 23:00:00', 'pending', 'high', NULL),
-(192, 277, 'CMP-20260527-5147', 'No street name sign', 'No sign for years', 'infrastructure', '2026-05-29 00:00:00', 'pending', 'low', NULL),
-(193, 278, 'CMP-20260527-5148', 'Blocked view', 'Neighbor built wall blocking view', 'peace_order', '2026-05-29 01:00:00', 'pending', 'medium', NULL),
-(194, 279, 'CMP-20260527-5149', 'Garbage on sidewalk', 'Neighbor leaves garbage', 'waste', '2026-05-29 02:00:00', 'resolved', 'medium', 'Warned'),
-(195, 280, 'CMP-20260527-5150', 'Dogs barking', 'Stray dogs bark all night', 'noise', '2026-05-29 03:00:00', 'pending', 'medium', NULL),
-(196, 281, 'CMP-20260527-5151', 'Water pressure low', 'Low pressure for weeks', 'infrastructure', '2026-05-29 04:00:00', 'pending', 'high', NULL),
-(197, 282, 'CMP-20260527-5152', 'Threatened pet', 'Neighbor threatened cat', 'peace_order', '2026-05-29 05:00:00', 'pending', 'high', NULL),
-(198, 283, 'CMP-20260527-5153', 'Restaurant smoke', 'Smoke enters house', 'waste', '2026-05-29 06:00:00', 'reviewing', 'medium', 'Filter required'),
-(199, 284, 'CMP-20260527-5154', 'Loud argument', 'Couple arguing at 3 AM', 'noise', '2026-05-29 07:00:00', 'pending', 'medium', NULL),
-(200, 285, 'CMP-20260527-5155', 'Street light cluster', '6 lights not working', 'infrastructure', '2026-05-29 08:00:00', 'pending', 'high', NULL),
-(201, 286, 'CMP-20260527-5156', 'Bullying', 'Neighbor\'s child bullies', 'peace_order', '2026-05-29 09:00:00', 'resolved', 'medium', 'Parents talked'),
-(202, 287, 'CMP-20260527-5157', 'Industrial waste', 'Dumped in empty lot', 'waste', '2026-05-29 10:00:00', 'pending', 'high', NULL),
-(203, 288, 'CMP-20260527-5158', 'Live band', 'Band plays every Saturday', 'noise', '2026-05-29 11:00:00', 'pending', 'medium', NULL),
-(204, 289, 'CMP-20260527-5159', 'No water 2 weeks', 'No water for 14 days', 'infrastructure', '2026-05-29 12:00:00', 'pending', 'high', NULL),
-(205, 290, 'CMP-20260527-5160', 'Keyed car', 'Car scratched', 'peace_order', '2026-05-29 13:00:00', 'reviewing', 'high', 'CCTV review'),
-(206, 291, 'CMP-20260527-5161', 'Dead animals', 'Improper disposal', 'waste', '2026-05-29 14:00:00', 'resolved', 'high', 'Enforced'),
-(207, 292, 'CMP-20260527-5162', 'Truck beeping', 'Beeping at 4 AM', 'noise', '2026-05-29 15:00:00', 'pending', 'low', NULL),
-(208, 293, 'CMP-20260527-5163', 'Erosion threat', 'Soil erosion threatening house', 'infrastructure', '2026-05-29 16:00:00', 'pending', 'high', NULL),
-(209, 294, 'CMP-20260527-5164', 'Tree blocking driveway', 'Tree blocks driveway', 'peace_order', '2026-05-29 17:00:00', 'resolved', 'medium', 'Tree trimmed'),
-(210, 295, 'CMP-20260527-5165', 'Noise from sari-sari', 'Store plays loud music', 'noise', '2026-05-29 18:00:00', 'pending', 'low', NULL),
-(211, 296, 'CMP-20260527-5166', 'Unregistered tricycle', 'No franchise causing accidents', 'peace_order', '2026-05-29 19:00:00', 'pending', 'medium', NULL),
-(212, 297, 'CMP-20260527-5167', 'Dead pig creek', 'Foul smell', 'waste', '2026-05-29 20:00:00', 'resolved', 'high', 'Removed'),
-(213, 298, 'CMP-20260527-5168', 'Power outage', '3 days no power', 'infrastructure', '2026-05-29 21:00:00', 'pending', 'high', NULL),
-(214, 299, 'CMP-20260527-5169', 'Threatening behavior', 'Neighbor shouts threats', 'peace_order', '2026-05-29 22:00:00', 'pending', 'high', NULL),
-(215, 300, 'CMP-20260527-5170', 'Dirty canal', 'Canal clogged', 'waste', '2026-05-29 23:00:00', 'resolved', 'medium', 'Cleaned'),
 (600, 31, 'CMP-20240115-6001', 'New year noise', 'Fireworks until 3 AM', 'noise', '2024-01-01 14:00:00', 'resolved', 'medium', 'Warning issued'),
 (601, 32, 'CMP-20240125-6002', 'Trash piled up', 'Holiday garbage not collected', 'waste', '2024-01-05 00:00:00', 'resolved', 'high', 'Collection done'),
 (602, 33, 'CMP-20240201-6003', 'Street light down', 'Dark street for weeks', 'infrastructure', '2024-02-01 10:00:00', 'resolved', 'medium', 'Light replaced'),
@@ -614,8 +506,7 @@ INSERT INTO `complaint` (`complaint_id`, `household_id`, `ref_no`, `subject`, `d
 (801, 85, 'CMP-20260115-7002', 'Flooding issue', 'Rain caused street flood', 'infrastructure', '2026-01-15 05:00:00', 'pending', 'high', 'Pumping ongoing'),
 (802, 86, 'CMP-20260125-7003', 'Property dispute', 'Argument over property line', 'peace_order', '2026-01-25 07:00:00', 'reviewing', 'medium', 'Mediation scheduled'),
 (803, 87, 'CMP-20260201-7004', 'Stray cats problem', 'Too many stray cats', 'waste', '2026-02-01 01:00:00', 'pending', 'low', 'Capture planned'),
-(804, 88, 'CMP-20260210-7005', 'Valentines noise', 'Loud music until midnight', 'noise', '2026-02-10 12:00:00', 'pending', 'medium', NULL);
-INSERT INTO `complaint` (`complaint_id`, `household_id`, `ref_no`, `subject`, `description`, `category`, `date_submitted`, `status`, `priority`, `admin_response`) VALUES
+(804, 88, 'CMP-20260210-7005', 'Valentines noise', 'Loud music until midnight', 'noise', '2026-02-10 12:00:00', 'pending', 'medium', NULL),
 (805, 89, 'CMP-20260220-7006', 'Broken street light', 'Street dark for weeks', 'infrastructure', '2026-02-20 10:00:00', 'pending', 'medium', NULL),
 (806, 90, 'CMP-20260301-7007', 'Burning garbage', 'Neighbor burns plastic', 'waste', '2026-03-01 06:00:00', 'pending', 'high', NULL),
 (807, 91, 'CMP-20260310-7008', 'Loud fighting', 'Couple fights every night', 'noise', '2026-03-10 14:00:00', 'pending', 'medium', NULL),
@@ -655,7 +546,8 @@ INSERT INTO `complaint` (`complaint_id`, `household_id`, `ref_no`, `subject`, `d
 (841, 125, 'CMP-20241001-7106', 'October stray dogs', 'Dogs aggressive', 'peace_order', '2024-10-01 09:00:00', 'resolved', 'high', 'Impounded'),
 (842, 126, 'CMP-20241020-7107', 'Halloween early noise', 'Loud party', 'noise', '2024-10-20 15:00:00', 'resolved', 'medium', 'Warning'),
 (843, 127, 'CMP-20241101-7108', 'All Saints day', 'Cemetery noise', 'noise', '2024-11-01 13:00:00', 'resolved', 'high', 'Security increased'),
-(844, 128, 'CMP-20241115-7109', 'Thanksgiving party', 'Loud celebration', 'noise', '2024-11-15 14:00:00', 'resolved', 'low', 'Advised'),
+(844, 128, 'CMP-20241115-7109', 'Thanksgiving party', 'Loud celebration', 'noise', '2024-11-15 14:00:00', 'resolved', 'low', 'Advised');
+INSERT INTO `complaint` (`complaint_id`, `household_id`, `ref_no`, `subject`, `description`, `category`, `date_submitted`, `status`, `priority`, `admin_response`) VALUES
 (845, 129, 'CMP-20241201-7110', 'Christmas lights too bright', 'Blinding lights all night', 'noise', '2024-12-01 11:00:00', 'resolved', 'low', 'Timer suggested'),
 (846, 130, 'CMP-20241215-7111', 'Christmas carol noise', 'Carols until midnight', 'noise', '2024-12-15 15:00:00', 'resolved', 'medium', 'Time limit set'),
 (847, 131, 'CMP-20241224-7112', 'Christmas eve noise', 'Fireworks and music', 'noise', '2024-12-24 14:00:00', 'resolved', 'high', 'Warning'),
@@ -804,7 +696,7 @@ CREATE TABLE IF NOT EXISTS `household` (
   PRIMARY KEY (`household_id`),
   UNIQUE KEY `email` (`email`),
   KEY `idx_household_email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `household`
@@ -1171,7 +1063,8 @@ INSERT INTO `household` (`household_id`, `email`, `password`, `address`, `phase_
 (497, 'household497@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 497, Lot 97, Maharlika St, Phase 5', 'Phase 5', 'tagalog', '2026-09-05 00:00:00'),
 (498, 'household498@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 498, Lot 98, Rizal St, Phase 5', 'Phase 5', 'english', '2026-09-15 01:00:00'),
 (499, 'household499@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 499, Lot 99, Bonifacio St, Phase 1', 'Phase 1', 'tagalog', '2026-09-25 02:00:00'),
-(500, 'household500@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 500, Lot 100, Luna St, Phase 1', 'Phase 1', 'english', '2026-10-05 03:00:00');
+(500, 'household500@gmail.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Blk 500, Lot 100, Luna St, Phase 1', 'Phase 1', 'english', '2026-10-05 03:00:00'),
+(1000, '123@gmail.com', '$2y$10$AJZ4yWJ81h3kKDte.O0nXed6axKVIkzpGO7Ko3aI11G92yDcno/.C', 'asd', 'Phase 1', 'tagalog', '2026-05-27 20:24:49');
 
 -- --------------------------------------------------------
 
@@ -1190,7 +1083,7 @@ CREATE TABLE IF NOT EXISTS `payment` (
   `paid_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`payment_id`),
   UNIQUE KEY `ref_no` (`ref_no`),
-  KEY `request_id` (`request_id`)
+  KEY `fk_payment_request` (`request_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1344,258 +1237,6 @@ INSERT INTO `payment` (`payment_id`, `request_id`, `total_amount`, `payment_meth
 (144, 146, 25.00, 'cash', 'PAY-20260527-3086', 0, NULL),
 (145, 147, 500.00, 'gcash', 'PAY-20260527-3087', 1, '2026-05-27 03:30:00'),
 (146, 148, 200.00, 'cash', 'PAY-20260527-3088', 0, NULL),
-(300, 149, 50.00, 'cash', 'PAY-20260527-5001', 1, '2026-05-26 17:00:00'),
-(301, 150, 30.00, 'gcash', 'PAY-20260527-5002', 1, '2026-05-26 18:00:00'),
-(302, 151, 50.00, 'bank_transfer', 'PAY-20260527-5003', 0, NULL),
-(303, 152, 25.00, 'cash', 'PAY-20260527-5004', 1, '2026-05-26 19:00:00'),
-(304, 153, 500.00, 'gcash', 'PAY-20260527-5005', 0, NULL),
-(305, 154, 200.00, 'cash', 'PAY-20260527-5006', 1, '2026-05-26 20:00:00'),
-(306, 155, 15.00, 'bank_transfer', 'PAY-20260527-5007', 1, '2026-05-26 21:00:00'),
-(307, 156, 40.00, 'cash', 'PAY-20260527-5008', 0, NULL),
-(308, 157, 30.00, 'gcash', 'PAY-20260527-5009', 1, '2026-05-26 22:00:00'),
-(309, 158, 0.00, 'cash', 'PAY-20260527-5010', 1, '2026-05-26 23:00:00'),
-(310, 159, 100.00, 'bank_transfer', 'PAY-20260527-5011', 0, NULL),
-(311, 160, 0.00, 'cash', 'PAY-20260527-5012', 1, '2026-05-27 00:00:00'),
-(312, 161, 50.00, 'gcash', 'PAY-20260527-5013', 1, '2026-05-27 01:00:00'),
-(313, 162, 25.00, 'cash', 'PAY-20260527-5014', 0, NULL),
-(314, 163, 500.00, 'bank_transfer', 'PAY-20260527-5015', 1, '2026-05-27 02:00:00'),
-(315, 164, 200.00, 'cash', 'PAY-20260527-5016', 1, '2026-05-27 03:00:00'),
-(316, 165, 15.00, 'gcash', 'PAY-20260527-5017', 0, NULL),
-(317, 166, 40.00, 'cash', 'PAY-20260527-5018', 1, '2026-05-27 04:00:00'),
-(318, 167, 30.00, 'bank_transfer', 'PAY-20260527-5019', 1, '2026-05-27 05:00:00'),
-(319, 168, 0.00, 'cash', 'PAY-20260527-5020', 0, NULL),
-(320, 169, 100.00, 'gcash', 'PAY-20260527-5021', 1, '2026-05-27 06:00:00'),
-(321, 170, 0.00, 'cash', 'PAY-20260527-5022', 1, '2026-05-27 07:00:00'),
-(322, 171, 50.00, 'bank_transfer', 'PAY-20260527-5023', 0, NULL),
-(323, 172, 25.00, 'cash', 'PAY-20260527-5024', 1, '2026-05-27 08:00:00'),
-(324, 173, 500.00, 'gcash', 'PAY-20260527-5025', 1, '2026-05-27 09:00:00'),
-(325, 174, 200.00, 'cash', 'PAY-20260527-5026', 0, NULL),
-(326, 175, 15.00, 'bank_transfer', 'PAY-20260527-5027', 1, '2026-05-27 10:00:00'),
-(327, 176, 40.00, 'cash', 'PAY-20260527-5028', 1, '2026-05-27 11:00:00'),
-(328, 177, 30.00, 'gcash', 'PAY-20260527-5029', 0, NULL),
-(329, 178, 0.00, 'cash', 'PAY-20260527-5030', 1, '2026-05-27 12:00:00'),
-(330, 179, 100.00, 'bank_transfer', 'PAY-20260527-5031', 1, '2026-05-27 13:00:00'),
-(331, 180, 0.00, 'cash', 'PAY-20260527-5032', 0, NULL),
-(332, 181, 50.00, 'gcash', 'PAY-20260527-5033', 1, '2026-05-27 14:00:00'),
-(333, 182, 25.00, 'cash', 'PAY-20260527-5034', 1, '2026-05-27 15:00:00'),
-(334, 183, 500.00, 'bank_transfer', 'PAY-20260527-5035', 0, NULL),
-(335, 184, 200.00, 'cash', 'PAY-20260527-5036', 1, '2026-05-27 16:00:00'),
-(336, 185, 15.00, 'gcash', 'PAY-20260527-5037', 1, '2026-05-27 17:00:00'),
-(337, 186, 40.00, 'cash', 'PAY-20260527-5038', 0, NULL),
-(338, 187, 30.00, 'bank_transfer', 'PAY-20260527-5039', 1, '2026-05-27 18:00:00'),
-(339, 188, 0.00, 'cash', 'PAY-20260527-5040', 1, '2026-05-27 19:00:00'),
-(340, 189, 100.00, 'gcash', 'PAY-20260527-5041', 0, NULL),
-(341, 190, 0.00, 'cash', 'PAY-20260527-5042', 1, '2026-05-27 20:00:00'),
-(342, 191, 50.00, 'bank_transfer', 'PAY-20260527-5043', 1, '2026-05-27 21:00:00'),
-(343, 192, 25.00, 'cash', 'PAY-20260527-5044', 0, NULL),
-(344, 193, 500.00, 'gcash', 'PAY-20260527-5045', 1, '2026-05-27 22:00:00'),
-(345, 194, 200.00, 'cash', 'PAY-20260527-5046', 1, '2026-05-27 23:00:00'),
-(346, 195, 15.00, 'bank_transfer', 'PAY-20260527-5047', 0, NULL),
-(347, 196, 40.00, 'cash', 'PAY-20260527-5048', 1, '2026-05-28 00:00:00'),
-(348, 197, 30.00, 'gcash', 'PAY-20260527-5049', 1, '2026-05-28 01:00:00'),
-(349, 198, 0.00, 'cash', 'PAY-20260527-5050', 0, NULL),
-(350, 199, 100.00, 'bank_transfer', 'PAY-20260527-5051', 1, '2026-05-28 02:00:00'),
-(351, 200, 0.00, 'cash', 'PAY-20260527-5052', 1, '2026-05-28 03:00:00'),
-(352, 201, 50.00, 'gcash', 'PAY-20260527-5053', 0, NULL),
-(353, 202, 25.00, 'cash', 'PAY-20260527-5054', 1, '2026-05-28 04:00:00'),
-(354, 203, 500.00, 'bank_transfer', 'PAY-20260527-5055', 1, '2026-05-28 05:00:00'),
-(355, 204, 200.00, 'cash', 'PAY-20260527-5056', 0, NULL),
-(356, 205, 15.00, 'gcash', 'PAY-20260527-5057', 1, '2026-05-28 06:00:00'),
-(357, 206, 40.00, 'cash', 'PAY-20260527-5058', 1, '2026-05-28 07:00:00'),
-(358, 207, 30.00, 'bank_transfer', 'PAY-20260527-5059', 0, NULL),
-(359, 208, 0.00, 'cash', 'PAY-20260527-5060', 1, '2026-05-28 08:00:00'),
-(360, 209, 100.00, 'gcash', 'PAY-20260527-5061', 1, '2026-05-28 09:00:00'),
-(361, 210, 0.00, 'cash', 'PAY-20260527-5062', 0, NULL),
-(362, 211, 50.00, 'bank_transfer', 'PAY-20260527-5063', 1, '2026-05-28 10:00:00'),
-(363, 212, 25.00, 'cash', 'PAY-20260527-5064', 1, '2026-05-28 11:00:00'),
-(364, 213, 500.00, 'gcash', 'PAY-20260527-5065', 0, NULL),
-(365, 214, 200.00, 'cash', 'PAY-20260527-5066', 1, '2026-05-28 12:00:00'),
-(366, 215, 15.00, 'bank_transfer', 'PAY-20260527-5067', 1, '2026-05-28 13:00:00'),
-(367, 216, 40.00, 'cash', 'PAY-20260527-5068', 0, NULL),
-(368, 217, 30.00, 'gcash', 'PAY-20260527-5069', 1, '2026-05-28 14:00:00'),
-(369, 218, 0.00, 'cash', 'PAY-20260527-5070', 1, '2026-05-28 15:00:00'),
-(370, 219, 100.00, 'bank_transfer', 'PAY-20260527-5071', 0, NULL),
-(371, 220, 0.00, 'cash', 'PAY-20260527-5072', 1, '2026-05-28 16:00:00'),
-(372, 221, 50.00, 'gcash', 'PAY-20260527-5073', 1, '2026-05-28 17:00:00'),
-(373, 222, 25.00, 'cash', 'PAY-20260527-5074', 0, NULL),
-(374, 223, 500.00, 'bank_transfer', 'PAY-20260527-5075', 1, '2026-05-28 18:00:00'),
-(375, 224, 200.00, 'cash', 'PAY-20260527-5076', 1, '2026-05-28 19:00:00'),
-(376, 225, 15.00, 'gcash', 'PAY-20260527-5077', 0, NULL),
-(377, 226, 40.00, 'cash', 'PAY-20260527-5078', 1, '2026-05-28 20:00:00'),
-(378, 227, 30.00, 'bank_transfer', 'PAY-20260527-5079', 1, '2026-05-28 21:00:00'),
-(379, 228, 0.00, 'cash', 'PAY-20260527-5080', 0, NULL),
-(380, 229, 100.00, 'gcash', 'PAY-20260527-5081', 1, '2026-05-28 22:00:00'),
-(381, 230, 0.00, 'cash', 'PAY-20260527-5082', 1, '2026-05-28 23:00:00'),
-(382, 231, 50.00, 'bank_transfer', 'PAY-20260527-5083', 0, NULL),
-(383, 232, 25.00, 'cash', 'PAY-20260527-5084', 1, '2026-05-29 00:00:00'),
-(384, 233, 500.00, 'gcash', 'PAY-20260527-5085', 1, '2026-05-29 01:00:00'),
-(385, 234, 200.00, 'cash', 'PAY-20260527-5086', 0, NULL),
-(386, 235, 15.00, 'bank_transfer', 'PAY-20260527-5087', 1, '2026-05-29 02:00:00'),
-(387, 236, 40.00, 'cash', 'PAY-20260527-5088', 1, '2026-05-29 03:00:00'),
-(388, 237, 30.00, 'gcash', 'PAY-20260527-5089', 0, NULL),
-(389, 238, 0.00, 'cash', 'PAY-20260527-5090', 1, '2026-05-29 04:00:00'),
-(390, 239, 100.00, 'bank_transfer', 'PAY-20260527-5091', 1, '2026-05-29 05:00:00'),
-(391, 240, 0.00, 'cash', 'PAY-20260527-5092', 0, NULL),
-(392, 241, 50.00, 'gcash', 'PAY-20260527-5093', 1, '2026-05-29 06:00:00'),
-(393, 242, 25.00, 'cash', 'PAY-20260527-5094', 1, '2026-05-29 07:00:00'),
-(394, 243, 500.00, 'bank_transfer', 'PAY-20260527-5095', 0, NULL),
-(395, 244, 200.00, 'cash', 'PAY-20260527-5096', 1, '2026-05-29 08:00:00'),
-(396, 245, 15.00, 'gcash', 'PAY-20260527-5097', 1, '2026-05-29 09:00:00'),
-(397, 246, 40.00, 'cash', 'PAY-20260527-5098', 0, NULL),
-(398, 247, 30.00, 'bank_transfer', 'PAY-20260527-5099', 1, '2026-05-29 10:00:00'),
-(399, 248, 0.00, 'cash', 'PAY-20260527-5100', 1, '2026-05-29 11:00:00'),
-(400, 249, 100.00, 'gcash', 'PAY-20260527-5101', 0, NULL),
-(401, 250, 0.00, 'cash', 'PAY-20260527-5102', 1, '2026-05-29 12:00:00'),
-(402, 251, 50.00, 'bank_transfer', 'PAY-20260527-5103', 1, '2026-05-29 13:00:00'),
-(403, 252, 25.00, 'cash', 'PAY-20260527-5104', 0, NULL),
-(404, 253, 500.00, 'gcash', 'PAY-20260527-5105', 1, '2026-05-29 14:00:00'),
-(405, 254, 200.00, 'cash', 'PAY-20260527-5106', 1, '2026-05-29 15:00:00'),
-(406, 255, 15.00, 'bank_transfer', 'PAY-20260527-5107', 0, NULL),
-(407, 256, 40.00, 'cash', 'PAY-20260527-5108', 1, '2026-05-29 16:00:00'),
-(408, 257, 30.00, 'gcash', 'PAY-20260527-5109', 1, '2026-05-29 17:00:00'),
-(409, 258, 0.00, 'cash', 'PAY-20260527-5110', 0, NULL),
-(410, 259, 100.00, 'bank_transfer', 'PAY-20260527-5111', 1, '2026-05-29 18:00:00'),
-(411, 260, 0.00, 'cash', 'PAY-20260527-5112', 1, '2026-05-29 19:00:00'),
-(412, 261, 50.00, 'gcash', 'PAY-20260527-5113', 0, NULL),
-(413, 262, 25.00, 'cash', 'PAY-20260527-5114', 1, '2026-05-29 20:00:00'),
-(414, 263, 500.00, 'bank_transfer', 'PAY-20260527-5115', 1, '2026-05-29 21:00:00'),
-(415, 264, 200.00, 'cash', 'PAY-20260527-5116', 0, NULL),
-(416, 265, 15.00, 'gcash', 'PAY-20260527-5117', 1, '2026-05-29 22:00:00'),
-(417, 266, 40.00, 'cash', 'PAY-20260527-5118', 1, '2026-05-29 23:00:00'),
-(418, 267, 30.00, 'bank_transfer', 'PAY-20260527-5119', 0, NULL),
-(419, 268, 0.00, 'cash', 'PAY-20260527-5120', 1, '2026-05-30 00:00:00'),
-(420, 269, 100.00, 'gcash', 'PAY-20260527-5121', 1, '2026-05-30 01:00:00'),
-(421, 270, 0.00, 'cash', 'PAY-20260527-5122', 0, NULL),
-(422, 271, 50.00, 'bank_transfer', 'PAY-20260527-5123', 1, '2026-05-30 02:00:00'),
-(423, 272, 25.00, 'cash', 'PAY-20260527-5124', 1, '2026-05-30 03:00:00'),
-(424, 273, 500.00, 'gcash', 'PAY-20260527-5125', 0, NULL),
-(425, 274, 200.00, 'cash', 'PAY-20260527-5126', 1, '2026-05-30 04:00:00'),
-(426, 275, 15.00, 'bank_transfer', 'PAY-20260527-5127', 1, '2026-05-30 05:00:00'),
-(427, 276, 40.00, 'cash', 'PAY-20260527-5128', 0, NULL),
-(428, 277, 30.00, 'gcash', 'PAY-20260527-5129', 1, '2026-05-30 06:00:00'),
-(429, 278, 0.00, 'cash', 'PAY-20260527-5130', 1, '2026-05-30 07:00:00'),
-(430, 279, 100.00, 'bank_transfer', 'PAY-20260527-5131', 0, NULL),
-(431, 280, 0.00, 'cash', 'PAY-20260527-5132', 1, '2026-05-30 08:00:00'),
-(432, 281, 50.00, 'gcash', 'PAY-20260527-5133', 1, '2026-05-30 09:00:00'),
-(433, 282, 25.00, 'cash', 'PAY-20260527-5134', 0, NULL),
-(434, 283, 500.00, 'bank_transfer', 'PAY-20260527-5135', 1, '2026-05-30 10:00:00'),
-(435, 284, 200.00, 'cash', 'PAY-20260527-5136', 1, '2026-05-30 11:00:00'),
-(436, 285, 15.00, 'gcash', 'PAY-20260527-5137', 0, NULL),
-(437, 286, 40.00, 'cash', 'PAY-20260527-5138', 1, '2026-05-30 12:00:00'),
-(438, 287, 30.00, 'bank_transfer', 'PAY-20260527-5139', 1, '2026-05-30 13:00:00'),
-(439, 288, 0.00, 'cash', 'PAY-20260527-5140', 0, NULL),
-(440, 289, 100.00, 'gcash', 'PAY-20260527-5141', 1, '2026-05-30 14:00:00'),
-(441, 290, 0.00, 'cash', 'PAY-20260527-5142', 1, '2026-05-30 15:00:00'),
-(442, 291, 50.00, 'bank_transfer', 'PAY-20260527-5143', 0, NULL),
-(443, 292, 25.00, 'cash', 'PAY-20260527-5144', 1, '2026-05-30 16:00:00'),
-(444, 293, 500.00, 'gcash', 'PAY-20260527-5145', 1, '2026-05-30 17:00:00'),
-(445, 294, 200.00, 'cash', 'PAY-20260527-5146', 0, NULL),
-(446, 295, 15.00, 'bank_transfer', 'PAY-20260527-5147', 1, '2026-05-30 18:00:00'),
-(447, 296, 40.00, 'cash', 'PAY-20260527-5148', 1, '2026-05-30 19:00:00'),
-(448, 297, 30.00, 'gcash', 'PAY-20260527-5149', 0, NULL),
-(449, 298, 0.00, 'cash', 'PAY-20260527-5150', 1, '2026-05-30 20:00:00'),
-(600, 149, 50.00, 'cash', 'PAY-20260527-9001', 0, NULL),
-(601, 150, 30.00, 'gcash', 'PAY-20260527-9002', 1, '2026-05-27 17:00:00'),
-(602, 151, 500.00, 'bank_transfer', 'PAY-20260527-9003', 0, NULL),
-(603, 152, 200.00, 'cash', 'PAY-20260527-9004', 1, '2026-05-27 18:00:00'),
-(604, 153, 15.00, 'gcash', 'PAY-20260527-9005', 1, '2026-05-27 19:00:00'),
-(605, 154, 40.00, 'cash', 'PAY-20260527-9006', 0, NULL),
-(606, 155, 30.00, 'bank_transfer', 'PAY-20260527-9007', 1, '2026-05-27 20:00:00'),
-(607, 156, 0.00, 'cash', 'PAY-20260527-9008', 1, '2026-05-27 21:00:00'),
-(608, 157, 100.00, 'gcash', 'PAY-20260527-9009', 0, NULL),
-(609, 158, 0.00, 'cash', 'PAY-20260527-9010', 1, '2026-05-27 22:00:00'),
-(610, 159, 50.00, 'bank_transfer', 'PAY-20260527-9011', 1, '2026-05-27 23:00:00'),
-(611, 160, 25.00, 'cash', 'PAY-20260527-9012', 0, NULL),
-(612, 161, 500.00, 'gcash', 'PAY-20260527-9013', 1, '2026-05-28 00:00:00'),
-(613, 162, 200.00, 'cash', 'PAY-20260527-9014', 1, '2026-05-28 01:00:00'),
-(614, 163, 15.00, 'bank_transfer', 'PAY-20260527-9015', 0, NULL),
-(615, 164, 40.00, 'cash', 'PAY-20260527-9016', 1, '2026-05-28 02:00:00'),
-(616, 165, 30.00, 'gcash', 'PAY-20260527-9017', 1, '2026-05-28 03:00:00'),
-(617, 166, 0.00, 'cash', 'PAY-20260527-9018', 0, NULL),
-(618, 167, 100.00, 'bank_transfer', 'PAY-20260527-9019', 1, '2026-05-28 04:00:00'),
-(619, 168, 0.00, 'cash', 'PAY-20260527-9020', 1, '2026-05-28 05:00:00'),
-(620, 169, 50.00, 'gcash', 'PAY-20260527-9021', 0, NULL),
-(621, 170, 25.00, 'cash', 'PAY-20260527-9022', 1, '2026-05-28 06:00:00'),
-(622, 171, 500.00, 'bank_transfer', 'PAY-20260527-9023', 1, '2026-05-28 07:00:00'),
-(623, 172, 200.00, 'cash', 'PAY-20260527-9024', 0, NULL),
-(624, 173, 15.00, 'gcash', 'PAY-20260527-9025', 1, '2026-05-28 08:00:00'),
-(625, 174, 40.00, 'cash', 'PAY-20260527-9026', 1, '2026-05-28 09:00:00'),
-(626, 175, 30.00, 'bank_transfer', 'PAY-20260527-9027', 0, NULL),
-(627, 176, 0.00, 'cash', 'PAY-20260527-9028', 1, '2026-05-28 10:00:00'),
-(628, 177, 100.00, 'gcash', 'PAY-20260527-9029', 1, '2026-05-28 11:00:00'),
-(629, 178, 0.00, 'cash', 'PAY-20260527-9030', 0, NULL),
-(630, 179, 50.00, 'bank_transfer', 'PAY-20260527-9031', 1, '2026-05-28 12:00:00'),
-(631, 180, 25.00, 'cash', 'PAY-20260527-9032', 1, '2026-05-28 13:00:00'),
-(632, 181, 500.00, 'gcash', 'PAY-20260527-9033', 0, NULL),
-(633, 182, 200.00, 'cash', 'PAY-20260527-9034', 1, '2026-05-28 14:00:00'),
-(634, 183, 15.00, 'bank_transfer', 'PAY-20260527-9035', 1, '2026-05-28 15:00:00'),
-(635, 184, 40.00, 'cash', 'PAY-20260527-9036', 0, NULL),
-(636, 185, 30.00, 'gcash', 'PAY-20260527-9037', 1, '2026-05-28 16:00:00'),
-(637, 186, 0.00, 'cash', 'PAY-20260527-9038', 1, '2026-05-28 17:00:00'),
-(638, 187, 100.00, 'bank_transfer', 'PAY-20260527-9039', 0, NULL),
-(639, 188, 0.00, 'cash', 'PAY-20260527-9040', 1, '2026-05-28 18:00:00'),
-(640, 189, 50.00, 'gcash', 'PAY-20260527-9041', 1, '2026-05-28 19:00:00'),
-(641, 190, 25.00, 'cash', 'PAY-20260527-9042', 0, NULL),
-(642, 191, 500.00, 'bank_transfer', 'PAY-20260527-9043', 1, '2026-05-28 20:00:00'),
-(643, 192, 200.00, 'cash', 'PAY-20260527-9044', 1, '2026-05-28 21:00:00'),
-(644, 193, 15.00, 'gcash', 'PAY-20260527-9045', 0, NULL),
-(645, 194, 40.00, 'cash', 'PAY-20260527-9046', 1, '2026-05-28 22:00:00'),
-(646, 195, 30.00, 'bank_transfer', 'PAY-20260527-9047', 1, '2026-05-28 23:00:00'),
-(647, 196, 0.00, 'cash', 'PAY-20260527-9048', 0, NULL),
-(648, 197, 100.00, 'gcash', 'PAY-20260527-9049', 1, '2026-05-29 00:00:00'),
-(649, 198, 0.00, 'cash', 'PAY-20260527-9050', 1, '2026-05-29 01:00:00'),
-(650, 199, 50.00, 'bank_transfer', 'PAY-20260527-9051', 0, NULL),
-(651, 200, 25.00, 'cash', 'PAY-20260527-9052', 1, '2026-05-29 02:00:00'),
-(652, 201, 50.00, 'cash', 'PAY-20260527-9101', 1, '2026-05-30 00:00:00'),
-(653, 202, 30.00, 'gcash', 'PAY-20260527-9102', 0, NULL),
-(654, 203, 500.00, 'bank_transfer', 'PAY-20260527-9103', 1, '2026-05-30 01:00:00'),
-(655, 204, 200.00, 'cash', 'PAY-20260527-9104', 1, '2026-05-30 02:00:00'),
-(656, 205, 15.00, 'gcash', 'PAY-20260527-9105', 0, NULL),
-(657, 206, 40.00, 'cash', 'PAY-20260527-9106', 1, '2026-05-30 03:00:00'),
-(658, 207, 30.00, 'bank_transfer', 'PAY-20260527-9107', 1, '2026-05-30 04:00:00'),
-(659, 208, 0.00, 'cash', 'PAY-20260527-9108', 0, NULL),
-(660, 209, 100.00, 'gcash', 'PAY-20260527-9109', 1, '2026-05-30 05:00:00'),
-(661, 210, 0.00, 'cash', 'PAY-20260527-9110', 1, '2026-05-30 06:00:00'),
-(662, 211, 50.00, 'bank_transfer', 'PAY-20260527-9111', 0, NULL),
-(663, 212, 25.00, 'cash', 'PAY-20260527-9112', 1, '2026-05-30 07:00:00'),
-(664, 213, 500.00, 'gcash', 'PAY-20260527-9113', 1, '2026-05-30 08:00:00'),
-(665, 214, 200.00, 'cash', 'PAY-20260527-9114', 0, NULL),
-(666, 215, 15.00, 'bank_transfer', 'PAY-20260527-9115', 1, '2026-05-30 09:00:00'),
-(667, 216, 40.00, 'cash', 'PAY-20260527-9116', 1, '2026-05-30 10:00:00'),
-(668, 217, 30.00, 'gcash', 'PAY-20260527-9117', 0, NULL),
-(669, 218, 0.00, 'cash', 'PAY-20260527-9118', 1, '2026-05-30 11:00:00'),
-(670, 219, 100.00, 'bank_transfer', 'PAY-20260527-9119', 1, '2026-05-30 12:00:00'),
-(671, 220, 0.00, 'cash', 'PAY-20260527-9120', 0, NULL),
-(672, 221, 50.00, 'gcash', 'PAY-20260527-9121', 1, '2026-05-30 13:00:00'),
-(673, 222, 25.00, 'cash', 'PAY-20260527-9122', 1, '2026-05-30 14:00:00'),
-(674, 223, 500.00, 'bank_transfer', 'PAY-20260527-9123', 0, NULL),
-(675, 224, 200.00, 'cash', 'PAY-20260527-9124', 1, '2026-05-30 15:00:00'),
-(676, 225, 15.00, 'gcash', 'PAY-20260527-9125', 1, '2026-05-30 16:00:00'),
-(677, 226, 40.00, 'cash', 'PAY-20260527-9126', 0, NULL),
-(678, 227, 30.00, 'bank_transfer', 'PAY-20260527-9127', 1, '2026-05-30 17:00:00'),
-(679, 228, 0.00, 'cash', 'PAY-20260527-9128', 1, '2026-05-30 18:00:00'),
-(680, 229, 100.00, 'gcash', 'PAY-20260527-9129', 0, NULL),
-(681, 230, 0.00, 'cash', 'PAY-20260527-9130', 1, '2026-05-30 19:00:00'),
-(682, 231, 50.00, 'bank_transfer', 'PAY-20260527-9131', 1, '2026-05-30 20:00:00'),
-(683, 232, 25.00, 'cash', 'PAY-20260527-9132', 0, NULL),
-(684, 233, 500.00, 'gcash', 'PAY-20260527-9133', 1, '2026-05-30 21:00:00'),
-(685, 234, 200.00, 'cash', 'PAY-20260527-9134', 1, '2026-05-30 22:00:00'),
-(686, 235, 15.00, 'bank_transfer', 'PAY-20260527-9135', 0, NULL),
-(687, 236, 40.00, 'cash', 'PAY-20260527-9136', 1, '2026-05-30 23:00:00'),
-(688, 237, 30.00, 'gcash', 'PAY-20260527-9137', 1, '2026-05-31 00:00:00'),
-(689, 238, 0.00, 'cash', 'PAY-20260527-9138', 0, NULL),
-(690, 239, 100.00, 'bank_transfer', 'PAY-20260527-9139', 1, '2026-05-31 01:00:00'),
-(691, 240, 0.00, 'cash', 'PAY-20260527-9140', 1, '2026-05-31 02:00:00'),
-(692, 241, 50.00, 'gcash', 'PAY-20260527-9141', 0, NULL),
-(693, 242, 25.00, 'cash', 'PAY-20260527-9142', 1, '2026-05-31 03:00:00'),
-(694, 243, 500.00, 'bank_transfer', 'PAY-20260527-9143', 1, '2026-05-31 04:00:00'),
-(695, 244, 200.00, 'cash', 'PAY-20260527-9144', 0, NULL),
-(696, 245, 15.00, 'gcash', 'PAY-20260527-9145', 1, '2026-05-31 05:00:00'),
-(697, 246, 40.00, 'cash', 'PAY-20260527-9146', 1, '2026-05-31 06:00:00'),
-(698, 247, 30.00, 'bank_transfer', 'PAY-20260527-9147', 0, NULL),
-(699, 248, 0.00, 'cash', 'PAY-20260527-9148', 1, '2026-05-31 07:00:00'),
-(700, 249, 100.00, 'gcash', 'PAY-20260527-9149', 1, '2026-05-31 08:00:00'),
-(701, 250, 0.00, 'cash', 'PAY-20260527-9150', 0, NULL),
 (702, 301, 50.00, 'cash', 'PAY-20260101-9201', 1, '2026-01-10 00:00:00'),
 (703, 302, 30.00, 'gcash', 'PAY-20260102-9202', 1, '2026-01-11 01:00:00'),
 (704, 303, 500.00, 'bank_transfer', 'PAY-20260103-9203', 1, '2026-01-12 02:00:00'),
@@ -1694,8 +1335,7 @@ INSERT INTO `payment` (`payment_id`, `request_id`, `total_amount`, `payment_meth
 (797, 396, 40.00, 'cash', 'PAY-20260406-9296', 1, '2026-04-14 23:00:00'),
 (798, 397, 30.00, 'gcash', 'PAY-20260407-9297', 1, '2026-04-16 00:00:00'),
 (799, 398, 0.00, 'cash', 'PAY-20260408-9298', 1, '2026-04-17 01:00:00'),
-(800, 399, 100.00, 'bank_transfer', 'PAY-20260409-9299', 1, '2026-04-18 02:00:00'),
-(801, 400, 0.00, 'cash', 'PAY-20260410-9300', 1, '2026-04-19 03:00:00');
+(800, 399, 100.00, 'bank_transfer', 'PAY-20260409-9299', 1, '2026-04-18 02:00:00');
 
 -- --------------------------------------------------------
 
@@ -1716,8 +1356,8 @@ CREATE TABLE IF NOT EXISTS `resident` (
   `relationship_to_head` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `contact_no` varchar(15) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`resident_id`),
-  KEY `household_id` (`household_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1819 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `fk_resident_household` (`household_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1820 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `resident`
@@ -2042,36 +1682,6 @@ INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`
 (316, 228, 'Bianca', 'Rivera', '', 43, 1, 1, 'Head', '09171234528'),
 (317, 229, 'Christian', 'Rivera', '', 46, 1, 1, 'Head', '09171234529'),
 (318, 230, 'Danielle', 'Rivera', '', 48, 1, 1, 'Head', '09171234530'),
-(319, 301, 'Mario', 'Fernandez', '', 44, 1, 1, 'Head', '09171234601'),
-(320, 302, 'Nora', 'Fernandez', '', 40, 1, 1, 'Head', '09171234602'),
-(321, 303, 'Oscar', 'Fernandez', '', 52, 1, 1, 'Head', '09171234603'),
-(322, 304, 'Paula', 'Fernandez', '', 38, 1, 1, 'Head', '09171234604'),
-(323, 305, 'Quinn', 'Fernandez', '', 45, 1, 1, 'Head', '09171234605'),
-(324, 306, 'Randy', 'Fernandez', '', 41, 1, 1, 'Head', '09171234606'),
-(325, 307, 'Sarah', 'Fernandez', '', 49, 1, 1, 'Head', '09171234607'),
-(326, 308, 'Timothy', 'Fernandez', '', 37, 1, 1, 'Head', '09171234608'),
-(327, 309, 'Una', 'Fernandez', '', 46, 1, 1, 'Head', '09171234609'),
-(328, 310, 'Vincent', 'Fernandez', '', 43, 1, 1, 'Head', '09171234610'),
-(329, 311, 'Wanda', 'Fernandez', '', 39, 1, 1, 'Head', '09171234611'),
-(330, 312, 'Xavier', 'Fernandez', '', 48, 1, 1, 'Head', '09171234612'),
-(331, 313, 'Yolanda', 'Fernandez', '', 55, 1, 1, 'Head', '09171234613'),
-(332, 314, 'Zandro', 'Fernandez', '', 42, 1, 1, 'Head', '09171234614'),
-(333, 315, 'Abigail', 'Fernandez', '', 36, 1, 1, 'Head', '09171234615'),
-(334, 316, 'Benjamin', 'Fernandez', '', 50, 1, 1, 'Head', '09171234616'),
-(335, 317, 'Caroline', 'Fernandez', '', 44, 1, 1, 'Head', '09171234617'),
-(336, 318, 'David', 'Fernandez', '', 47, 1, 1, 'Head', '09171234618'),
-(337, 319, 'Emily', 'Fernandez', '', 38, 1, 1, 'Head', '09171234619'),
-(338, 320, 'Frank', 'Fernandez', '', 53, 1, 1, 'Head', '09171234620'),
-(339, 321, 'Grace', 'Fernandez', '', 41, 1, 1, 'Head', '09171234621'),
-(340, 322, 'Henry', 'Fernandez', '', 45, 1, 1, 'Head', '09171234622'),
-(341, 323, 'Irene', 'Fernandez', '', 39, 1, 1, 'Head', '09171234623'),
-(342, 324, 'Jack', 'Fernandez', '', 48, 1, 1, 'Head', '09171234624'),
-(343, 325, 'Kelly', 'Fernandez', '', 43, 1, 1, 'Head', '09171234625'),
-(344, 326, 'Leo', 'Fernandez', '', 46, 1, 1, 'Head', '09171234626'),
-(345, 327, 'Megan', 'Fernandez', '', 40, 1, 1, 'Head', '09171234627'),
-(346, 328, 'Noel', 'Fernandez', '', 52, 1, 1, 'Head', '09171234628'),
-(347, 329, 'Olive', 'Fernandez', '', 44, 1, 1, 'Head', '09171234629'),
-(348, 330, 'Paul', 'Fernandez', '', 37, 1, 1, 'Head', '09171234630'),
 (400, 31, 'Carmina', 'Santos', '', 25, 1, 0, 'Child', '09170000701'),
 (401, 31, 'Christian', 'Santos', '', 22, 1, 0, 'Child', '09170000702'),
 (402, 32, 'Marco', 'Reyes', '', 30, 1, 0, 'Child', '09170000703'),
@@ -2451,8 +2061,7 @@ INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`
 (875, 72, 'Quinn', 'Reyes', '', 9, 0, 0, 'Grandchild', '09171235026'),
 (876, 73, 'Rex', 'Cruz', '', 34, 1, 0, 'Child', '09171235027'),
 (877, 73, 'Sia', 'Cruz', '', 32, 1, 0, 'Child-in-law', '09171235028'),
-(878, 73, 'Tye', 'Cruz', '', 7, 0, 0, 'Grandchild', '09171235029');
-INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`, `suffix`, `age`, `is_voter`, `is_head`, `relationship_to_head`, `contact_no`) VALUES
+(878, 73, 'Tye', 'Cruz', '', 7, 0, 0, 'Grandchild', '09171235029'),
 (879, 74, 'Uma', 'Garcia', '', 38, 1, 0, 'Child', '09171235030'),
 (880, 74, 'Vic', 'Garcia', '', 36, 1, 0, 'Child-in-law', '09171235031'),
 (881, 74, 'Wes', 'Garcia', '', 10, 0, 0, 'Grandchild', '09171235032'),
@@ -2482,7 +2091,8 @@ INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`
 (905, 81, 'Uly', 'Gonzales', '', 32, 1, 0, 'Child-in-law', '09171235056'),
 (906, 81, 'Vee', 'Gonzales', '', 8, 0, 0, 'Grandchild', '09171235057'),
 (907, 82, 'Wen', 'Ramirez', '', 40, 1, 0, 'Child', '09171235058'),
-(908, 82, 'Xia', 'Ramirez', '', 38, 1, 0, 'Child-in-law', '09171235059'),
+(908, 82, 'Xia', 'Ramirez', '', 38, 1, 0, 'Child-in-law', '09171235059');
+INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`, `suffix`, `age`, `is_voter`, `is_head`, `relationship_to_head`, `contact_no`) VALUES
 (909, 82, 'Yan', 'Ramirez', '', 12, 0, 0, 'Grandchild', '09171235060'),
 (910, 82, 'Zen', 'Ramirez', '', 9, 0, 0, 'Grandchild', '09171235061'),
 (911, 83, 'Axl', 'Dela Cruz', '', 35, 1, 0, 'Child', '09171235062'),
@@ -2887,36 +2497,6 @@ INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`
 (1567, 198, 'Kyla', 'Alvarez', NULL, 44, 1, 1, 'Head', '09171980001'),
 (1568, 199, 'Erik', 'Santos', NULL, 46, 1, 1, 'Head', '09171990001'),
 (1569, 200, 'Moira', 'dela Torre', NULL, 38, 1, 1, 'Head', '09172000001'),
-(1570, 301, 'Christian', 'Bautista', NULL, 42, 1, 1, 'Head', '09173010001'),
-(1571, 302, 'Yeng', 'Constantino', NULL, 40, 1, 1, 'Head', '09173020001'),
-(1572, 303, 'Zayn', 'Malik', NULL, 38, 1, 1, 'Head', '09173030001'),
-(1573, 304, 'Taylor', 'Swift', NULL, 35, 1, 1, 'Head', '09173040001'),
-(1574, 305, 'Bruno', 'Mars', NULL, 37, 1, 1, 'Head', '09173050001'),
-(1575, 306, 'Ed', 'Sheeran', NULL, 36, 1, 1, 'Head', '09173060001'),
-(1576, 307, 'Adele', 'Adkins', NULL, 34, 1, 1, 'Head', '09173070001'),
-(1577, 308, 'Justin', 'Bieber', NULL, 32, 1, 1, 'Head', '09173080001'),
-(1578, 309, 'Ariana', 'Grande', NULL, 31, 1, 1, 'Head', '09173090001'),
-(1579, 310, 'Shawn', 'Mendes', NULL, 30, 1, 1, 'Head', '09173100001'),
-(1580, 311, 'Camila', 'Cabello', NULL, 28, 1, 1, 'Head', '09173110001'),
-(1581, 312, 'Billie', 'Eilish', NULL, 27, 1, 1, 'Head', '09173120001'),
-(1582, 313, 'Dua', 'Lipa', NULL, 29, 1, 1, 'Head', '09173130001'),
-(1583, 314, 'Harry', 'Styles', NULL, 30, 1, 1, 'Head', '09173140001'),
-(1584, 315, 'Lizzo', 'Jefferson', NULL, 33, 1, 1, 'Head', '09173150001'),
-(1585, 316, 'Post', 'Malone', NULL, 32, 1, 1, 'Head', '09173160001'),
-(1586, 317, 'The', 'Weeknd', NULL, 34, 1, 1, 'Head', '09173170001'),
-(1587, 318, 'Drake', 'Graham', NULL, 37, 1, 1, 'Head', '09173180001'),
-(1588, 319, 'Kendrick', 'Lamar', NULL, 36, 1, 1, 'Head', '09173190001'),
-(1589, 320, 'Travis', 'Scott', NULL, 35, 1, 1, 'Head', '09173200001'),
-(1590, 321, 'Megan', 'Stallion', NULL, 29, 1, 1, 'Head', '09173210001'),
-(1591, 322, 'Cardi', 'B', NULL, 31, 1, 1, 'Head', '09173220001'),
-(1592, 323, 'Nicki', 'Minaj', NULL, 38, 1, 1, 'Head', '09173230001'),
-(1593, 324, 'Doja', 'Cat', NULL, 27, 1, 1, 'Head', '09173240001'),
-(1594, 325, 'SZA', 'Solana', NULL, 34, 1, 1, 'Head', '09173250001'),
-(1595, 326, 'H.E.R.', 'Wilson', NULL, 26, 1, 1, 'Head', '09173260001'),
-(1596, 327, 'Lana', 'Del Rey', NULL, 36, 1, 1, 'Head', '09173270001'),
-(1597, 328, 'Halsey', 'Frangipane', NULL, 29, 1, 1, 'Head', '09173280001'),
-(1598, 329, 'Selena', 'Gomez', NULL, 31, 1, 1, 'Head', '09173290001'),
-(1599, 330, 'Demi', 'Lovato', NULL, 32, 1, 1, 'Head', '09173300001'),
 (1600, 131, 'Maria', 'Magsaysay', NULL, 48, 1, 0, 'Spouse', '09171310002'),
 (1601, 132, 'Elena', 'Quirino', NULL, 54, 1, 0, 'Spouse', '09171320002'),
 (1602, 133, 'Isabel', 'Garcia', NULL, 51, 1, 0, 'Spouse', '09171330002'),
@@ -2943,103 +2523,6 @@ INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`
 (1623, 138, 'Jinggoy', 'Estrada', NULL, 29, 1, 0, 'Child', '09171380003'),
 (1624, 139, 'Mikey', 'Arroyo', NULL, 31, 1, 0, 'Child', '09171390003'),
 (1625, 140, 'Bam', 'Aquino', NULL, 33, 1, 0, 'Child', '09171400003'),
-(1626, 301, 'Ricardo', 'Villanueva', NULL, 52, 1, 1, 'Head', '09173010001'),
-(1627, 302, 'Carmela', 'Rivera', NULL, 48, 1, 1, 'Head', '09173020001'),
-(1628, 303, 'Gregorio', 'Santos', NULL, 55, 1, 1, 'Head', '09173030001'),
-(1629, 304, 'Teresita', 'Garcia', NULL, 50, 1, 1, 'Head', '09173040001'),
-(1630, 305, 'Manuel', 'Ramos', NULL, 58, 1, 1, 'Head', '09173050001'),
-(1631, 306, 'Luzviminda', 'Cruz', NULL, 45, 1, 1, 'Head', '09173060001'),
-(1632, 307, 'Fernando', 'Mendoza', NULL, 53, 1, 1, 'Head', '09173070001'),
-(1633, 308, 'Gloria', 'Flores', NULL, 49, 1, 1, 'Head', '09173080001'),
-(1634, 309, 'Romeo', 'Torres', NULL, 56, 1, 1, 'Head', '09173090001'),
-(1635, 310, 'Julieta', 'Aquino', NULL, 47, 1, 1, 'Head', '09173100001'),
-(1636, 311, 'Ramon', 'Castillo', NULL, 54, 1, 1, 'Head', '09173110001'),
-(1637, 312, 'Milagros', 'Villanueva', NULL, 51, 1, 1, 'Head', '09173120001'),
-(1638, 313, 'Ernesto', 'Gonzales', NULL, 59, 1, 1, 'Head', '09173130001'),
-(1639, 314, 'Consuelo', 'Ramirez', NULL, 46, 1, 1, 'Head', '09173140001'),
-(1640, 315, 'Rogelio', 'Dela Cruz', NULL, 57, 1, 1, 'Head', '09173150001'),
-(1641, 316, 'Nieves', 'Fernandez', NULL, 52, 1, 1, 'Head', '09173160001'),
-(1642, 317, 'Feliciano', 'Lopez', NULL, 61, 1, 1, 'Head', '09173170001'),
-(1643, 318, 'Pilar', 'Rivera', NULL, 48, 1, 1, 'Head', '09173180001'),
-(1644, 319, 'Gregorio', 'Gomez', NULL, 55, 1, 1, 'Head', '09173190001'),
-(1645, 320, 'Lourdes', 'Diaz', NULL, 50, 1, 1, 'Head', '09173200001'),
-(1646, 321, 'Dante', 'Alvarez', NULL, 53, 1, 1, 'Head', '09173210001'),
-(1647, 322, 'Corazon', 'Navarro', NULL, 49, 1, 1, 'Head', '09173220001'),
-(1648, 323, 'Rene', 'Molina', NULL, 56, 1, 1, 'Head', '09173230001'),
-(1649, 324, 'Luz', 'Reyes', NULL, 47, 1, 1, 'Head', '09173240001'),
-(1650, 325, 'Antonio', 'Bautista', NULL, 58, 1, 1, 'Head', '09173250001'),
-(1651, 326, 'Elena', 'Soriano', NULL, 51, 1, 1, 'Head', '09173260001'),
-(1652, 327, 'Victor', 'Manuel', NULL, 54, 1, 1, 'Head', '09173270001'),
-(1653, 328, 'Rosa', 'Cortez', NULL, 48, 1, 1, 'Head', '09173280001'),
-(1654, 329, 'Edgardo', 'Fernando', NULL, 57, 1, 1, 'Head', '09173290001'),
-(1655, 330, 'Adelaida', 'Mariano', NULL, 52, 1, 1, 'Head', '09173300001'),
-(1656, 301, 'Leonora', 'Villanueva', NULL, 48, 1, 0, 'Spouse', '09173010002'),
-(1657, 302, 'Rogelio', 'Rivera', NULL, 52, 1, 0, 'Spouse', '09173020002'),
-(1658, 303, 'Luzviminda', 'Santos', NULL, 52, 1, 0, 'Spouse', '09173030002'),
-(1659, 304, 'Roberto', 'Garcia', NULL, 55, 1, 0, 'Spouse', '09173040002'),
-(1660, 305, 'Cecilia', 'Ramos', NULL, 54, 1, 0, 'Spouse', '09173050002'),
-(1661, 306, 'Ramon', 'Cruz', NULL, 50, 1, 0, 'Spouse', '09173060002'),
-(1662, 307, 'Angelina', 'Mendoza', NULL, 49, 1, 0, 'Spouse', '09173070002'),
-(1663, 308, 'Ronaldo', 'Flores', NULL, 53, 1, 0, 'Spouse', '09173080002'),
-(1664, 309, 'Isabella', 'Torres', NULL, 52, 1, 0, 'Spouse', '09173090002'),
-(1665, 310, 'Ramon', 'Aquino', NULL, 52, 1, 0, 'Spouse', '09173100002'),
-(1666, 311, 'Socorro', 'Castillo', NULL, 50, 1, 0, 'Spouse', '09173110002'),
-(1667, 312, 'Emilio', 'Villanueva', NULL, 55, 1, 0, 'Spouse', '09173120002'),
-(1668, 313, 'Pacita', 'Gonzales', NULL, 55, 1, 0, 'Spouse', '09173130002'),
-(1669, 314, 'Felipe', 'Ramirez', NULL, 50, 1, 0, 'Spouse', '09173140002'),
-(1670, 315, 'Belinda', 'Dela Cruz', NULL, 53, 1, 0, 'Spouse', '09173150002'),
-(1671, 316, 'Mario', 'Fernandez', NULL, 56, 1, 0, 'Spouse', '09173160002'),
-(1672, 317, 'Susan', 'Lopez', NULL, 58, 1, 0, 'Spouse', '09173170002'),
-(1673, 318, 'Federico', 'Rivera', NULL, 52, 1, 0, 'Spouse', '09173180002'),
-(1674, 319, 'Aurora', 'Gomez', NULL, 51, 1, 0, 'Spouse', '09173190002'),
-(1675, 320, 'Rogelio', 'Diaz', NULL, 55, 1, 0, 'Spouse', '09173200002'),
-(1676, 321, 'Estrella', 'Alvarez', NULL, 49, 1, 0, 'Spouse', '09173210002'),
-(1677, 322, 'Ramoncito', 'Navarro', NULL, 54, 1, 0, 'Spouse', '09173220002'),
-(1678, 323, 'Caridad', 'Molina', NULL, 52, 1, 0, 'Spouse', '09173230002'),
-(1679, 324, 'Manuel', 'Reyes', NULL, 52, 1, 0, 'Spouse', '09173240002'),
-(1680, 325, 'Merced', 'Bautista', NULL, 54, 1, 0, 'Spouse', '09173250002'),
-(1681, 326, 'Ramon', 'Soriano', NULL, 55, 1, 0, 'Spouse', '09173260002'),
-(1682, 327, 'Natividad', 'Manuel', NULL, 50, 1, 0, 'Spouse', '09173270002'),
-(1683, 328, 'Rolando', 'Cortez', NULL, 52, 1, 0, 'Spouse', '09173280002'),
-(1684, 329, 'Winnie', 'Fernando', NULL, 53, 1, 0, 'Spouse', '09173290002'),
-(1685, 330, 'Rene', 'Mariano', NULL, 56, 1, 0, 'Spouse', '09173300002'),
-(1686, 301, 'John Mark', 'Villanueva', NULL, 22, 1, 0, 'Child', '09173010003'),
-(1687, 301, 'Mary Jane', 'Villanueva', NULL, 19, 1, 0, 'Child', '09173010004'),
-(1688, 302, 'Kevin', 'Rivera', NULL, 24, 1, 0, 'Child', '09173020003'),
-(1689, 302, 'Angel', 'Rivera', NULL, 21, 1, 0, 'Child', '09173020004'),
-(1690, 303, 'Patrick', 'Santos', NULL, 25, 1, 0, 'Child', '09173030003'),
-(1691, 304, 'Catherine', 'Garcia', NULL, 23, 1, 0, 'Child', '09173040003'),
-(1692, 305, 'Michael', 'Ramos', NULL, 26, 1, 0, 'Child', '09173050003'),
-(1693, 305, 'Michelle', 'Ramos', NULL, 24, 1, 0, 'Child', '09173050004'),
-(1694, 306, 'Joseph', 'Cruz', NULL, 22, 1, 0, 'Child', '09173060003'),
-(1695, 307, 'Jennifer', 'Mendoza', NULL, 25, 1, 0, 'Child', '09173070003'),
-(1696, 308, 'Christopher', 'Flores', NULL, 24, 1, 0, 'Child', '09173080003'),
-(1697, 309, 'Christian', 'Torres', NULL, 23, 1, 0, 'Child', '09173090003'),
-(1698, 309, 'Christine', 'Torres', NULL, 20, 1, 0, 'Child', '09173090004'),
-(1699, 310, 'Daniel', 'Aquino', NULL, 22, 1, 0, 'Child', '09173100003'),
-(1700, 311, 'David', 'Castillo', NULL, 21, 1, 0, 'Child', '09173110003'),
-(1701, 312, 'Erika', 'Villanueva', NULL, 24, 1, 0, 'Child', '09173120003'),
-(1702, 313, 'Francis', 'Gonzales', NULL, 26, 1, 0, 'Child', '09173130003'),
-(1703, 314, 'Grace', 'Ramirez', NULL, 23, 1, 0, 'Child', '09173140003'),
-(1704, 315, 'Henry', 'Dela Cruz', NULL, 25, 1, 0, 'Child', '09173150003'),
-(1705, 315, 'Hannah', 'Dela Cruz', NULL, 22, 1, 0, 'Child', '09173150004'),
-(1706, 316, 'Ian', 'Fernandez', NULL, 24, 1, 0, 'Child', '09173160003'),
-(1707, 317, 'Julia', 'Lopez', NULL, 27, 1, 0, 'Child', '09173170003'),
-(1708, 318, 'Karl', 'Rivera', NULL, 23, 1, 0, 'Child', '09173180003'),
-(1709, 319, 'Liza', 'Gomez', NULL, 25, 1, 0, 'Child', '09173190003'),
-(1710, 320, 'Mark', 'Diaz', NULL, 24, 1, 0, 'Child', '09173200003'),
-(1711, 320, 'Maricel', 'Diaz', NULL, 21, 1, 0, 'Child', '09173200004'),
-(1712, 321, 'Nathan', 'Alvarez', NULL, 22, 1, 0, 'Child', '09173210003'),
-(1713, 322, 'Olivia', 'Navarro', NULL, 24, 1, 0, 'Child', '09173220003'),
-(1714, 323, 'Paul', 'Molina', NULL, 25, 1, 0, 'Child', '09173230003'),
-(1715, 324, 'Rachel', 'Reyes', NULL, 22, 1, 0, 'Child', '09173240003'),
-(1716, 325, 'Samuel', 'Bautista', NULL, 26, 1, 0, 'Child', '09173250003'),
-(1717, 326, 'Tina', 'Soriano', NULL, 24, 1, 0, 'Child', '09173260003'),
-(1718, 327, 'Ulysses', 'Manuel', NULL, 23, 1, 0, 'Child', '09173270003'),
-(1719, 328, 'Vivian', 'Cortez', NULL, 22, 1, 0, 'Child', '09173280003'),
-(1720, 329, 'William', 'Fernando', NULL, 25, 1, 0, 'Child', '09173290003'),
-(1721, 330, 'Xenia', 'Mariano', NULL, 23, 1, 0, 'Child', '09173300003'),
-(1722, 330, 'Xander', 'Mariano', NULL, 20, 1, 0, 'Child', '09173300004'),
 (1723, 231, 'Romeo', 'Fernandez', NULL, 52, 1, 1, 'Head', '09172310001'),
 (1724, 232, 'Juliet', 'Fernandez', NULL, 48, 1, 1, 'Head', '09172320001'),
 (1725, 233, 'Marco', 'Polo', NULL, 55, 1, 1, 'Head', '09172330001'),
@@ -3135,7 +2618,8 @@ INSERT INTO `resident` (`resident_id`, `household_id`, `first_name`, `last_name`
 (1815, 257, 'Gia', 'Mar', NULL, 24, 1, 0, 'Child', '09172570003'),
 (1816, 258, 'Hugo', 'Ravena', NULL, 8, 0, 0, 'Child', '09172580003'),
 (1817, 259, 'Isla', 'Ravena', NULL, 6, 0, 0, 'Child', '09172590003'),
-(1818, 260, 'Jiro', 'Valdez', NULL, 10, 0, 0, 'Child', '09172600003');
+(1818, 260, 'Jiro', 'Valdez', NULL, 10, 0, 0, 'Child', '09172600003'),
+(1819, 1000, 'test', 'test', '', 0, 1, 1, 'Head', '0');
 
 -- --------------------------------------------------------
 
@@ -3188,8 +2672,8 @@ CREATE TABLE IF NOT EXISTS `service_request` (
   `delivery_method` enum('pickup','delivery') COLLATE utf8mb4_unicode_ci DEFAULT 'pickup',
   PRIMARY KEY (`request_id`),
   UNIQUE KEY `ref_no` (`ref_no`),
-  KEY `service_id` (`service_id`),
-  KEY `idx_request_household` (`household_id`)
+  KEY `idx_request_household` (`household_id`),
+  KEY `fk_request_service` (`service_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1064 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -3756,46 +3240,6 @@ INSERT INTO `service_request` (`request_id`, `household_id`, `service_id`, `ref_
 (909, 258, 10, 'BRG-20251230-8258', 'Year-end indigency', '2025-12-30 09:00:00', 'pending', 'pickup'),
 (910, 259, 11, 'BRG-20260105-8259', 'New year police clearance', '2026-01-05 10:00:00', 'pending', 'pickup'),
 (911, 260, 12, 'BRG-20260112-8260', 'January travel pass', '2026-01-12 11:00:00', 'pending', 'pickup'),
-(912, 261, 1, 'BRG-20260120-8261', 'January clearance', '2026-01-20 12:00:00', 'pending', 'pickup'),
-(913, 262, 2, 'BRG-20260128-8262', 'Barangay ID for voter', '2026-01-28 13:00:00', 'pending', 'pickup'),
-(914, 263, 3, 'BRG-20260205-8263', 'February building permit', '2026-02-05 14:00:00', 'pending', 'delivery'),
-(915, 264, 4, 'BRG-20260212-8264', 'Valentine business permit', '2026-02-12 15:00:00', 'pending', 'pickup'),
-(916, 265, 5, 'BRG-20260220-8265', 'February cedula', '2026-02-19 16:00:00', 'pending', 'pickup'),
-(917, 266, 6, 'BRG-20260301-8266', 'March good moral', '2026-02-28 17:00:00', 'pending', 'pickup'),
-(918, 267, 7, 'BRG-20260310-8267', 'Residency for election', '2026-03-09 18:00:00', 'approved', 'pickup'),
-(919, 268, 8, 'BRG-20260320-8268', 'March first time job', '2026-03-19 19:00:00', 'approved', 'pickup'),
-(920, 269, 9, 'BRG-20260401-8269', 'April health cert', '2026-03-31 20:00:00', 'approved', 'delivery'),
-(921, 270, 10, 'BRG-20260410-8270', 'April indigency', '2026-04-09 21:00:00', 'approved', 'pickup'),
-(922, 271, 11, 'BRG-20260420-8271', 'Police clearance for work', '2026-04-19 22:00:00', 'approved', 'pickup'),
-(923, 272, 12, 'BRG-20260501-8272', 'May travel pass', '2026-04-30 23:00:00', 'approved', 'pickup'),
-(924, 273, 1, 'BRG-20260508-8273', 'May clearance', '2026-05-08 00:00:00', 'processing', 'pickup'),
-(925, 274, 2, 'BRG-20260515-8274', 'Barangay ID renewal', '2026-05-15 01:00:00', 'processing', 'pickup'),
-(926, 275, 3, 'BRG-20260522-8275', 'May building permit', '2026-05-22 02:00:00', 'processing', 'delivery'),
-(927, 276, 4, 'BRG-20260529-8276', 'End of May permit', '2026-05-29 03:00:00', 'pending', 'pickup'),
-(928, 277, 5, 'BRG-20260605-8277', 'June cedula', '2026-06-05 04:00:00', 'pending', 'pickup'),
-(929, 278, 6, 'BRG-20260612-8278', 'June good moral', '2026-06-12 05:00:00', 'pending', 'pickup'),
-(930, 279, 7, 'BRG-20260619-8279', 'June residency', '2026-06-19 06:00:00', 'pending', 'pickup'),
-(931, 280, 8, 'BRG-20260626-8280', 'June first time job', '2026-06-26 07:00:00', 'pending', 'pickup'),
-(932, 281, 9, 'BRG-20260703-8281', 'July health cert', '2026-07-03 08:00:00', 'pending', 'delivery'),
-(933, 282, 10, 'BRG-20260710-8282', 'July indigency', '2026-07-10 09:00:00', 'pending', 'pickup'),
-(934, 283, 11, 'BRG-20260717-8283', 'July police clearance', '2026-07-17 10:00:00', 'pending', 'pickup'),
-(935, 284, 12, 'BRG-20260724-8284', 'July travel pass', '2026-07-24 11:00:00', 'pending', 'pickup'),
-(936, 285, 1, 'BRG-20260731-8285', 'July clearance', '2026-07-31 12:00:00', 'pending', 'pickup'),
-(937, 286, 2, 'BRG-20260807-8286', 'August barangay ID', '2026-08-07 13:00:00', 'pending', 'pickup'),
-(938, 287, 3, 'BRG-20260814-8287', 'August building permit', '2026-08-14 14:00:00', 'pending', 'delivery'),
-(939, 288, 4, 'BRG-20260821-8288', 'August business permit', '2026-08-21 15:00:00', 'pending', 'pickup'),
-(940, 289, 5, 'BRG-20260828-8289', 'August cedula', '2026-08-27 16:00:00', 'pending', 'pickup'),
-(941, 290, 6, 'BRG-20260904-8290', 'September good moral', '2026-09-03 17:00:00', 'pending', 'pickup'),
-(942, 291, 7, 'BRG-20260911-8291', 'September residency', '2026-09-10 18:00:00', 'pending', 'pickup'),
-(943, 292, 8, 'BRG-20260918-8292', 'September first time job', '2026-09-17 19:00:00', 'pending', 'pickup'),
-(944, 293, 9, 'BRG-20260925-8293', 'September health cert', '2026-09-24 20:00:00', 'pending', 'delivery'),
-(945, 294, 10, 'BRG-20261002-8294', 'October indigency', '2026-10-01 21:00:00', 'pending', 'pickup'),
-(946, 295, 11, 'BRG-20261009-8295', 'October police clearance', '2026-10-08 22:00:00', 'pending', 'pickup'),
-(947, 296, 12, 'BRG-20261016-8296', 'October travel pass', '2026-10-15 23:00:00', 'pending', 'pickup'),
-(948, 297, 1, 'BRG-20261023-8297', 'October clearance', '2026-10-23 00:00:00', 'pending', 'pickup'),
-(949, 298, 2, 'BRG-20261030-8298', 'Halloween barangay ID', '2026-10-30 01:00:00', 'pending', 'pickup'),
-(950, 299, 3, 'BRG-20261106-8299', 'November building permit', '2026-11-06 02:00:00', 'pending', 'delivery'),
-(951, 300, 4, 'BRG-20261113-8300', 'November business permit', '2026-11-13 03:00:00', 'pending', 'pickup'),
 (952, 401, 1, 'BRG-20240105-8401', 'Clearance for new job', '2024-01-05 00:00:00', 'completed', 'pickup'),
 (953, 402, 2, 'BRG-20240112-8402', 'Barangay ID for school', '2024-01-12 01:00:00', 'completed', 'pickup'),
 (954, 403, 3, 'BRG-20240120-8403', 'Building permit for house', '2024-01-20 02:00:00', 'completed', 'delivery'),
@@ -3932,12 +3376,12 @@ DELIMITER ;
 --
 DROP VIEW IF EXISTS `vw_admin_dashboard`;
 CREATE TABLE IF NOT EXISTS `vw_admin_dashboard` (
-`pending_complaints` decimal(23,0)
-,`pending_requests` decimal(23,0)
-,`total_complaints` bigint
-,`total_households` bigint
-,`total_requests` bigint
+`total_households` bigint
 ,`total_residents` bigint
+,`total_requests` bigint
+,`total_complaints` bigint
+,`pending_requests` decimal(23,0)
+,`pending_complaints` decimal(23,0)
 ,`total_revenue` decimal(32,2)
 );
 
@@ -3949,11 +3393,11 @@ CREATE TABLE IF NOT EXISTS `vw_admin_dashboard` (
 --
 DROP VIEW IF EXISTS `vw_monthly_requests`;
 CREATE TABLE IF NOT EXISTS `vw_monthly_requests` (
-`completed` decimal(23,0)
-,`month` varchar(7)
+`month` varchar(7)
+,`total_requests` bigint
+,`completed` decimal(23,0)
 ,`pending` decimal(23,0)
 ,`rejected` decimal(23,0)
-,`total_requests` bigint
 );
 
 -- --------------------------------------------------------
@@ -3964,21 +3408,21 @@ CREATE TABLE IF NOT EXISTS `vw_monthly_requests` (
 --
 DROP VIEW IF EXISTS `vw_resident_requests`;
 CREATE TABLE IF NOT EXISTS `vw_resident_requests` (
-`base_price` decimal(10,2)
-,`date_submitted` timestamp
-,`delivery_method` enum('pickup','delivery')
+`request_id` int
 ,`household_id` int
-,`is_paid` tinyint(1)
-,`payment_method` enum('cash','gcash','bank_transfer')
-,`purpose` text
+,`service_id` int
 ,`ref_no` varchar(50)
-,`request_id` int
+,`purpose` text
+,`date_submitted` timestamp
+,`status` enum('pending','approved','processing','completed','rejected')
+,`delivery_method` enum('pickup','delivery')
+,`service_name` varchar(100)
+,`base_price` decimal(10,2)
+,`is_paid` tinyint(1)
+,`total_amount` decimal(10,2)
+,`payment_method` enum('cash','gcash','bank_transfer')
 ,`resident_id` int
 ,`resident_name` varchar(101)
-,`service_id` int
-,`service_name` varchar(100)
-,`status` enum('pending','approved','processing','completed','rejected')
-,`total_amount` decimal(10,2)
 );
 
 -- --------------------------------------------------------
@@ -4010,6 +3454,41 @@ DROP TABLE IF EXISTS `vw_resident_requests`;
 
 DROP VIEW IF EXISTS `vw_resident_requests`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `vw_resident_requests`  AS SELECT `sr`.`request_id` AS `request_id`, `sr`.`household_id` AS `household_id`, `sr`.`service_id` AS `service_id`, `sr`.`ref_no` AS `ref_no`, `sr`.`purpose` AS `purpose`, `sr`.`date_submitted` AS `date_submitted`, `sr`.`status` AS `status`, `sr`.`delivery_method` AS `delivery_method`, `s`.`service_name` AS `service_name`, `s`.`base_price` AS `base_price`, `p`.`is_paid` AS `is_paid`, `p`.`total_amount` AS `total_amount`, `p`.`payment_method` AS `payment_method`, `r`.`resident_id` AS `resident_id`, concat(`r`.`first_name`,' ',`r`.`last_name`) AS `resident_name` FROM (((`service_request` `sr` join `service` `s` on((`sr`.`service_id` = `s`.`service_id`))) left join `payment` `p` on((`sr`.`request_id` = `p`.`request_id`))) join `resident` `r` on((`sr`.`household_id` = `r`.`household_id`))) WHERE (`r`.`is_head` = 1) ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `announcements`
+--
+ALTER TABLE `announcements`
+  ADD CONSTRAINT `fk_announcement_admin` FOREIGN KEY (`created_by`) REFERENCES `admin` (`admin_id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Constraints for table `complaint`
+--
+ALTER TABLE `complaint`
+  ADD CONSTRAINT `fk_complaint_household` FOREIGN KEY (`household_id`) REFERENCES `household` (`household_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `payment`
+--
+ALTER TABLE `payment`
+  ADD CONSTRAINT `fk_payment_request` FOREIGN KEY (`request_id`) REFERENCES `service_request` (`request_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `resident`
+--
+ALTER TABLE `resident`
+  ADD CONSTRAINT `fk_resident_household` FOREIGN KEY (`household_id`) REFERENCES `household` (`household_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `service_request`
+--
+ALTER TABLE `service_request`
+  ADD CONSTRAINT `fk_request_household` FOREIGN KEY (`household_id`) REFERENCES `household` (`household_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_request_service` FOREIGN KEY (`service_id`) REFERENCES `service` (`service_id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
